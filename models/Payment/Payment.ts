@@ -13,7 +13,7 @@ const paymentSchema = new Schema<Payment>(
     },
     card: {
       number: { type: String, minLength: 14, maxLength: 14, required: true },
-      csv: { type: String, minlength: 3, maxlength: 3, required: true },
+      cvc: { type: String, minlength: 3, maxlength: 3, required: true },
       expires: { type: Date, required: true },
     },
   },

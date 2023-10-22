@@ -2,11 +2,11 @@
   "name": "faceX_backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.ts",
+  "main": "index.js",
   "scripts": {
     "dev": "nodemon index.ts",
-    "build": "npm run build",
-    "start": "node index.ts"
+    "build": "tsc",
+    "start": "node index.js"
   },
   "keywords": [],
   "author": "Mohamed Mahmoud",
@@ -20,7 +20,8 @@
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^7.5.3"
+    "mongoose": "^7.5.3",
+    "stripe": "^14.1.0"
   },
   "devDependencies": {
     "@tsconfig/node-lts": "^18.12.5",

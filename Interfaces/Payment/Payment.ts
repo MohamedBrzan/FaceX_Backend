@@ -6,7 +6,7 @@ interface Payment {
   status: PaymentStatus;
   card: {
     number: string;
-    csv: string;
+    cvc: string;
     expires: Date;
   };
 }
