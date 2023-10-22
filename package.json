@@ -12,8 +12,6 @@
   "author": "Mohamed Mahmoud",
   "license": "ISC",
   "dependencies": {
-    "@prisma/client": "^5.3.1",
-    "@prisma/extension-accelerate": "^0.6.2",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -32,7 +30,6 @@
     "@typescript-eslint/parser": "^6.7.4",
     "eslint": "^8.51.0",
     "nodemon": "^3.0.1",
-    "prisma": "^5.3.1",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
   }
