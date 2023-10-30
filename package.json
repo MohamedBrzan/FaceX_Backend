@@ -1,12 +1,12 @@
 {
   "name": "faceX_backend",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "This is FaceX Application backend",
+  "main": "./build/index.js",
   "scripts": {
     "dev": "nodemon index.ts",
     "build": "tsc",
-    "start": "node index.js"
+    "start": "node ./build/index.js"
   },
   "keywords": [],
   "author": "Mohamed Mahmoud",
