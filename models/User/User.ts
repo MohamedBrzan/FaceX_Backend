@@ -17,6 +17,7 @@ const UserSchema = new Schema<User>(
     comments: [{ type: mongoose.Types.ObjectId, ref: 'Comments' }],
     replies: [{ type: mongoose.Types.ObjectId, ref: 'Reply' }],
     avatar: { type: String },
+    cover: { type: String },
     bio: { type: String },
     gender: { type: String, enum: Gender },
     role: {

@@ -22,6 +22,7 @@ interface User {
   comments?: Comment[];
   replies?: Reply[];
   avatar?: string;
+  cover?: string;
   bio?: string;
   gender?: string;
   role: string;
