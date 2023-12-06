@@ -12,7 +12,7 @@ import SendFollow from '../../controllers/User/SendFollow';
 const router = Router();
 
 // Get Users
-router.get('/', GetAllUsers);
+router.get('/users', GetAllUsers);
 
 // Register User
 router.post('/register', Register);

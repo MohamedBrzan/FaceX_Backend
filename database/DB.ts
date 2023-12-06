@@ -1,4 +1,6 @@
 import mongoose, { ConnectOptions } from 'mongoose';
+import debug from 'debug';
+const debugDB = debug('Database');
 
 const DB = async () =>
   await mongoose
@@ -6,9 +8,7 @@ const DB = async () =>
       useNewUrlParser: true,
       useUnifiedTopology: true,
     } as ConnectOptions)
-    .then(() => console.log(`DATABASE CONNECTED SUCCESSFULLY :)`))
-    .catch((err) =>
-      console.log(`DATABASE CONNECTION FAILED :( ${err.message}`)
-    );
+    .then(() => debugDB(`DATABASE CONNECTED SUCCESSFULLY :)`))
+    .catch((err) => debugDB(`DATABASE CONNECTION FAILED :( ${err.message}`));
 
 export default DB;
