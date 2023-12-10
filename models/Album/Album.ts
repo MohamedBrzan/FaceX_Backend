@@ -1,12 +1,12 @@
-import mongoose, { Schema, model } from 'mongoose';
+import { Schema, model, Types } from 'mongoose';
 import Album from '../../Interfaces/Album/Album';
 
 const albumSchema = new Schema<Album>(
   {
-    user: { type: mongoose.Types.ObjectId, ref: 'User' },
+    user: { type: Types.ObjectId, ref: 'User' },
     title: { type: String, required: true },
     description: { type: String },
-    images: [{ type: mongoose.Types.ObjectId, ref: 'Image' }],
+    images: [{ type: Types.ObjectId, ref: 'Image' }],
   },
   { timestamps: true }
 );

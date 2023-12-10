@@ -1,14 +1,14 @@
-import mongoose, { Schema, model } from 'mongoose';
+import { Schema, model, Types } from 'mongoose';
 import Reel from '../../Interfaces/Reel/Reel';
 import VisiblePrivacy from '../../enums/VisiblePrivacy';
 
 const reelSchema = new Schema<Reel>(
   {
-    user: { type: mongoose.Types.ObjectId, ref: 'User' },
+    user: { type: Types.ObjectId, ref: 'User' },
     title: { type: String, required: true },
-    image: [{ type: mongoose.Types.ObjectId, ref: 'Image' }],
-    video: [{ type: mongoose.Types.ObjectId, ref: 'Video' }],
-    comments: [{ type: mongoose.Types.ObjectId, ref: 'Comment' }],
+    image: [{ type: Types.ObjectId, ref: 'Image' }],
+    video: [{ type: Types.ObjectId, ref: 'Video' }],
+    comments: [{ type: Types.ObjectId, ref: 'Comment' }],
     expressions: {
       like: { type: Number, required: true, default: 0 },
       love: { type: Number, required: true, default: 0 },

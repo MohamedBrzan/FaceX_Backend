@@ -1,10 +1,10 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, Types } from 'mongoose';
 import Notification from '../../Interfaces/Notification/Notification';
 import NotificationStatus from '../../enums/NotificationStatus';
 
 const notificationSchema = new Schema<Notification>(
   {
-    from: { type: Schema.Types.ObjectId, ref: 'User' },
+    from: { type: Types.ObjectId, ref: 'User' },
     title: { type: String, required: true },
     link: { type: String, required: true },
     status: {

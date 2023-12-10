@@ -1,9 +1,9 @@
-import mongoose, { Schema, model } from 'mongoose';
+import { Schema, model, Types } from 'mongoose';
 import Ad from '../../Interfaces/Ad/Ad';
 
 const adSchema = new Schema<Ad>(
   {
-    user: { type: mongoose.Types.ObjectId, ref: 'User' },
+    user: { type: Types.ObjectId, ref: 'User' },
     images: [{ type: String }],
     videos: [{ type: String }],
     start: { type: Date, required: true },
@@ -13,7 +13,7 @@ const adSchema = new Schema<Ad>(
       from: { type: Number, required: true },
       to: { type: Number, required: true },
     },
-    payment: { type: mongoose.Types.ObjectId, ref: 'Payment' },
+    payment: { type: Types.ObjectId, ref: 'Payment' },
   },
   { timestamps: true }
 );

@@ -1,17 +1,17 @@
-import mongoose, { Schema, model } from 'mongoose';
+import { Schema, model, Types } from 'mongoose';
 import Comment from '../../Interfaces/Comment/Comment';
 import VisiblePrivacy from '../../enums/VisiblePrivacy';
 
 const commentSchema = new Schema<Comment>(
   {
-    user: { type: mongoose.Types.ObjectId, ref: 'User' },
+    user: { type: Types.ObjectId, ref: 'User' },
     message: { type: String, required: true },
     ref: {
-      post: { type: mongoose.Types.ObjectId, ref: 'Post' },
-      blog: { type: mongoose.Types.ObjectId, ref: 'Blog' },
-      reel: { type: mongoose.Types.ObjectId, ref: 'Reel' },
+      post: { type: Types.ObjectId, ref: 'Post' },
+      blog: { type: Types.ObjectId, ref: 'Blog' },
+      reel: { type: Types.ObjectId, ref: 'Reel' },
     },
-    replies: [{ type: mongoose.Types.ObjectId, ref: 'Reply' }],
+    replies: [{ type: Types.ObjectId, ref: 'Reply' }],
     expressions: {
       like: { type: Number, required: true, default: 0 },
       love: { type: Number, required: true, default: 0 },

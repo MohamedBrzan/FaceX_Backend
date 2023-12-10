@@ -1,10 +1,10 @@
-import mongoose, { Schema, model } from 'mongoose';
+import { Schema, model, Types } from 'mongoose';
 import Payment from '../../Interfaces/Payment/Payment';
 import PaymentStatus from '../../enums/PaymentStatus';
 
 const paymentSchema = new Schema<Payment>(
   {
-    user: { type: mongoose.Types.ObjectId, ref: 'User' },
+    user: { type: Types.ObjectId, ref: 'User' },
     status: {
       type: String,
       enum: PaymentStatus,

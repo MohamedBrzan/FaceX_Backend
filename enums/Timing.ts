@@ -5,6 +5,7 @@ enum Timing {
   flexible_time = 'flexible-time',
   tasks = 'tasks',
   remote = 'remote',
+  contract = 'contract',
 }
 
 export default Timing;

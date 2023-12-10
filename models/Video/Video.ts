@@ -1,11 +1,11 @@
-import mongoose, { Schema, model } from 'mongoose';
+import { Schema, model, Types } from 'mongoose';
 import Video from '../../Interfaces/Video/Video';
 
 const videoSchema = new Schema<Video>(
   {
-    user: { type: mongoose.Types.ObjectId, ref: 'User' },
+    user: { type: Types.ObjectId, ref: 'User' },
     video: { type: String, required: true },
-    ref: { type: mongoose.Types.ObjectId, ref: 'Album' },
+    ref: { type: Types.ObjectId, ref: 'Album' },
   },
   { timestamps: true }
 );

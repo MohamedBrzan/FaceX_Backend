@@ -1,4 +1,4 @@
-import mongoose, { Schema, model } from 'mongoose';
+import { Schema, model, Types } from 'mongoose';
 import Post from '../../Interfaces/Post/Post';
 import PostStatus from '../../enums/PostStatus';
 import VisiblePrivacy from '../../enums/VisiblePrivacy';
@@ -16,8 +16,8 @@ const PostSchema = new Schema<Post>(
       default: PostStatus.Active,
       required: true,
     },
-    views: [{ type: mongoose.Types.ObjectId, ref: 'User' }],
-    comments: [{ type: mongoose.Types.ObjectId, ref: 'Comment' }],
+    views: [{ type: Types.ObjectId, ref: 'User' }],
+    comments: [{ type: Types.ObjectId, ref: 'Comment' }],
     expressions: {
       like: { type: Number, required: true, default: 0 },
       love: { type: Number, required: true, default: 0 },

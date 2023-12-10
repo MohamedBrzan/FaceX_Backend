@@ -24,6 +24,7 @@ interface User {
   avatar?: string;
   cover?: string;
   bio?: string;
+  actively_recruiting: boolean;
   gender?: string;
   role: string;
   followers?: User[];

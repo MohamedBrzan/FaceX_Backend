@@ -1,9 +1,16 @@
 import User from '../User/User';
 import Timing from '../../enums/Timing';
+import Skill from '../Skill/Skill';
+
+enum apply {
+  easy = 'easy',
+  apply = 'apply',
+}
 
 interface Job {
   user: User;
   title: string;
+  apply: apply;
   type: {
     position: string;
     timing: Timing;
@@ -18,6 +25,16 @@ interface Job {
       };
     };
     applicants?: number;
+  };
+  skills: string[];
+  about: {
+    bio: string;
+    duties: string;
+    requirements: string;
+    skills: {
+      technical: Skill[];
+      interpersonal: Skill[];
+    };
   };
 }
 
