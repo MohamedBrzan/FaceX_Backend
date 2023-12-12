@@ -29,7 +29,7 @@ exports.default = (0, AsyncHandler_1.default)((req, res, next) => __awaiter(void
         if (!comment)
             return next(new ErrorHandler_1.default(404, `This Post Comment Id ${ref.post} Not Found`));
         //* Remove Comment From User Comments
-        yield User_1.default.findByIdAndUpdate(req['user']._id, { $pull: { comments: ref.post } }, { runValidators: true, new: true });
+        yield User_1.default.findByIdAndUpdate(req['authorizedUser']._id, { $pull: { comments: ref.post } }, { runValidators: true, new: true });
         yield Post_1.default.findByIdAndUpdate(ref.post, {
             $pull: {
                 comments: comment['_id'].toString(),
@@ -43,7 +43,7 @@ exports.default = (0, AsyncHandler_1.default)((req, res, next) => __awaiter(void
         if (!comment)
             return next(new ErrorHandler_1.default(404, `This Blog Comment Id ${ref.blog} Not Found`));
         //* Remove Comment From User Comments
-        yield User_1.default.findByIdAndUpdate(req['user']._id, { $pull: { comments: ref.blog } }, { runValidators: true, new: true });
+        yield User_1.default.findByIdAndUpdate(req['authorizedUser']._id, { $pull: { comments: ref.blog } }, { runValidators: true, new: true });
         yield Blog_1.default.findByIdAndUpdate(ref.blog, {
             $pull: {
                 comments: ref.blog,
@@ -57,7 +57,7 @@ exports.default = (0, AsyncHandler_1.default)((req, res, next) => __awaiter(void
         if (!comment)
             return next(new ErrorHandler_1.default(404, `This Reel Comment Id ${ref.reel} Not Found`));
         //* Remove Comment From User Comments
-        yield User_1.default.findByIdAndUpdate(req['user']._id, { $pull: { comments: ref.reel } }, { runValidators: true, new: true });
+        yield User_1.default.findByIdAndUpdate(req['authorizedUser']._id, { $pull: { comments: ref.reel } }, { runValidators: true, new: true });
         yield Reel_1.default.findByIdAndUpdate(ref.reel, {
             $pull: {
                 comments: ref.reel,

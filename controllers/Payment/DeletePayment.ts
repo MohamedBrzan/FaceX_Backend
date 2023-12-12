@@ -11,7 +11,7 @@ export default AsyncHandler(
     if (!payment)
       return next(new ErrorHandler(404, `Payment With Id ${id} Not Exist`));
 
-    let user = await User.findById(req['user']._id);
+    let user = await User.findById(req['authorizedUser']._id);
 
     const paymentIndex = user.payments.findIndex(
       (payment) => payment['_id'].toString() === id

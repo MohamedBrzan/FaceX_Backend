@@ -22,7 +22,7 @@ exports.default = (0, AsyncHandler_1.default)((req, res, next) => __awaiter(void
     let reel = yield Reel_1.default.findById(id);
     if (!reel)
         return next(new ErrorHandler_1.default(404, `Reel With Id ${id} Not Exist`));
-    let user = yield User_1.default.findById(req['user']._id);
+    let user = yield User_1.default.findById(req['authorizedUser']._id);
     const reelIndex = user.reels.findIndex((reel) => reel['_id'].toString() === id);
     if (reelIndex >= 0) {
         user.reels.splice(reelIndex, 1);

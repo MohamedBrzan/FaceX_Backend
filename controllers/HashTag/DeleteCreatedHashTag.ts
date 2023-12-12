@@ -11,7 +11,7 @@ export default AsyncHandler(
     if (!hashTag)
       return next(new ErrorHandler(404, `HashTag With Id ${id} Not Exist`));
 
-    let user = await User.findById(req['user']._id);
+    let user = await User.findById(req['authorizedUser']._id);
 
     const hashTagIndex = user.hashTags.create.findIndex(
       (hashTag) => hashTag['_id'].toString() === id

@@ -12,7 +12,7 @@ export default AsyncHandler(
     if (!reel)
       return next(new ErrorHandler(404, `Reel With Id ${id} Not Exist`));
 
-    let user = await User.findById(req['user']._id);
+    let user = await User.findById(req['authorizedUser']._id);
 
     const reelIndex = user.reels.findIndex(
       (reel) => reel['_id'].toString() === id

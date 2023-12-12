@@ -19,17 +19,17 @@ const ErrorHandler_1 = __importDefault(require("../../middleware/ErrorHandler"))
 exports.default = (0, AsyncHandler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { title, description, images } = req.body;
     let album = yield Album_1.default.create({
-        user: req['user']._id,
+        user: req['authorizedUser']._id,
         title,
         description,
         images,
     });
-    let user = yield User_1.default.findById(req['user']._id);
+    let user = yield User_1.default.findById(req['authorizedUser']._id);
     if (!user) {
         yield Album_1.default.findByIdAndRemove(album['_id']);
-        return next(new ErrorHandler_1.default(404, `User With Id ${req['user']._id} Not Exist`));
+        return next(new ErrorHandler_1.default(404, `User With Id ${req['authorizedUser']._id} Not Exist`));
     }
-    yield User_1.default.findByIdAndUpdate(req['user']._id, {
+    yield User_1.default.findByIdAndUpdate(req['authorizedUser']._id, {
         $push: {
             albums: album['_id'],
         },

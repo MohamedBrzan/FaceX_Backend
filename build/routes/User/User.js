@@ -16,7 +16,7 @@ const ReceiveFollow_1 = __importDefault(require("../../controllers/User/ReceiveF
 const SendFollow_1 = __importDefault(require("../../controllers/User/SendFollow"));
 const router = (0, express_1.Router)();
 // Get Users
-router.get('/', GetUsers_1.default);
+router.get('/users', GetUsers_1.default);
 // Register User
 router.post('/register', Register_1.default);
 // Login User

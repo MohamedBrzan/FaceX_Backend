@@ -10,7 +10,7 @@ export default AsyncHandler(
     let ad = await Ad.findById(id);
     if (!ad) return next(new ErrorHandler(404, `Ad With Id : ${id} Not Exist`));
 
-    let user = await User.findById(req['user']._id);
+    let user = await User.findById(req['authorizedUser']._id);
 
     const adIndex = user.ads.findIndex((ad) => ad['_id'].toString() === id);
 

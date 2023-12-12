@@ -12,7 +12,7 @@ export default AsyncHandler(
     if (!blog)
       return next(new ErrorHandler(404, `Couldn't Find Blog With Id => ${id}`));
 
-    let user = await User.findById(req['user']._id);
+    let user = await User.findById(req['authorizedUser']._id);
 
     const blogIndex = user.blogs.findIndex(
       (blog) => blog['_id'].toString() === id

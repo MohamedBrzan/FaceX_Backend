@@ -18,13 +18,13 @@ const User_1 = __importDefault(require("../../models/User/User"));
 const ErrorHandler_1 = __importDefault(require("../../middleware/ErrorHandler"));
 exports.default = (0, AsyncHandler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { video, ref } = req.body;
-    let vdeo = yield Video_1.default.create({ user: req['user']._id, video, ref });
-    let user = yield User_1.default.findById(req['user']._id);
+    let vdeo = yield Video_1.default.create({ user: req['authorizedUser']._id, video, ref });
+    let user = yield User_1.default.findById(req['authorizedUser']._id);
     if (!user) {
         yield Video_1.default.findByIdAndRemove(vdeo['_id']);
-        return next(new ErrorHandler_1.default(404, `User With Id ${req['user']._id} Not Exist`));
+        return next(new ErrorHandler_1.default(404, `User With Id ${req['authorizedUser']._id} Not Exist`));
     }
-    yield User_1.default.findByIdAndUpdate(req['user']._id, {
+    yield User_1.default.findByIdAndUpdate(req['authorizedUser']._id, {
         $push: {
             videos: vdeo['_id'],
         },

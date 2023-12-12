@@ -11,7 +11,7 @@ export default AsyncHandler(
     if (!video)
       return next(new ErrorHandler(404, `Video With Id ${videoId} Not Exist`));
 
-    let user = await User.findById(req['user']._id);
+    let user = await User.findById(req['authorizedUser']._id);
 
     const videoIndex = user.videos.findIndex(
       (video) => video['_id'].toString() === videoId

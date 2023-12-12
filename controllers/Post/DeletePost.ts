@@ -12,7 +12,7 @@ export default AsyncHandler(
     if (!post)
       return next(new ErrorHandler(404, `Couldn't Find Post With Id => ${id}`));
 
-    let user = await User.findById(req['user']._id);
+    let user = await User.findById(req['authorizedUser']._id);
 
     const postIndex = user.posts.findIndex(
       (post) => post['_id'].toString() === id

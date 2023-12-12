@@ -11,7 +11,7 @@ export default AsyncHandler(
     if (!image)
       return next(new ErrorHandler(404, `Image With Id ${id} Not Exist`));
 
-    let user = await User.findById(req['user']._id);
+    let user = await User.findById(req['authorizedUser']._id);
 
     const imageIndex = user.images.findIndex(
       (image) => image['_id'].toString() === id

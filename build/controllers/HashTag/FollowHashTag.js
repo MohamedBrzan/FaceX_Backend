@@ -22,14 +22,14 @@ exports.default = (0, AsyncHandler_1.default)((req, res, next) => __awaiter(void
     let hashTag = yield HashTag_1.default.findById(hashTagId).select('followers');
     if (!hashTag)
         return next(new ErrorHandler_1.default(404, `Cannot Find HashTag With Id : ${hashTagId}`));
-    let user = yield User_1.default.findById(req['user']._id).select('hashTags');
+    let user = yield User_1.default.findById(req['authorizedUser']._id).select('hashTags');
     const findHashTagOwner = (_b = (_a = user === null || user === void 0 ? void 0 : user.hashTags) === null || _a === void 0 ? void 0 : _a.create) === null || _b === void 0 ? void 0 : _b.findIndex((tag) => tag === hashTag);
     if (findHashTagOwner > -1)
         return next(new ErrorHandler_1.default(500, `You Cannot Follow Your HashTag`));
-    const findUser = (_c = hashTag === null || hashTag === void 0 ? void 0 : hashTag.followers) === null || _c === void 0 ? void 0 : _c.findIndex((user) => user.toString() === req['user']._id.toString());
+    const findUser = (_c = hashTag === null || hashTag === void 0 ? void 0 : hashTag.followers) === null || _c === void 0 ? void 0 : _c.findIndex((user) => user.toString() === req['authorizedUser']._id.toString());
     if (findUser > -1)
         return next(new ErrorHandler_1.default(500, `You Already Following This HashTag`));
-    hashTag.followers.push(req['user']._id.toString());
+    hashTag.followers.push(req['authorizedUser']._id.toString());
     yield hashTag.save();
     user.hashTags.follow.push(hashTagId);
     yield user.save();

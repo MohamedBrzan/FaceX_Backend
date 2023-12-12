@@ -22,7 +22,7 @@ exports.default = (0, AsyncHandler_1.default)((req, res, next) => __awaiter(void
     let notification = yield Notification_1.default.findById(id);
     if (!notification)
         return next(new ErrorHandler_1.default(404, `Notification With Id: ${id} Not Exist`));
-    let user = yield User_1.default.findById(req['user']._id);
+    let user = yield User_1.default.findById(req['authorizedUser']._id);
     const { notifications, followers, followings } = user;
     const notificationIndex = user.notifications.findIndex((notification) => notification['_id'].toString() === id);
     if (notificationIndex >= 0) {

@@ -13,7 +13,8 @@ export default AsyncHandler(
     if (user)
       return next(new ErrorHandler(500, 'This User Is Already Registered!'));
 
-    user = await User.create({ name, email, password });
+    user = await User.create(req.body);
+    await user.save();
 
     return SendToken(res, user, 200);
   }

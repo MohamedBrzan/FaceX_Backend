@@ -13,7 +13,7 @@ export default AsyncHandler(
         new ErrorHandler(404, `Notification With Id: ${id} Not Exist`)
       );
 
-    let user = await User.findById(req['user']._id);
+    let user = await User.findById(req['authorizedUser']._id);
 
     const { notifications, followers, followings } = user;
 

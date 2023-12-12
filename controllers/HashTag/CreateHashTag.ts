@@ -8,14 +8,14 @@ export default AsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { text } = req.body;
 
-    let user = await User.findById(req['user']._id);
+    let user = await User.findById(req['authorizedUser']._id);
 
     if (!user)
       return next(new ErrorHandler(404, `You Must Be Logged In First`));
 
-    let hashTag = await HashTag.create({ user: req['user']._id, text });
+    let hashTag = await HashTag.create({ user: req['authorizedUser']._id, text });
 
-    await User.findByIdAndUpdate(req['user']._id, {
+    await User.findByIdAndUpdate(req['authorizedUser']._id, {
       $push: {
         'hashTags.create': hashTag['_id'].toString(),
       },

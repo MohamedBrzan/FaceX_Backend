@@ -1,6 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import session from 'express-session';
+import cookieParser from 'cookie-parser';
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import debug from 'debug';
@@ -8,6 +9,7 @@ import DB from './database/DB';
 import User from './routes/User/User';
 import Post from './routes/Post/Post';
 import Blog from './routes/Blog/Blog';
+import Job from './routes/Job/Job';
 import Comment from './routes/Comment/Comment';
 import Reply from './routes/Comment/Reply/Reply';
 import Ad from './routes/Ad/Ad';
@@ -22,18 +24,11 @@ import ErrorMessage from './middleware/ErrorMessage';
 const app = express();
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 app.use(cors());
 
 DB();
-
-// export interface IGetUserAuthInfoRequest extends Request {
-//   session: any;
-//   isAuthenticated(): Function;
-//   logout: any;
-//   user: string; // or any other type
-//   // isAuthenticated: Function;
-//   // logout: Function;
-// }
 
 const debugServer = debug('app:sever');
 
@@ -58,10 +53,13 @@ passport.use(
 passport.serializeUser((user, done) => done(null, user));
 passport.deserializeUser((user, done) => done(null, user));
 
+app.set('http://localhost:3000/', 1);
+
 app.use(
   session({
+    name: process.env.SESSION_NAME,
     secret: process.env.SESSION_SECRET,
-    resave: true,
+    resave: false,
     saveUninitialized: true,
     cookie: { maxAge: 1000 * 60 * 60 },
   })
@@ -113,19 +111,20 @@ app.get('/logout', (req: Request, res: Response, next: NextFunction) =>
 
 //** */
 
-// app.use('/user', User);
-// app.use('/ad', Ad);
-// app.use('/post', Post);
-// app.use('/blog', Blog);
-// app.use('/comment', Comment);
-// app.use('/reply', Reply);
-// app.use('/hashTag', HashTag);
-// app.use('/image', Image);
-// app.use('/album', Album);
-// app.use('/notification', Notification);
-// app.use('/reel', Reel);
-// app.use('/video', Video);
-// app.use('/payment', Payment);
+app.use('/user', User);
+app.use('/ad', Ad);
+app.use('/post', Post);
+app.use('/blog', Blog);
+app.use('/job', Job);
+app.use('/comment', Comment);
+app.use('/reply', Reply);
+app.use('/hashTag', HashTag);
+app.use('/image', Image);
+app.use('/album', Album);
+app.use('/notification', Notification);
+app.use('/reel', Reel);
+app.use('/video', Video);
+app.use('/payment', Payment);
 
 app.use(ErrorMessage);
 

@@ -8,18 +8,18 @@ export default AsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { video, ref } = req.body;
 
-    let vdeo = await Video.create({ user: req['user']._id, video, ref });
+    let vdeo = await Video.create({ user: req['authorizedUser']._id, video, ref });
 
-    let user = await User.findById(req['user']._id);
+    let user = await User.findById(req['authorizedUser']._id);
 
     if (!user) {
       await Video.findByIdAndRemove(vdeo['_id']);
       return next(
-        new ErrorHandler(404, `User With Id ${req['user']._id} Not Exist`)
+        new ErrorHandler(404, `User With Id ${req['authorizedUser']._id} Not Exist`)
       );
     }
 
-    await User.findByIdAndUpdate(req['user']._id, {
+    await User.findByIdAndUpdate(req['authorizedUser']._id, {
       $push: {
         videos: vdeo['_id'],
       },

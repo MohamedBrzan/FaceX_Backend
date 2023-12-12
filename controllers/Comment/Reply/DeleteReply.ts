@@ -16,7 +16,7 @@ export default AsyncHandler(
     reply = await Reply.findByIdAndRemove(replyId);
 
     await User.findByIdAndUpdate(
-      req['user']._id,
+      req['authorizedUser']._id,
       { $pull: { replies: replyId } },
       { runValidators: true, new: true }
     );

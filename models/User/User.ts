@@ -35,6 +35,7 @@ const UserSchema = new Schema<User>(
     },
     posts: [{ type: Types.ObjectId, ref: 'Post' }],
     blogs: [{ type: Types.ObjectId, ref: 'Blog' }],
+    jobs: [{ type: Types.ObjectId, ref: 'Job' }],
     isVerified: { type: Boolean, default: false },
     ads: [{ type: Types.ObjectId, ref: 'Ads' }],
     reels: [{ type: Types.ObjectId, ref: 'Reels' }],

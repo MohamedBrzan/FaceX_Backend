@@ -9,18 +9,18 @@ export default AsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { image, ref } = req.body;
 
-    let img = await Image.create({ user: req['user']._id, image, ref });
+    let img = await Image.create({ user: req['authorizedUser']._id, image, ref });
 
-    let user = await User.findById(req['user']._id);
+    let user = await User.findById(req['authorizedUser']._id);
 
     if (!user) {
       await Image.findByIdAndRemove(img['_id']);
       return next(
-        new ErrorHandler(404, `User With Id ${req['user']._id} Not Exist`)
+        new ErrorHandler(404, `User With Id ${req['authorizedUser']._id} Not Exist`)
       );
     }
 
-    await User.findByIdAndUpdate(req['user']._id, {
+    await User.findByIdAndUpdate(req['authorizedUser']._id, {
       $push: {
         images: img['_id'],
       },

@@ -21,6 +21,7 @@ exports.default = (0, AsyncHandler_1.default)((req, res, next) => __awaiter(void
     let user = yield User_1.default.findOne({ email });
     if (user)
         return next(new ErrorHandler_1.default(500, 'This User Is Already Registered!'));
-    user = yield User_1.default.create({ name, email, password });
+    user = yield User_1.default.create(req.body);
+    yield user.save();
     return (0, SendToken_1.default)(res, user, 200);
 }));

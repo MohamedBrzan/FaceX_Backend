@@ -21,7 +21,7 @@ exports.default = (0, AsyncHandler_1.default)((req, res, next) => __awaiter(void
     let hashTag = yield HashTag_1.default.findById(hashTagId);
     if (!hashTag)
         return next(new ErrorHandler_1.default(404, `HashTag With Id ${hashTagId} Not Exist`));
-    let user = yield User_1.default.findById(req['user']._id);
+    let user = yield User_1.default.findById(req['authorizedUser']._id);
     const hashTagIndex = user.hashTags.follow.findIndex((hashTag) => hashTag['_id'].toString() === hashTagId);
     if (hashTagIndex >= 0) {
         user.hashTags.follow.splice(hashTagIndex, 1);

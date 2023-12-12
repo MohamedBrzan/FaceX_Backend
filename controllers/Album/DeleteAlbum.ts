@@ -12,7 +12,7 @@ export default AsyncHandler(
     if (!album)
       return next(new ErrorHandler(404, `Album With Id ${id} Not Exist`));
 
-    let user = await User.findById(req['user']._id);
+    let user = await User.findById(req['authorizedUser']._id);
 
     const albumIndex = user.albums.findIndex(
       (album) => album['_id'].toString() === id

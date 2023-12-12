@@ -21,6 +21,6 @@ exports.default = (0, AsyncHandler_1.default)((req, res, next) => __awaiter(void
     if (!token)
         return next(new ErrorHandler_1.default(404, 'Not Authorized'));
     const decoded = jsonwebtoken_1.default.decode(token, process.env.JWT_SECRET_TOKEN);
-    req['user'] = yield User_1.default.findById(decoded.id);
+    req['authorizedUser'] = yield User_1.default.findById(decoded.id);
     next();
 }));

@@ -27,7 +27,7 @@ export default AsyncHandler(
       //* Remove Comment From User Comments
 
       await User.findByIdAndUpdate(
-        req['user']._id,
+        req['authorizedUser']._id,
         { $pull: { comments: ref.post } },
         { runValidators: true, new: true }
       );
@@ -55,7 +55,7 @@ export default AsyncHandler(
       //* Remove Comment From User Comments
 
       await User.findByIdAndUpdate(
-        req['user']._id,
+        req['authorizedUser']._id,
         { $pull: { comments: ref.blog } },
         { runValidators: true, new: true }
       );
@@ -84,7 +84,7 @@ export default AsyncHandler(
       //* Remove Comment From User Comments
 
       await User.findByIdAndUpdate(
-        req['user']._id,
+        req['authorizedUser']._id,
         { $pull: { comments: ref.reel } },
         { runValidators: true, new: true }
       );

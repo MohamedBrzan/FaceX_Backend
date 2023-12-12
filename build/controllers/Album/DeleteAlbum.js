@@ -22,7 +22,7 @@ exports.default = (0, AsyncHandler_1.default)((req, res, next) => __awaiter(void
     let album = yield Album_1.default.findById(id);
     if (!album)
         return next(new ErrorHandler_1.default(404, `Album With Id ${id} Not Exist`));
-    let user = yield User_1.default.findById(req['user']._id);
+    let user = yield User_1.default.findById(req['authorizedUser']._id);
     const albumIndex = user.albums.findIndex((album) => album['_id'].toString() === id);
     if (albumIndex >= 0) {
         //* Delete Album From User

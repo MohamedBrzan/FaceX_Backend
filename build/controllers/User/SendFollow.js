@@ -18,18 +18,18 @@ const ErrorHandler_1 = __importDefault(require("../../middleware/ErrorHandler"))
 exports.default = (0, AsyncHandler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b, _c, _d;
     const { following } = req.body;
-    let user = yield User_1.default.findById(req['user']._id).select('followings name _id');
+    let user = yield User_1.default.findById(req['authorizedUser']._id).select('followings name _id');
     if (following === user._id.toString())
         return next(new ErrorHandler_1.default(500, 'You Cannot Follow Yourself'));
     let follower = yield User_1.default.findById(following).select('followers name');
-    const userIndex = (_a = follower === null || follower === void 0 ? void 0 : follower.followers) === null || _a === void 0 ? void 0 : _a.findIndex((f) => f.toString() === req['user']._id);
+    const userIndex = (_a = follower === null || follower === void 0 ? void 0 : follower.followers) === null || _a === void 0 ? void 0 : _a.findIndex((f) => f.toString() === req['authorizedUser']._id);
     if (((_b = follower === null || follower === void 0 ? void 0 : follower.followers) === null || _b === void 0 ? void 0 : _b.length) > 0 && userIndex)
         return next(new ErrorHandler_1.default(500, `${follower.name} Is Already In Your Followings`));
     let followingIndex = (_c = user === null || user === void 0 ? void 0 : user.followings) === null || _c === void 0 ? void 0 : _c.findIndex((f) => f.toString() === following);
     if (((_d = user === null || user === void 0 ? void 0 : user.followings) === null || _d === void 0 ? void 0 : _d.length) > 0 && followingIndex)
         return next(new ErrorHandler_1.default(500, `${following === null || following === void 0 ? void 0 : following.name} Is Already In Your Followers`));
     //* Following The User
-    follower.followers.push(req['user']._id);
+    follower.followers.push(req['authorizedUser']._id);
     yield follower.save();
     //* Follow The User
     user.followings.push(following);

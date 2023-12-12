@@ -21,7 +21,7 @@ exports.default = (0, AsyncHandler_1.default)((req, res, next) => __awaiter(void
     let image = yield Image_1.default.findById(id);
     if (!image)
         return next(new ErrorHandler_1.default(404, `Image With Id ${id} Not Exist`));
-    let user = yield User_1.default.findById(req['user']._id);
+    let user = yield User_1.default.findById(req['authorizedUser']._id);
     const imageIndex = user.images.findIndex((image) => image['_id'].toString() === id);
     if (imageIndex >= 0) {
         user.images.splice(imageIndex, 1);

@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
 const NotificationStatus_1 = __importDefault(require("../../enums/NotificationStatus"));
 const notificationSchema = new mongoose_1.Schema({
-    from: { type: mongoose_1.Schema.Types.ObjectId, ref: 'User' },
+    from: { type: mongoose_1.Types.ObjectId, ref: 'User' },
     title: { type: String, required: true },
     link: { type: String, required: true },
     status: {

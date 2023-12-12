@@ -11,7 +11,7 @@ export default AsyncHandler(
     const { message, visiblePrivacy, ref } = req.body;
 
     let comment = await Comment.create({
-      user: req['user']._id,
+      user: req['authorizedUser']._id,
       message,
       visiblePrivacy,
     });
@@ -19,7 +19,7 @@ export default AsyncHandler(
     //* Add Comment To The User Comments
 
     await User.findByIdAndUpdate(
-      req['user']._id,
+      req['authorizedUser']._id,
       { $push: { comments: comment['_id'] } },
       { runValidators: true, new: true }
     );

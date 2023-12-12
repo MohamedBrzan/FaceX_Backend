@@ -11,9 +11,7 @@ export default AsyncHandler(
     if (!token) return next(new ErrorHandler(404, 'Not Authorized'));
 
     const decoded = jwt.decode(token, process.env.JWT_SECRET_TOKEN);
-
-    req['user'] = await User.findById(decoded.id);
-
+    req['authorizedUser'] = await User.findById(decoded.id);
     next();
   }
 );

@@ -21,7 +21,7 @@ exports.default = (0, AsyncHandler_1.default)((req, res, next) => __awaiter(void
     let ad = yield Ad_1.default.findById(id);
     if (!ad)
         return next(new ErrorHandler_1.default(404, `Ad With Id : ${id} Not Exist`));
-    let user = yield User_1.default.findById(req['user']._id);
+    let user = yield User_1.default.findById(req['authorizedUser']._id);
     const adIndex = user.ads.findIndex((ad) => ad['_id'].toString() === id);
     if (adIndex >= 0) {
         user.ads.splice(adIndex, 1);

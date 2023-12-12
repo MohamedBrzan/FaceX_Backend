@@ -22,6 +22,6 @@ exports.default = (0, AsyncHandler_1.default)((req, res, next) => __awaiter(void
     if (!reply)
         return next(new ErrorHandler_1.default(404, `This Reply Id ${replyId} Not Found`));
     reply = yield Reply_1.default.findByIdAndRemove(replyId);
-    yield User_1.default.findByIdAndUpdate(req['user']._id, { $pull: { replies: replyId } }, { runValidators: true, new: true });
+    yield User_1.default.findByIdAndUpdate(req['authorizedUser']._id, { $pull: { replies: replyId } }, { runValidators: true, new: true });
     return res.status(200).json({ message: 'Reply Deleted Successfully' });
 }));

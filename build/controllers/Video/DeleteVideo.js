@@ -21,7 +21,7 @@ exports.default = (0, AsyncHandler_1.default)((req, res, next) => __awaiter(void
     let video = yield Video_1.default.findById(videoId);
     if (!video)
         return next(new ErrorHandler_1.default(404, `Video With Id ${videoId} Not Exist`));
-    let user = yield User_1.default.findById(req['user']._id);
+    let user = yield User_1.default.findById(req['authorizedUser']._id);
     const videoIndex = user.videos.findIndex((video) => video['_id'].toString() === videoId);
     if (videoIndex >= 0) {
         user.videos.splice(videoIndex, 1);

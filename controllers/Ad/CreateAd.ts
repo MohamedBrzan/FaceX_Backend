@@ -17,7 +17,7 @@ export default AsyncHandler(
       );
 
     const ad = await Ad.create({
-      user: req['user']._id,
+      user: req['authorizedUser']._id,
       images,
       videos,
       start,
@@ -27,16 +27,16 @@ export default AsyncHandler(
       payment,
     });
 
-    let user = await User.findById(req['user']._id);
+    let user = await User.findById(req['authorizedUser']._id);
 
     if (!user) {
       await Ad.findByIdAndRemove(ad['_id']);
       return next(
-        new ErrorHandler(404, `User With Id ${req['user']._id} Not Exist`)
+        new ErrorHandler(404, `User With Id ${req['authorizedUser']._id} Not Exist`)
       );
     }
 
-    await User.findByIdAndUpdate(req['user']._id, {
+    await User.findByIdAndUpdate(req['authorizedUser']._id, {
       $push: {
         ads: ad['_id'],
       },

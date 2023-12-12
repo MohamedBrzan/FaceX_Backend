@@ -21,7 +21,7 @@ exports.default = (0, AsyncHandler_1.default)((req, res, next) => __awaiter(void
     let payment = yield Payment_1.default.findById(id);
     if (!payment)
         return next(new ErrorHandler_1.default(404, `Payment With Id ${id} Not Exist`));
-    let user = yield User_1.default.findById(req['user']._id);
+    let user = yield User_1.default.findById(req['authorizedUser']._id);
     const paymentIndex = user.payments.findIndex((payment) => payment['_id'].toString() === id);
     if (paymentIndex >= 0) {
         user.payments.splice(paymentIndex, 1);

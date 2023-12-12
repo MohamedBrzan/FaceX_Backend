@@ -15,7 +15,7 @@ export default AsyncHandler(
         new ErrorHandler(404, `Cannot Find HashTag With Id : ${hashTagId}`)
       );
 
-    let user = await User.findById(req['user']._id).select('hashTags');
+    let user = await User.findById(req['authorizedUser']._id).select('hashTags');
 
     const findHashTagOwner = user?.hashTags?.create?.findIndex(
       (tag) => tag === hashTag
@@ -25,13 +25,13 @@ export default AsyncHandler(
       return next(new ErrorHandler(500, `You Cannot Follow Your HashTag`));
 
     const findUser = hashTag?.followers?.findIndex(
-      (user) => user.toString() === req['user']._id.toString()
+      (user) => user.toString() === req['authorizedUser']._id.toString()
     );
 
     if (findUser > -1)
       return next(new ErrorHandler(500, `You Already Following This HashTag`));
 
-    hashTag.followers.push(req['user']._id.toString());
+    hashTag.followers.push(req['authorizedUser']._id.toString());
     await hashTag.save();
 
     user.hashTags.follow.push(hashTagId);

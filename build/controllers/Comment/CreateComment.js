@@ -21,12 +21,12 @@ const User_1 = __importDefault(require("../../models/User/User"));
 exports.default = (0, AsyncHandler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { message, visiblePrivacy, ref } = req.body;
     let comment = yield Comment_1.default.create({
-        user: req['user']._id,
+        user: req['authorizedUser']._id,
         message,
         visiblePrivacy,
     });
     //* Add Comment To The User Comments
-    yield User_1.default.findByIdAndUpdate(req['user']._id, { $push: { comments: comment['_id'] } }, { runValidators: true, new: true });
+    yield User_1.default.findByIdAndUpdate(req['authorizedUser']._id, { $push: { comments: comment['_id'] } }, { runValidators: true, new: true });
     //* If The Comment For Post | Blog | Reel
     if (ref.post) {
         yield Post_1.default.findByIdAndUpdate(ref.post, {

@@ -18,13 +18,13 @@ const User_1 = __importDefault(require("../../models/User/User"));
 const ErrorHandler_1 = __importDefault(require("../../middleware/ErrorHandler"));
 exports.default = (0, AsyncHandler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { title, content } = req.body;
-    let blog = yield Blog_1.default.create({ user: req['user']._id, title, content });
-    let user = yield User_1.default.findById(req['user']._id);
+    let blog = yield Blog_1.default.create({ user: req['authorizedUser']._id, title, content });
+    let user = yield User_1.default.findById(req['authorizedUser']._id);
     if (!user) {
         yield Blog_1.default.findByIdAndRemove(blog['_id']);
-        return next(new ErrorHandler_1.default(404, `User With Id ${req['user']._id} Not Exist`));
+        return next(new ErrorHandler_1.default(404, `User With Id ${req['authorizedUser']._id} Not Exist`));
     }
-    yield User_1.default.findByIdAndUpdate(req['user']._id, {
+    yield User_1.default.findByIdAndUpdate(req['authorizedUser']._id, {
         $push: {
             blogs: blog['_id'],
         },

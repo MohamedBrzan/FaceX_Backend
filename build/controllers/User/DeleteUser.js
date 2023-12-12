@@ -28,8 +28,8 @@ const Notification_1 = __importDefault(require("../../models/Notification/Notifi
 const HashTag_1 = __importDefault(require("../../models/HashTag/HashTag"));
 const Reply_1 = __importDefault(require("../../models/Comment/Reply"));
 exports.default = (0, AsyncHandler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b;
-    let user = yield User_1.default.findById((_a = req['user']) === null || _a === void 0 ? void 0 : _a._id);
+    var _a;
+    let user = yield User_1.default.findById(req['authorizedUser']._id);
     if (!user)
         return next(new ErrorHandler_1.default(404, 'You Must Be Logged In First'));
     const { posts, blogs, reels, images, albums, payments, videos, comments, replies, hashTags, ads, notifications, followers, followings, } = user;
@@ -108,7 +108,7 @@ exports.default = (0, AsyncHandler_1.default)((req, res, next) => __awaiter(void
     //! Delete All Hashtags That Followed By User
     if ((hashTags === null || hashTags === void 0 ? void 0 : hashTags.follow.length) > 0) {
         for (let i = 0; i < hashTags.follow.length; i++) {
-            yield HashTag_1.default.findByIdAndUpdate(hashTags.follow[i].toString(), { $pull: { followers: req['user']._id.toString() } }, { runValidators: true, new: true });
+            yield HashTag_1.default.findByIdAndUpdate(hashTags.follow[i].toString(), { $pull: { followers: req['authorizedUser']._id.toString() } }, { runValidators: true, new: true });
         }
     }
     //! Delete All User Notifications
@@ -133,7 +133,7 @@ exports.default = (0, AsyncHandler_1.default)((req, res, next) => __awaiter(void
             yield following.save();
         }
     }
-    yield User_1.default.findByIdAndRemove((_b = req['user']) === null || _b === void 0 ? void 0 : _b._id);
+    yield User_1.default.findByIdAndRemove((_a = req['authorizedUser']) === null || _a === void 0 ? void 0 : _a._id);
     return res
         .status(200)
         .json({ success: true, msg: 'User Deleted Successfully' });

@@ -23,7 +23,7 @@ exports.default = (0, AsyncHandler_1.default)((req, res, next) => __awaiter(void
     if (!findPayment)
         return next(new ErrorHandler_1.default(404, `Couldn't Find Payment With Id: ${payment}`));
     const ad = yield Ad_1.default.create({
-        user: req['user']._id,
+        user: req['authorizedUser']._id,
         images,
         videos,
         start,
@@ -32,12 +32,12 @@ exports.default = (0, AsyncHandler_1.default)((req, res, next) => __awaiter(void
         ages,
         payment,
     });
-    let user = yield User_1.default.findById(req['user']._id);
+    let user = yield User_1.default.findById(req['authorizedUser']._id);
     if (!user) {
         yield Ad_1.default.findByIdAndRemove(ad['_id']);
-        return next(new ErrorHandler_1.default(404, `User With Id ${req['user']._id} Not Exist`));
+        return next(new ErrorHandler_1.default(404, `User With Id ${req['authorizedUser']._id} Not Exist`));
     }
-    yield User_1.default.findByIdAndUpdate(req['user']._id, {
+    yield User_1.default.findByIdAndUpdate(req['authorizedUser']._id, {
         $push: {
             ads: ad['_id'],
         },

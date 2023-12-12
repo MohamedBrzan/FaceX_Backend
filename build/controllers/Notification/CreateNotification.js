@@ -19,17 +19,17 @@ const ErrorHandler_1 = __importDefault(require("../../middleware/ErrorHandler"))
 exports.default = (0, AsyncHandler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { title, link, status } = req.body;
     let notification = yield Notification_1.default.create({
-        from: req['user']._id,
+        from: req['authorizedUser']._id,
         title,
         link,
         status,
     });
-    let user = yield User_1.default.findById(req['user']._id);
+    let user = yield User_1.default.findById(req['authorizedUser']._id);
     if (!user) {
         yield Notification_1.default.findByIdAndRemove(notification['_id']);
-        return next(new ErrorHandler_1.default(404, `User With Id ${req['user']._id} Not Exist`));
+        return next(new ErrorHandler_1.default(404, `User With Id ${req['authorizedUser']._id} Not Exist`));
     }
-    yield User_1.default.findByIdAndUpdate(req['user']._id, { $push: { notifications: notification['_id'].toString() } }, { runValidators: true, new: true });
+    yield User_1.default.findByIdAndUpdate(req['authorizedUser']._id, { $push: { notifications: notification['_id'].toString() } }, { runValidators: true, new: true });
     const { followers, followings } = user;
     //* Send This Notification From All Followers
     if ((followers === null || followers === void 0 ? void 0 : followers.length) > 0) {

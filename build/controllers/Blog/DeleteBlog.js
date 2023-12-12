@@ -22,7 +22,7 @@ exports.default = (0, AsyncHandler_1.default)((req, res, next) => __awaiter(void
     let blog = yield Blog_1.default.findById(id);
     if (!blog)
         return next(new ErrorHandler_1.default(404, `Couldn't Find Blog With Id => ${id}`));
-    let user = yield User_1.default.findById(req['user']._id);
+    let user = yield User_1.default.findById(req['authorizedUser']._id);
     const blogIndex = user.blogs.findIndex((blog) => blog['_id'].toString() === id);
     if (blogIndex >= 0) {
         user.blogs.splice(blogIndex, 1);

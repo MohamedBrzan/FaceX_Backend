@@ -18,11 +18,11 @@ const User_1 = __importDefault(require("../../../models/User/User"));
 exports.default = (0, AsyncHandler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { ref, message, visiblePrivacy } = req.body;
     let reply = yield Reply_1.default.create({
-        user: req['user']._id,
+        user: req['authorizedUser']._id,
         ref,
         reply: message,
         visiblePrivacy,
     });
-    yield User_1.default.findByIdAndUpdate(req['user']._id, { $push: { replies: reply['_id'].toString() } }, { runValidators: true, new: true });
+    yield User_1.default.findByIdAndUpdate(req['authorizedUser']._id, { $push: { replies: reply['_id'].toString() } }, { runValidators: true, new: true });
     return res.status(200).json(reply);
 }));

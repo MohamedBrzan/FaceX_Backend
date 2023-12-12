@@ -4,6 +4,7 @@ import Blog from '../Blog/Blog';
 import Comment from '../Comment/Comment';
 import Reply from '../Comment/Reply';
 import HashTag from '../HashTag/HashTag';
+import Job from '../Job/Job';
 import Notification from '../Notification/Notification';
 import Payment from '../Payment/Payment';
 import Post from '../Post/Post';
@@ -31,6 +32,7 @@ interface User {
   followings?: User[];
   posts?: Post[];
   blogs?: Blog[];
+  jobs?: Job[];
   isVerified?: boolean;
   ads?: Ad[];
   reels?: Reel[];
