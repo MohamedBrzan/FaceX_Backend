@@ -46,6 +46,7 @@ const UserSchema = new Schema<User>(
     github: { type: String },
     deletion: { type: Date },
     isDeleted: { type: Boolean, default: false },
+    isBanned: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

@@ -43,6 +43,7 @@ interface User {
   github?: string;
   deletion?: Date;
   isDeleted: boolean;
+  isBanned?: boolean;
 }
 
 export default User;
