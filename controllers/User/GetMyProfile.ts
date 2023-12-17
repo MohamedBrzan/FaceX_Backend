@@ -4,5 +4,9 @@ import User from '../../models/User/User';
 
 export default AsyncHandler(
   async (req: Request, res: Response, next: NextFunction) =>
+<<<<<<< HEAD
     res.status(200).json(await User.findById(req['authorizedUser']._id))
+=======
+    res.status(200).json(await User.findById(req.user['id']))
+>>>>>>> auth
 );

@@ -7,7 +7,11 @@ export default AsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { follower } = req.body;
 
+<<<<<<< HEAD
     let user = await User.findById(req['authorizedUser']._id).select(
+=======
+    let user = await User.findById(req.user['id']).select(
+>>>>>>> auth
       'followers name _id'
     );
 
@@ -17,7 +21,11 @@ export default AsyncHandler(
     let following = await User.findById(follower).select('followings name');
 
     const userIndex = following?.followings?.findIndex(
+<<<<<<< HEAD
       (f) => f.toString() === req['authorizedUser']._id
+=======
+      (f) => f.toString() === req.user['id']
+>>>>>>> auth
     );
 
     if (userIndex)
@@ -35,7 +43,11 @@ export default AsyncHandler(
       );
 
     //* Following The User
+<<<<<<< HEAD
     following?.followings?.push(req['authorizedUser']._id);
+=======
+    following?.followings?.push(req.user['id']);
+>>>>>>> auth
     await following.save();
 
     //* Follow The User

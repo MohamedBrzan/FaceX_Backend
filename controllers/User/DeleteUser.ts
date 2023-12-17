@@ -17,7 +17,12 @@ import Reply from '../../models/Comment/Reply';
 
 export default AsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
+<<<<<<< HEAD
     let user = await User.findById(req['authorizedUser']._id);
+=======
+    let user = await User.findById(req.user['id']);
+
+>>>>>>> auth
     if (!user)
       return next(new ErrorHandler(404, 'You Must Be Logged In First'));
     const {
@@ -113,7 +118,11 @@ export default AsyncHandler(
       for (let i = 0; i < hashTags.follow.length; i++) {
         await HashTag.findByIdAndUpdate(
           hashTags.follow[i].toString(),
+<<<<<<< HEAD
           { $pull: { followers: req['authorizedUser']._id.toString() } },
+=======
+          { $pull: { followers: req.user['id'] } },
+>>>>>>> auth
           { runValidators: true, new: true }
         );
       }
@@ -140,7 +149,11 @@ export default AsyncHandler(
         await following.save();
       }
     }
+<<<<<<< HEAD
     await User.findByIdAndRemove(req['authorizedUser']?._id);
+=======
+    await User.findByIdAndRemove(req.user['id']);
+>>>>>>> auth
     return res
       .status(200)
       .json({ success: true, msg: 'User Deleted Successfully' });
