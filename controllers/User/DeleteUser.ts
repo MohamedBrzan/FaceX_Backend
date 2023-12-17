@@ -14,17 +14,20 @@ import Ad from '../../models/Ad/Ad';
 import Notification from '../../models/Notification/Notification';
 import HashTag from '../../models/HashTag/HashTag';
 import Reply from '../../models/Comment/Reply';
+import { getUserId } from '../../constants/UserId';
 
 export default AsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
+    const userId = (await getUserId(req)).toString();
+
     const { id } = req.params;
 
-    if (id !== req.user['id'])
+    if (id !== userId)
       return next(
         new ErrorHandler(404, "You're not allowed to delete the user")
       );
 
-    let user = await User.findById(req.user['id']);
+    let user = await User.findById(userId);
 
     if (!user) return next(new ErrorHandler(404, 'You must be logged in'));
 
@@ -121,7 +124,7 @@ export default AsyncHandler(
       for (let i = 0; i < hashTags.follow.length; i++) {
         await HashTag.findByIdAndUpdate(
           hashTags.follow[i].toString(),
-          { $pull: { followers: req.user['id'] } },
+          { $pull: { followers: userId } },
           { runValidators: true, new: true }
         );
       }
@@ -148,7 +151,7 @@ export default AsyncHandler(
         await following.save();
       }
     }
-    await User.findByIdAndRemove(req.user['id']);
+    await User.findByIdAndRemove(userId);
     return res
       .status(200)
       .json({ success: true, msg: 'User Deleted Successfully' });

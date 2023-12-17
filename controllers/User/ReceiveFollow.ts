@@ -2,12 +2,14 @@ import { Request, Response, NextFunction } from 'express';
 import AsyncHandler from '../../middleware/AsyncHandler';
 import User from '../../models/User/User';
 import ErrorHandler from '../../middleware/ErrorHandler';
+import { getUserId } from '../../constants/UserId';
 
 export default AsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
+    const userId = (await getUserId(req)).toString();
     const { follower } = req.body;
 
-    let user = await User.findById(req.user['id']).select(
+    let user = await User.findById(userId).select(
       'followers name _id'
     );
 
@@ -17,7 +19,7 @@ export default AsyncHandler(
     let following = await User.findById(follower).select('followings name');
 
     const userIndex = following?.followings?.findIndex(
-      (f) => f.toString() === req.user['id']
+      (f) => f.toString() === userId
     );
 
     if (userIndex)
@@ -35,7 +37,7 @@ export default AsyncHandler(
       );
 
     //* Following The User
-    following?.followings?.push(req.user['id']);
+    following?.followings?.push(userId);
     await following.save();
 
     //* Follow The User
