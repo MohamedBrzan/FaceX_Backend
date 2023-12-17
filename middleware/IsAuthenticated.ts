@@ -22,9 +22,8 @@ import jwt from 'jsonwebtoken';
 export default AsyncHandler(
   (req: Request, res: Response, next: NextFunction) => {
     if (!req.isAuthenticated()) {
-      new ErrorHandler(404, 'Not Authorized');
+      return next(new ErrorHandler(404, "You're not Authenticated"));
     }
-
     next();
   }
 );

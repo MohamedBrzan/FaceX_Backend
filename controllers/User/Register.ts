@@ -6,7 +6,7 @@ import SendToken from '../../utils/SendToken';
 
 export default AsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { name, email, password } = req.body;
+    const { email } = req.body;
 
     let user = await User.findOne({ email });
 
@@ -16,6 +16,6 @@ export default AsyncHandler(
     user = await User.create(req.body);
     await user.save();
 
-    return SendToken(res, user, 200);
+    return res.status(200).json(user);
   }
 );

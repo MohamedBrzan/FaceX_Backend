@@ -17,10 +17,17 @@ import Reply from '../../models/Comment/Reply';
 
 export default AsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+
+    if (id !== req.user['id'])
+      return next(
+        new ErrorHandler(404, "You're not allowed to delete the user")
+      );
+
     let user = await User.findById(req.user['id']);
 
-    if (!user)
-      return next(new ErrorHandler(404, 'You Must Be Logged In First'));
+    if (!user) return next(new ErrorHandler(404, 'You must be logged in'));
+
     const {
       posts,
       blogs,

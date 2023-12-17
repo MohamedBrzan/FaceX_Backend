@@ -56,7 +56,12 @@ passport.use(
   )
 );
 
-passport.serializeUser((user, done) => done(null, { id: user['_id'] }));
+passport.serializeUser((user, done) => {
+  if (user['_id']) {
+    return done(null, { id: user['_id'] });
+  }
+  return done(null, { id: user['id'] });
+});
 passport.deserializeUser((id, done) => done(null, id));
 
 app.set('http://localhost:3000/', 1);
