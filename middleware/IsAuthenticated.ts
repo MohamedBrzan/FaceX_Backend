@@ -20,17 +20,33 @@ import jwt from 'jsonwebtoken';
 // );
 
 export default AsyncHandler(
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { token } = req.cookies;
+
+    if (!token) return next(new ErrorHandler(404, 'Not Authorized'));
+
+    const decoded = jwt.decode(token, process.env.JWT_SECRET_TOKEN);
+    req['authorizedUser'] = await User.findById(decoded.id);
+=======
+>>>>>>> main
   (req: Request, res: Response, next: NextFunction) => {
     if (!req.isAuthenticated()) {
       new ErrorHandler(404, 'Not Authorized');
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     // if (!token) return next(new ErrorHandler(404, 'Not Authorized'));
 
 <<<<<<< HEAD
     const decoded = jwt.decode(token, process.env.JWT_SECRET_TOKEN);
     req['authorizedUser'] = await User.findById(decoded.id);
+=======
+>>>>>>> auth
+>>>>>>> main
     next();
 =======
     // const decoded = jwt.decode(token, process.env.JWT_SECRET_TOKEN);
