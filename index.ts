@@ -81,10 +81,10 @@ app.use(
 );
 
 //* Save User into session (cookie)
-passport.serializeUser((user, done) => done(null, { email: user['email'] }));
+passport.serializeUser((user, done) => done(null, { id: user['_id'] }));
 
 //* Retrieve user from session (cookie)
-passport.deserializeUser((email, done) => done(null, email));
+passport.deserializeUser((id, done) => done(null, id));
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -92,21 +92,6 @@ app.use(passport.session());
 //** Google Authentication ( passport-google-oauth20 ) */
 
 // const debugLogout = debug('GoogleLogout');
-
-app.get('/', (req, res, next) => {
-  passport.authenticate('local', (err, user) => {
-    if (err)
-      return res.status(401).json({
-        message:
-          'Access Denied. email or password is incorrect. please try again.',
-      });
-    if (!user) return res.status(401).json({ message: 'User Not Authorized' });
-    return req.logIn(user, (err) => {
-      if (err) return res.status(401).json({ error: err });
-      return res.status(200).json(user);
-    });
-  })(req, res, next);
-});
 
 // app.get(
 //   '/auth/google',
