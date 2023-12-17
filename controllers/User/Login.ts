@@ -4,21 +4,34 @@ import ErrorHandler from '../../middleware/ErrorHandler';
 import SendToken from '../../utils/SendToken';
 import bcrypt from 'bcrypt';
 import User from '../../models/User/User';
+import passport from 'passport';
 
-export default AsyncHandler(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const { email, password } = req.body;
+export default function
+   (req: Request, res: Response, next: NextFunction) {
+    passport.authenticate('local', async (err: any, user: any) => {
+      if (err) {
+        throw err;
+      }
 
-    let user = await User.findOne({ email }).select('+password');
+      console.log(user)
 
-    if (!user)
-      return next(new ErrorHandler(404, 'Invalid Username or Password'));
+      // const { email, password } = req.body;
 
-    const isMatch = await bcrypt.compare(password, user.password);
+      // let usr = await User.findOne({ email }).select('+password');
 
-    if (!isMatch)
-      return next(new ErrorHandler(404, 'Invalid Username or Password'));
+      // if (!user)
+      //   return next(new ErrorHandler(404, 'Invalid Username or Password'));
 
-    return SendToken(res, user, 200);
+      // const isMatch = await bcrypt.compare(password, user.password);
+
+      // if (!isMatch)
+      //   return next(new ErrorHandler(404, 'Invalid Username or Password'));
+
+      // req.logIn(user, (err) => {
+      //   if (err) {
+      //     return err;
+      //   }
+      // });
+    })(req, res, next);
   }
-);
+

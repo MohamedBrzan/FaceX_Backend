@@ -1,6 +1,6 @@
 import mongoose, { ConnectOptions } from 'mongoose';
 import debug from 'debug';
-const debugDB = debug('Database');
+const debugDB = debug('app:Database');
 
 const DB = async () =>
   await mongoose

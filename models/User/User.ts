@@ -59,6 +59,12 @@ UserSchema.pre('save', async function (next) {
   next();
 });
 
+UserSchema.methods.verifyPassword = async function (
+  password: string
+): Promise<boolean> {
+  return await bcrypt.compare(password, this.password);
+};
+
 // Match Password to hashed password in database
 // UserSchema.methods.passwordValidation = async function (password) {
 //   return await bcrypt.compare(password, this.password);
