@@ -13,13 +13,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
+const debug_1 = __importDefault(require("debug"));
+const debugDB = (0, debug_1.default)('Database');
 const DB = () => __awaiter(void 0, void 0, void 0, function* () {
     return yield mongoose_1.default
         .connect(`${process.env.DATABASE_URL}`, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     })
-        .then(() => console.log(`DATABASE CONNECTED SUCCESSFULLY :)`))
-        .catch((err) => console.log(`DATABASE CONNECTION FAILED :( ${err.message}`));
+        .then(() => debugDB(`DATABASE CONNECTED SUCCESSFULLY :)`))
+        .catch((err) => debugDB(`DATABASE CONNECTION FAILED :( ${err.message}`));
 });
 exports.default = DB;

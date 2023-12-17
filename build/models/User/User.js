@@ -51,6 +51,7 @@ const UserSchema = new mongoose_1.Schema({
     comments: [{ type: mongoose_1.default.Types.ObjectId, ref: 'Comments' }],
     replies: [{ type: mongoose_1.default.Types.ObjectId, ref: 'Reply' }],
     avatar: { type: String },
+    cover: { type: String },
     bio: { type: String },
     gender: { type: String, enum: Gender_1.default },
     role: {

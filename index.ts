@@ -3,6 +3,7 @@ import cors from 'cors';
 import session from 'express-session';
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+import { Strategy as LocalStrategy } from 'passport-local';
 import debug from 'debug';
 import DB from './database/DB';
 import User from './routes/User/User';
@@ -22,18 +23,13 @@ import ErrorMessage from './middleware/ErrorMessage';
 const app = express();
 
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    credentials: true,
+  })
+);
 
 DB();
-
-// export interface IGetUserAuthInfoRequest extends Request {
-//   session: any;
-//   isAuthenticated(): Function;
-//   logout: any;
-//   user: string; // or any other type
-//   // isAuthenticated: Function;
-//   // logout: Function;
-// }
 
 const debugServer = debug('app:sever');
 
@@ -55,6 +51,8 @@ passport.use(
   )
 );
 
+// passport.use(new LocalStrategy({}));
+
 passport.serializeUser((user, done) => done(null, user));
 passport.deserializeUser((user, done) => done(null, user));
 
@@ -68,9 +66,7 @@ app.use(
 );
 
 //* Setup passport middleware
-app.use(passport.initialize());
-app.use(passport.session());
-
+// ;
 //** Google Authentication ( passport-google-oauth20 ) */
 
 const debugLogout = debug('GoogleLogout');
@@ -113,19 +109,19 @@ app.get('/logout', (req: Request, res: Response, next: NextFunction) =>
 
 //** */
 
-// app.use('/user', User);
-// app.use('/ad', Ad);
-// app.use('/post', Post);
-// app.use('/blog', Blog);
-// app.use('/comment', Comment);
-// app.use('/reply', Reply);
-// app.use('/hashTag', HashTag);
-// app.use('/image', Image);
-// app.use('/album', Album);
-// app.use('/notification', Notification);
-// app.use('/reel', Reel);
-// app.use('/video', Video);
-// app.use('/payment', Payment);
+app.use('/user', User);
+app.use('/ad', Ad);
+app.use('/post', Post);
+app.use('/blog', Blog);
+app.use('/comment', Comment);
+app.use('/reply', Reply);
+app.use('/hashTag', HashTag);
+app.use('/image', Image);
+app.use('/album', Album);
+app.use('/notification', Notification);
+app.use('/reel', Reel);
+app.use('/video', Video);
+app.use('/payment', Payment);
 
 app.use(ErrorMessage);
 
