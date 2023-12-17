@@ -9,6 +9,7 @@ import IsAuthenticated from '../../middleware/IsAuthenticated';
 import GetMyProfile from '../../controllers/User/GetMyProfile';
 import ReceiveFollow from '../../controllers/User/ReceiveFollow';
 import SendFollow from '../../controllers/User/SendFollow';
+import Logout from '../../controllers/User/Logout';
 const router = Router();
 
 // Get Users
@@ -19,6 +20,9 @@ router.post('/register', Register);
 
 // Login User
 router.get('/login', Login);
+
+// Logout User
+router.get('/logout', Logout);
 
 // User Profile
 router.get('/me', IsAuthenticated, GetMyProfile);
