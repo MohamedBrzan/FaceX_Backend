@@ -117,7 +117,16 @@ const UserSchema = new Schema<User>(
         dark_mode: { type: Boolean, default: false },
       },
     },
-    deletion: { type: Date },
+    deletion: {
+      executeIn: {
+        date: {
+          full: { type: String },
+          short: { type: String },
+        },
+        month: { type: Number },
+        day: { type: Number },
+      },
+    },
     actively_recruiting: { type: Boolean, default: false },
     isVerified: { type: Boolean, default: false },
     isDeleted: { type: Boolean, default: false },

@@ -110,7 +110,16 @@ interface User {
   hyperlinks?: Link[];
   preferences?: Preferences;
   isVerified?: boolean;
-  deletion?: Date;
+  deletion?: {
+    executeIn: {
+      date: {
+        full: string;
+        short: string;
+      };
+      month: number;
+      day: number;
+    };
+  };
   isDeleted?: boolean;
   isBanned?: boolean;
 }
