@@ -69,19 +69,43 @@ const UserSchema = new Schema<User>(
     followings: [{ type: Types.ObjectId, ref: 'User' }],
     images: [{ type: Types.ObjectId, ref: 'Image' }],
     albums: [{ type: Types.ObjectId, ref: 'Album' }],
-    videos: [{ type: Types.ObjectId, ref: 'Video' }],
-    payments: [{ type: Types.ObjectId, ref: 'Payment' }],
-    comments: [{ type: Types.ObjectId, ref: 'Comments' }],
-    replies: [{ type: Types.ObjectId, ref: 'Reply' }],
-    hashTags: {
-      create: [{ type: Types.ObjectId, ref: 'HashTag' }],
-      follow: [{ type: Types.ObjectId, ref: 'HashTag' }],
+    videos: {
+      published: [{ type: Types.ObjectId, ref: 'Video' }],
+      reacted: [{ type: Types.ObjectId, ref: 'Video' }],
     },
-    posts: [{ type: Types.ObjectId, ref: 'Post' }],
-    blogs: [{ type: Types.ObjectId, ref: 'Blog' }],
-    jobs: [{ type: Types.ObjectId, ref: 'Job' }],
+    payments: [{ type: Types.ObjectId, ref: 'Payment' }],
+    comments: {
+      published: [{ type: Types.ObjectId, ref: 'Comment' }],
+      reacted: [{ type: Types.ObjectId, ref: 'Comment' }],
+    },
+    replies: {
+      published: [{ type: Types.ObjectId, ref: 'Reply' }],
+      reacted: [{ type: Types.ObjectId, ref: 'Reply' }],
+    },
+    hashTags: {
+      published: [{ type: Types.ObjectId, ref: 'HashTag' }],
+      reacted: [{ type: Types.ObjectId, ref: 'HashTag' }],
+    },
+    posts: {
+      published: [{ type: Types.ObjectId, ref: 'Post' }],
+      reacted: [{ type: Types.ObjectId, ref: 'Post' }],
+    },
+    blogs: {
+      published: [{ type: Types.ObjectId, ref: 'Blog' }],
+      reacted: [{ type: Types.ObjectId, ref: 'Blog' }],
+    },
+    jobs: {
+      published: [{ type: Types.ObjectId, ref: 'Job' }],
+      applied: [{ type: Types.ObjectId, ref: 'Job' }],
+      reviewing: [{ type: Types.ObjectId, ref: 'Job' }],
+      accepted: [{ type: Types.ObjectId, ref: 'Job' }],
+      rejected: [{ type: Types.ObjectId, ref: 'Job' }],
+    },
     ads: [{ type: Types.ObjectId, ref: 'Ads' }],
-    reels: [{ type: Types.ObjectId, ref: 'Reels' }],
+    reels: {
+      published: [{ type: Types.ObjectId, ref: 'Reel' }],
+      reacted: [{ type: Types.ObjectId, ref: 'Reel' }],
+    },
     notifications: [{ type: Types.ObjectId, ref: 'Notification' }],
     saved: [{ type: Types.ObjectId }],
     hyperlinks: [

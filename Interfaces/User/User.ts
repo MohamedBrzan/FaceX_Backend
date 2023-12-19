@@ -62,11 +62,11 @@ interface User {
   password: string;
   images?: string[];
   albums?: Album[];
-  videos?: Video[];
+  videos?: { reacted: Video[]; published: Video[] };
   payments?: Payment[];
-  hashTags?: { create: HashTag[]; follow: HashTag[] };
-  comments?: Comment[];
-  replies?: Reply[];
+  hashTags?: { published: HashTag[]; reacted: HashTag[] };
+  comments?: { published: Comment[]; reacted: Comment[] };
+  replies?: { published: Reply[]; reacted: Reply[] };
   avatar?: string;
   cover?: string;
   bio?: string;
@@ -99,11 +99,17 @@ interface User {
   blocks?: User[];
   followers?: User[];
   followings?: User[];
-  posts?: Post[];
-  blogs?: Blog[];
-  jobs?: Job[];
+  posts?: { published: Post[]; reacted: Post[] };
+  blogs?: { published: Blog[]; reacted: Blog[] };
+  jobs?: {
+    applied: Job[];
+    published: Job[];
+    reviewing: Job[];
+    accepted: Job[];
+    rejected: Job[];
+  };
   ads?: Ad[];
-  reels?: Reel[];
+  reels?: { reacted: Reel[]; published: Reel[] };
   notifications?: Notification[];
   saved?: [];
   location?: string;

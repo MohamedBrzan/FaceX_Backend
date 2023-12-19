@@ -42,7 +42,8 @@ const jobSchema = new Schema<Job>(
           },
         ],
       },
-    }
+    },
+    employees: [{ type: Types.ObjectId, ref: 'User' }],
   },
   { timestamps: true }
 );

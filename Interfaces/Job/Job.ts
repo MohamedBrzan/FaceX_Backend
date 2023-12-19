@@ -36,6 +36,7 @@ interface Job {
       interpersonal: Skill[];
     };
   };
+  employees?: User[];
 }
 
 export default Job;
