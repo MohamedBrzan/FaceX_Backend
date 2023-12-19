@@ -2,28 +2,24 @@ import { Request, Response, NextFunction } from 'express';
 import AsyncHandler from '../../middleware/AsyncHandler';
 import Post from '../../models/Post/Post';
 import User from '../../models/User/User';
-import ErrorHandler from '../../middleware/ErrorHandler';
+import { getUserId } from '../../constants/UserId';
 
 export default AsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { title, content } = req.body;
 
-    let post = await Post.create({ user: req['authorizedUser']._id, title, content });
+    const userId = (await getUserId(req)).toString();
 
-    let user = await User.findById(req['authorizedUser']._id);
+    let user = await User.findById(userId);
 
-    if (!user) {
-      await Post.findByIdAndRemove(post['_id']);
-      return next(
-        new ErrorHandler(404, `User With Id ${req['authorizedUser']._id} Not Exist`)
-      );
-    }
-
-    await User.findByIdAndUpdate(req['authorizedUser']._id, {
-      $push: {
-        posts: post['_id'],
-      },
+    let post = await Post.create({
+      user: userId,
+      title,
+      content,
     });
+
+    user.posts.published.push(post);
+    await user.save();
 
     return res.status(200).json(post);
   }

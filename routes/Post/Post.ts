@@ -2,7 +2,7 @@ import { Router } from 'express';
 import GetPosts from '../../controllers/Post/GetPosts';
 import GetPost from '../../controllers/Post/GetPost';
 import UpdatePost from '../../controllers/Post/UpdatePost';
-import DeletePost from '../../controllers/Post/DeletePost';
+import DeletePost from '../../controllers/Post/DeletePublishedPost';
 import CreatePost from '../../controllers/Post/CreatePost';
 import IsAuthenticated from '../../middleware/IsAuthenticated';
 

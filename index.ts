@@ -141,19 +141,19 @@ app.use(passport.session());
 //** */
 
 app.use('/user', User);
-app.use('/ad', Ad);
 app.use('/post', Post);
-app.use('/blog', Blog);
-app.use('/job', Job);
-app.use('/comment', Comment);
-app.use('/reply', Reply);
-app.use('/hashTag', HashTag);
-app.use('/image', Image);
-app.use('/album', Album);
-app.use('/notification', Notification);
-app.use('/reel', Reel);
-app.use('/video', Video);
-app.use('/payment', Payment);
+// app.use('/ad', Ad);
+// app.use('/blog', Blog);
+// app.use('/job', Job);
+// app.use('/comment', Comment);
+// app.use('/reply', Reply);
+// app.use('/hashTag', HashTag);
+// app.use('/image', Image);
+// app.use('/album', Album);
+// app.use('/notification', Notification);
+// app.use('/reel', Reel);
+// app.use('/video', Video);
+// app.use('/payment', Payment);
 
 app.use(ErrorMessage);
 

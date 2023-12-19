@@ -18,6 +18,8 @@ import DeactivateBan from '../../controllers/User/DeactivateBan';
 import VerificationRequest from '../../controllers/User/VerificationRequest';
 import ActivateVerification from '../../controllers/User/ActivateVerification';
 import DeactivateVerification from '../../controllers/User/DeactivateVerification';
+import ActivelyRecruiting from '../../controllers/User/ActivelyRecruiting';
+import DeletePublishedPost from '../../controllers/Post/DeletePublishedPost';
 const router = Router();
 
 // Get Users
@@ -53,6 +55,9 @@ router.patch('/verification/reject', IsAuthenticated, DeactivateVerification);
 // Cancel Deletion Time
 router.patch('/deletion/deactivate', IsAuthenticated, DeactivateDeletion);
 
+// Actively Recruiting
+router.patch('/active_recruiter', IsAuthenticated, ActivelyRecruiting);
+
 // Block User
 router.patch('/block', IsAuthenticated, BlockUser);
 
@@ -73,6 +78,11 @@ router.get('/:id', IsAuthenticated, GetUser);
 
 // Put User
 router.put('/:id', IsAuthenticated, UpdateUser);
+
+//* Delete Section
+
+// Delete Published Post
+router.delete('/posts/published', IsAuthenticated, DeletePublishedPost);
 
 // Delete User
 router.delete('/:id', IsAuthenticated, DeleteUser);

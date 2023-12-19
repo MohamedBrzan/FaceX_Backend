@@ -4,15 +4,20 @@ import ErrorHandler from '../../middleware/ErrorHandler';
 import Post from '../../models/Post/Post';
 import User from '../../models/User/User';
 import Comment from '../../models/Comment/Comment';
+import { getUserId } from '../../constants/UserId';
 
 export default AsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { id } = req.params;
-    let post = await Post.findById(id);
+    const { postId } = req.body;
+    let post = await Post.findById(postId);
     if (!post)
-      return next(new ErrorHandler(404, `Couldn't Find Post With Id => ${id}`));
+      return next(
+        new ErrorHandler(404, `Couldn't Find Post With Id => ${postId}`)
+      );
 
-    let user = await User.findById(req['authorizedUser']._id);
+      const userId = (await getUserId(req)).toString();
+
+      let user = await User.findById(userId);
 
     const postIndex = user.posts.findIndex(
       (post) => post['_id'].toString() === id
