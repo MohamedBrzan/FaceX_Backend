@@ -119,6 +119,7 @@ interface User {
       month: number;
       day: number;
     };
+    isActive: boolean;
   };
   isDeleted?: boolean;
   isBanned?: boolean;

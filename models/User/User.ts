@@ -126,7 +126,9 @@ const UserSchema = new Schema<User>(
         month: { type: Number },
         day: { type: Number },
       },
+      isActive: { type: Boolean, default: false },
     },
+
     actively_recruiting: { type: Boolean, default: false },
     isVerified: { type: Boolean, default: false },
     isDeleted: { type: Boolean, default: false },

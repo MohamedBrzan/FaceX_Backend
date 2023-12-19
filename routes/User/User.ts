@@ -11,7 +11,8 @@ import ReceiveFollow from '../../controllers/User/ReceiveFollow';
 import SendFollow from '../../controllers/User/SendFollow';
 import Logout from '../../controllers/User/Logout';
 import BlockUser from '../../controllers/User/BlockUser';
-import DeletionTiming from '../../controllers/User/DeletionTiming';
+import ActivateDeletion from '../../controllers/User/ActivateDeletion';
+import InActivateDeletionCopy from '../../controllers/User/InActivateDeletion copy';
 const router = Router();
 
 // Get Users
@@ -39,7 +40,10 @@ router.post('/following', IsAuthenticated, SendFollow);
 router.put('/block', IsAuthenticated, BlockUser);
 
 // Send Deletion Time
-router.put('/deletion', IsAuthenticated, DeletionTiming);
+router.put('/deletion/activate', IsAuthenticated, ActivateDeletion);
+
+// Cancel Deletion Time
+router.put('/deletion/inactivate', IsAuthenticated, InActivateDeletionCopy);
 
 // Get User
 router.get('/:id', IsAuthenticated, GetUser);
