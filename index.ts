@@ -38,44 +38,6 @@ DB();
 
 const debugServer = debug('app:sever');
 
-passport.use(
-  new GoogleStrategy(
-    {
-      clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: process.env.GOOGLE_CALL_BACK_URL,
-    },
-    async (
-      accessToken: any,
-      refreshToken: any,
-      profile: any,
-      done: (arg0: null, arg1: any) => void
-    ) => {
-      done(null, profile);
-    }
-  )
-);
-
-passport.serializeUser((user, done) => {
-  if (user['_id']) {
-    return done(null, { id: user['_id'] });
-  }
-  return done(null, { id: user['id'] });
-});
-passport.deserializeUser((id, done) => done(null, id));
-
-app.set('http://localhost:3000/', 1);
-
-app.use(
-  session({
-    name: process.env.SESSION_NAME,
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: true,
-    cookie: { maxAge: 1000 * 60 * 60 },
-  })
-);
-
 // passport.use(
 //   new GoogleStrategy(
 //     {
@@ -93,6 +55,8 @@ app.use(
 //     }
 //   )
 // );
+
+// app.set('http://localhost:3000/', 1);
 
 passport.use(
   new LocalStrategy({ passReqToCallback: true }, async function (
@@ -125,10 +89,15 @@ app.use(
 );
 
 //* Save User into session (cookie)
-passport.serializeUser((user, done) => done(null, user));
+passport.serializeUser((user, done) => {
+  if (user['_id']) {
+    return done(null, { id: user['_id'] });
+  }
+  return done(null, { id: user['id'] });
+});
 
 //* Retrieve user from session (cookie)
-passport.deserializeUser((user, done) => done(null, user));
+passport.deserializeUser((id, done) => done(null, id));
 
 app.use(passport.initialize());
 app.use(passport.session());

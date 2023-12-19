@@ -22,6 +22,13 @@ export default AsyncHandler(
     if (!findBlocker)
       return next(new ErrorHandler(404, 'BlockId not exists in DB'));
 
+    const findBlockerInUserBlocks = user.blocks.find(
+      (blocker) => blocker.toString() === blockId
+    );
+
+    if (findBlockerInUserBlocks)
+      return next(new ErrorHandler(404, 'You already blocked this user'));
+
     user.blocks.push(blockId);
     await user.save();
 

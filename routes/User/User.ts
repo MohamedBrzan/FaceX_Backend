@@ -14,7 +14,7 @@ import BlockUser from '../../controllers/User/BlockUser';
 const router = Router();
 
 // Get Users
-router.get('/all', GetAllUsers);
+router.get('/all', IsAuthenticated, GetAllUsers);
 
 // Register User
 router.post('/register', Register);
@@ -23,7 +23,7 @@ router.post('/register', Register);
 router.get('/login', Login);
 
 // Logout User
-router.get('/logout', Logout);
+router.get('/logout', IsAuthenticated, Logout);
 
 // User Profile
 router.get('/me', IsAuthenticated, GetMyProfile);
@@ -38,7 +38,7 @@ router.post('/following', IsAuthenticated, SendFollow);
 router.put('/block', IsAuthenticated, BlockUser);
 
 // Get User
-router.get('/:id', GetUser);
+router.get('/:id', IsAuthenticated, GetUser);
 
 // Put User
 router.put('/:id', IsAuthenticated, UpdateUser);
