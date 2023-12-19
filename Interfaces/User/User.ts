@@ -11,8 +11,30 @@ import Post from '../Post/Post';
 import Reel from '../Reel/Reel';
 import Video from '../Video/Video';
 
-interface User {
+type Link = {
+  for: string;
+  link: string;
+};
+
+type Analytics = {
+  count: number;
   name: string;
+  percentage: number;
+  time: string;
+};
+
+type CreatorTools = {
+  live: string[];
+  events: string[];
+  newsletters: string[];
+  follow_link: string[];
+};
+
+interface User {
+  name: {
+    first: string;
+    last: string;
+  };
   email: string;
   password: string;
   images?: string[];
@@ -25,24 +47,43 @@ interface User {
   avatar?: string;
   cover?: string;
   bio?: string;
-  actively_recruiting: boolean;
+  actively_recruiting?: boolean;
   gender?: string;
-  role: string;
+  profession?: string;
+  role?: string;
+  address?: string;
+  contact?: {
+    profile: string;
+    website: string;
+    phone: string;
+    birthday: {
+      day: number;
+      month: string;
+      year: number;
+    };
+  };
+  analytics?: Analytics[];
+  profile_topics?: string[];
+  creator_tools?: CreatorTools;
+  open_to?: {
+    title: string;
+    description: string;
+  };
+  tags?: string[];
   followers?: User[];
   followings?: User[];
   posts?: Post[];
   blogs?: Blog[];
   jobs?: Job[];
-  isVerified?: boolean;
   ads?: Ad[];
   reels?: Reel[];
   notifications?: Notification[];
   saved?: [];
   location?: string;
-  website?: string;
-  github?: string;
+  hyperlinks?: Link[];
+  isVerified?: boolean;
   deletion?: Date;
-  isDeleted: boolean;
+  isDeleted?: boolean;
   isBanned?: boolean;
 }
 

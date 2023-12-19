@@ -105,7 +105,11 @@ passport.use(
       'email password'
     );
     if (!findUser) return done(null, false);
-    return done(null, findUser);
+    return done(null, {
+      id: findUser._id,
+      email: findUser.email,
+      password: findUser.password,
+    });
   })
 );
 
@@ -121,10 +125,10 @@ app.use(
 );
 
 //* Save User into session (cookie)
-passport.serializeUser((user, done) => done(null, { id: user['_id'] }));
+passport.serializeUser((user, done) => done(null, user));
 
 //* Retrieve user from session (cookie)
-passport.deserializeUser((id, done) => done(null, id));
+passport.deserializeUser((user, done) => done(null, user));
 
 app.use(passport.initialize());
 app.use(passport.session());
