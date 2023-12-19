@@ -128,9 +128,18 @@ const UserSchema = new Schema<User>(
       },
       isActive: { type: Boolean, default: false },
     },
-
     actively_recruiting: { type: Boolean, default: false },
-    isVerified: { type: Boolean, default: false },
+    verified: {
+      id: {
+        number: { type: Number },
+        photo: { type: String },
+      },
+      passport: {
+        number: { type: Number },
+        photo: { type: String },
+      },
+      isActive: { type: Boolean, default: false },
+    },
     isDeleted: { type: Boolean, default: false },
     isBanned: { type: Boolean, default: false },
   },

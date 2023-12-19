@@ -7,13 +7,6 @@ import { getUserId } from '../../constants/UserId';
 export default AsyncHandler(async (req: Request, res: Response) => {
   const userId = (await getUserId(req)).toString();
 
-  const timing = new Date();
-  timing.setDate(timing.getDate() + 30);
-
-  const short = timing.toDateString();
-  const day = timing.getDay();
-  const month = timing.getMonth();
-
   let user = await User.findByIdAndUpdate(
     userId,
     {
@@ -21,13 +14,13 @@ export default AsyncHandler(async (req: Request, res: Response) => {
         deletion: {
           executeIn: {
             date: {
-              full: timing.toISOString(),
-              short,
+              full: null,
+              short: null,
             },
-            month,
-            day,
+            month: null,
+            day: null,
           },
-          isActive: true,
+          isActive: false,
         },
       },
     },
@@ -38,7 +31,7 @@ export default AsyncHandler(async (req: Request, res: Response) => {
 
   return res.status(200).json({
     success: true,
-    msg: 'user will delete after 30 days',
+    msg: 'User deletion is inactivated successfully',
     deletion,
   });
 });

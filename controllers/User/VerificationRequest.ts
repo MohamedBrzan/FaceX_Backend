@@ -7,38 +7,35 @@ import { getUserId } from '../../constants/UserId';
 export default AsyncHandler(async (req: Request, res: Response) => {
   const userId = (await getUserId(req)).toString();
 
-  const timing = new Date();
-  timing.setDate(timing.getDate() + 30);
-
-  const short = timing.toDateString();
-  const day = timing.getDay();
-  const month = timing.getMonth();
+  const {
+    id: { number: idNumber, photo: idPhoto },
+    passport: { number: passportNumber, photo: passportPhoto },
+  } = req.body;
 
   let user = await User.findByIdAndUpdate(
     userId,
     {
       $set: {
-        deletion: {
-          executeIn: {
-            date: {
-              full: timing.toISOString(),
-              short,
-            },
-            month,
-            day,
+        verified: {
+          id: {
+            number: idNumber,
+            photo: idPhoto,
           },
-          isActive: true,
+          passport: {
+            number: passportNumber,
+            photo: passportPhoto,
+          },
         },
       },
     },
     { runValidators: true, new: true, upsert: true }
   );
 
-  const { deletion } = user;
+  const { verified } = user;
 
   return res.status(200).json({
     success: true,
-    msg: 'user will delete after 30 days',
-    deletion,
+    msg: 'verification request sent successfully',
+    verified,
   });
 });

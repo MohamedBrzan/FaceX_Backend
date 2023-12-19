@@ -12,7 +12,12 @@ import SendFollow from '../../controllers/User/SendFollow';
 import Logout from '../../controllers/User/Logout';
 import BlockUser from '../../controllers/User/BlockUser';
 import ActivateDeletion from '../../controllers/User/ActivateDeletion';
-import InActivateDeletionCopy from '../../controllers/User/InActivateDeletion copy';
+import DeactivateDeletion from '../../controllers/User/DeactivateDeletion';
+import ActivateBan from '../../controllers/User/ActivateBan';
+import DeactivateBan from '../../controllers/User/DeactivateBan';
+import VerificationRequest from '../../controllers/User/VerificationRequest';
+import ActivateVerification from '../../controllers/User/ActivateVerification';
+import DeactivateVerification from '../../controllers/User/DeactivateVerification';
 const router = Router();
 
 // Get Users
@@ -36,14 +41,32 @@ router.post('/follower', IsAuthenticated, ReceiveFollow);
 // Following
 router.post('/following', IsAuthenticated, SendFollow);
 
-// Block User
-router.put('/block', IsAuthenticated, BlockUser);
+// Send Request For Verification
+router.patch('/verification/request', IsAuthenticated, VerificationRequest);
 
-// Send Deletion Time
-router.put('/deletion/activate', IsAuthenticated, ActivateDeletion);
+// Accept Verification
+router.patch('/verification/accept', IsAuthenticated, ActivateVerification);
+
+// Reject Verification
+router.patch('/verification/reject', IsAuthenticated, DeactivateVerification);
 
 // Cancel Deletion Time
-router.put('/deletion/inactivate', IsAuthenticated, InActivateDeletionCopy);
+router.patch('/deletion/deactivate', IsAuthenticated, DeactivateDeletion);
+
+// Block User
+router.patch('/block', IsAuthenticated, BlockUser);
+
+// Send Deletion Time
+router.patch('/deletion/activate', IsAuthenticated, ActivateDeletion);
+
+// Cancel Deletion Time
+router.patch('/deletion/deactivate', IsAuthenticated, DeactivateDeletion);
+
+// Activate Ban
+router.patch('/ban/activate', IsAuthenticated, ActivateBan);
+
+// Deactivate Ban
+router.patch('/ban/deactivate', IsAuthenticated, DeactivateBan);
 
 // Get User
 router.get('/:id', IsAuthenticated, GetUser);

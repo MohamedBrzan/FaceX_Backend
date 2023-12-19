@@ -109,7 +109,17 @@ interface User {
   location?: string;
   hyperlinks?: Link[];
   preferences?: Preferences;
-  isVerified?: boolean;
+  verified: {
+    id: {
+      number: number;
+      photo: string;
+    };
+    passport: {
+      number: number;
+      photo: string;
+    };
+    isActive: boolean;
+  };
   deletion?: {
     executeIn: {
       date: {

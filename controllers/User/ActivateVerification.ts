@@ -11,25 +11,17 @@ export default AsyncHandler(async (req: Request, res: Response) => {
     userId,
     {
       $set: {
-        deletion: {
-          executeIn: {
-            date: {
-              full: null,
-              short: null,
-            },
-            month: null,
-            day: null,
-          },
-          isActive: false,
-        },
+        'verified.isActive': true,
       },
     },
     { runValidators: true, new: true, upsert: true }
   );
 
+  const { verified } = user;
+
   return res.status(200).json({
     success: true,
-    msg: 'User deletion is inactivated successfully',
-    time: user.deletion,
+    msg: 'verification request accepted :)',
+    verified,
   });
 });
