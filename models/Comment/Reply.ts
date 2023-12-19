@@ -22,7 +22,7 @@ const replySchema = new Schema<Reply>(
       type: String,
       enum: VisiblePrivacy,
       required: true,
-      default: VisiblePrivacy.Public,
+      default: VisiblePrivacy.public,
     },
   },
   { timestamps: true }

@@ -32,7 +32,7 @@ const PostSchema = new Schema<Post>(
     visiblePrivacy: {
       type: String,
       enum: VisiblePrivacy,
-      default: VisiblePrivacy.Public,
+      default: VisiblePrivacy.public,
       required: true,
     },
   },

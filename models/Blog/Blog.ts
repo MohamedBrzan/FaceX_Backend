@@ -32,7 +32,7 @@ const blogSchema = new Schema<Blog>(
     visiblePrivacy: {
       type: String,
       enum: VisiblePrivacy,
-      default: VisiblePrivacy.Public,
+      default: VisiblePrivacy.public,
       required: true,
     },
   },
