@@ -21,9 +21,9 @@ const UserSchema = new Schema<User>(
     bio: { type: String, trim: true },
     gender: { type: String, enum: Gender },
     disability: { type: String, trim: true },
-    headline: { type: String, required: true, trim: true },
+    headline: { type: String, trim: true },
     professions: [{ type: String, trim: true }],
-    industry: { type: String, required: true, trim: true },
+    industry: { type: String, trim: true },
     role: {
       type: String,
       required: true,
@@ -37,9 +37,9 @@ const UserSchema = new Schema<User>(
       website: { type: String, trim: true },
       phone: { type: String, trim: true },
       birthday: {
-        day: { type: Number, required: true },
-        month: { type: String, required: true },
-        year: { type: Number, required: true },
+        day: { type: Number },
+        month: { type: String },
+        year: { type: Number },
       },
     },
     analytics: [

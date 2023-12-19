@@ -10,10 +10,11 @@ import GetMyProfile from '../../controllers/User/GetMyProfile';
 import ReceiveFollow from '../../controllers/User/ReceiveFollow';
 import SendFollow from '../../controllers/User/SendFollow';
 import Logout from '../../controllers/User/Logout';
+import BlockUser from '../../controllers/User/BlockUser';
 const router = Router();
 
 // Get Users
-router.get('/users', GetAllUsers);
+router.get('/all', GetAllUsers);
 
 // Register User
 router.post('/register', Register);
@@ -32,6 +33,9 @@ router.post('/follower', IsAuthenticated, ReceiveFollow);
 
 // Following
 router.post('/following', IsAuthenticated, SendFollow);
+
+// Block User
+router.put('/block', IsAuthenticated, BlockUser);
 
 // Get User
 router.get('/:id', GetUser);

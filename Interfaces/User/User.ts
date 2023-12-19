@@ -53,7 +53,7 @@ type Preferences = {
 };
 
 interface User {
-  name: {
+  name?: {
     first: string;
     last: string;
     additional: string;
@@ -108,7 +108,7 @@ interface User {
   saved?: [];
   location?: string;
   hyperlinks?: Link[];
-  preferences: Preferences;
+  preferences?: Preferences;
   isVerified?: boolean;
   deletion?: Date;
   isDeleted?: boolean;
