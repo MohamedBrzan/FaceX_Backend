@@ -1,3 +1,5 @@
+import FilterContent from '../../enums/FilterContent';
+import VisiblePrivacy from '../../enums/VisiblePrivacy';
 import Ad from '../Ad/Ad';
 import Album from '../Album/Album';
 import Blog from '../Blog/Blog';
@@ -30,10 +32,31 @@ type CreatorTools = {
   follow_link: string[];
 };
 
+type Preferences = {
+  language: {
+    app: string;
+    content: string;
+  };
+  auto_videos: boolean;
+  sounds_effects: boolean;
+  visibility: {
+    profile_photos: VisiblePrivacy;
+    feed: FilterContent;
+  };
+  people: {
+    also_viewed: boolean;
+    unFollowed: User[];
+  };
+  display: {
+    dark_mode: boolean;
+  };
+};
+
 interface User {
   name: {
     first: string;
     last: string;
+    additional: string;
   };
   email: string;
   password: string;
@@ -49,7 +72,10 @@ interface User {
   bio?: string;
   actively_recruiting?: boolean;
   gender?: string;
-  profession?: string;
+  disability?: string;
+  headline?: string;
+  professions?: string[];
+  industry?: string;
   role?: string;
   address?: string;
   contact?: {
@@ -70,6 +96,7 @@ interface User {
     description: string;
   };
   tags?: string[];
+  blocks?: User[];
   followers?: User[];
   followings?: User[];
   posts?: Post[];
@@ -81,6 +108,7 @@ interface User {
   saved?: [];
   location?: string;
   hyperlinks?: Link[];
+  preferences: Preferences;
   isVerified?: boolean;
   deletion?: Date;
   isDeleted?: boolean;

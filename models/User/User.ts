@@ -4,12 +4,15 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import Gender from '../../enums/Gender';
 import Role from '../../enums/Role';
+import VisiblePrivacy from '../../enums/VisiblePrivacy';
+import FilterContent from '../../enums/FilterContent';
 
 const UserSchema = new Schema<User>(
   {
     name: {
       first: { type: String, required: true, trim: true },
       last: { type: String, required: true, trim: true },
+      additional: { type: String, required: true, trim: true },
     },
     email: { type: String, required: true, trim: true },
     password: { type: String, required: true, trim: true, select: false },
@@ -17,7 +20,10 @@ const UserSchema = new Schema<User>(
     cover: { type: String },
     bio: { type: String, trim: true },
     gender: { type: String, enum: Gender },
-    profession: { type: String, trim: true },
+    disability: { type: String, trim: true },
+    headline: { type: String, required: true, trim: true },
+    professions: [{ type: String, trim: true }],
+    industry: { type: String, required: true, trim: true },
     role: {
       type: String,
       required: true,
@@ -58,6 +64,7 @@ const UserSchema = new Schema<User>(
       },
     ],
     tags: [{ type: String, trim: true }],
+    blocks: [{ type: Types.ObjectId, ref: 'User' }],
     followers: [{ type: Types.ObjectId, ref: 'User' }],
     followings: [{ type: Types.ObjectId, ref: 'User' }],
     images: [{ type: Types.ObjectId, ref: 'Image' }],
@@ -83,6 +90,33 @@ const UserSchema = new Schema<User>(
         link: { type: String, trim: true },
       },
     ],
+    preferences: {
+      language: {
+        app: { type: String, trim: true },
+        content: { type: String, trim: true },
+      },
+      auto_videos: { type: Boolean, default: false },
+      sounds_effects: { type: Boolean, default: false },
+      visibility: {
+        profile_photos: {
+          type: String,
+          enum: VisiblePrivacy,
+          default: VisiblePrivacy.public,
+        },
+        feed: {
+          type: String,
+          enum: FilterContent,
+          default: FilterContent.recommended,
+        },
+      },
+      people: {
+        also_viewed: { type: Boolean, default: false },
+        unFollowed: [{ type: Types.ObjectId, ref: 'User' }],
+      },
+      display: {
+        dark_mode: { type: Boolean, default: false },
+      },
+    },
     deletion: { type: Date },
     actively_recruiting: { type: Boolean, default: false },
     isVerified: { type: Boolean, default: false },
