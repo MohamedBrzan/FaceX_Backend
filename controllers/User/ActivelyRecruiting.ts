@@ -32,8 +32,15 @@ export default AsyncHandler(async (req: Request, res: Response) => {
     });
   }
 
-  user.actively_recruiting = false;
-  await user.save();
+  user = await User.findByIdAndUpdate(
+    userId,
+    {
+      $set: {
+        actively_recruiting: false,
+      },
+    },
+    { runValidators: true, new: true, upsert: true }
+  );
 
   return res.status(404).json({ msg: "user isn't actively recruiting" });
 });

@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
-import AsyncHandler from '../../middleware/AsyncHandler';
-import Post from '../../models/Post/Post';
-import User from '../../models/User/User';
-import { getUserId } from '../../constants/UserId';
+import AsyncHandler from '../../../middleware/AsyncHandler';
+import Post from '../../../models/Post/Post';
+import User from '../../../models/User/User';
+import { getUserId } from '../../../constants/UserId';
 
 export default AsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -18,8 +18,15 @@ export default AsyncHandler(
       content,
     });
 
-    user.posts.published.push(post);
-    await user.save();
+    user = await User.findByIdAndUpdate(
+      userId,
+      {
+        $push: {
+          'posts.published': post._id,
+        },
+      },
+      { runValidators: true, new: true, upsert: true }
+    );
 
     return res.status(200).json(post);
   }

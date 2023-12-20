@@ -52,7 +52,7 @@ export default AsyncHandler(async (req: Request, res: Response) => {
         //! Delete All User Posts
         if (posts?.published.length > 0) {
           for (let i = 0; i < posts.published.length; i++) {
-            await Post.findByIdAndRemove(posts[i].toString());
+            await Post.findByIdAndRemove(posts[i].published.toString());
           }
         }
         if (posts?.reacted.length > 0) {
