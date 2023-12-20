@@ -15,6 +15,11 @@ export default AsyncHandler(
     if (!post)
       return next(new ErrorHandler(404, `cannot find post with id ${postId}`));
 
+    const findUser = post.views.findIndex((user) => user.toString() === userId);
+
+    if (findUser >= 0)
+      return next(new ErrorHandler(404, `you already pushed in post views`));
+
     post = await Post.findByIdAndUpdate(
       postId,
       {
