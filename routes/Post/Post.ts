@@ -8,6 +8,7 @@ import DeleteExpression from '../../controllers/Post/DeleteExpression';
 import DeletePost from '../../controllers/Post/DeletePost';
 import IsAuthenticated from '../../middleware/IsAuthenticated';
 import AddView from '../../controllers/Post/AddView';
+import DeleteView from '../../controllers/Post/DeleteView';
 
 const router = Router();
 
@@ -30,10 +31,10 @@ router.delete('/expressions/del', IsAuthenticated, DeleteExpression);
 router.put('/update', IsAuthenticated, UpdatePost);
 
 // Add Post View
-router.put('/views/add', IsAuthenticated, AddView);
+router.patch('/views/add', IsAuthenticated, AddView);
 
 // Delete Post View
-// router.put('/views/del', IsAuthenticated, AddView);
+router.patch('/views/del', IsAuthenticated, DeleteView);
 
 // Delete Post
 router.delete('/del', IsAuthenticated, DeletePost);
