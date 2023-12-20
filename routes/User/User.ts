@@ -19,7 +19,6 @@ import VerificationRequest from '../../controllers/User/VerificationRequest';
 import ActivateVerification from '../../controllers/User/ActivateVerification';
 import DeactivateVerification from '../../controllers/User/DeactivateVerification';
 import ActivelyRecruiting from '../../controllers/User/ActivelyRecruiting';
-import DeletePublishedPost from '../../controllers/Post/DeletePublishedPost';
 const router = Router();
 
 // Get Users
@@ -78,11 +77,6 @@ router.get('/:id', IsAuthenticated, GetUser);
 
 // Put User
 router.put('/:id', IsAuthenticated, UpdateUser);
-
-//* Delete Section
-
-// Delete Published Post
-router.delete('/posts/published', IsAuthenticated, DeletePublishedPost);
 
 // Delete User
 router.delete('/:id', IsAuthenticated, DeleteUser);

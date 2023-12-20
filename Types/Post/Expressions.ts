@@ -1,13 +1,15 @@
+import User from "../../Interfaces/User/User";
+
 type Expressions = {
-  like?: number;
-  love?: number;
-  support?: number;
-  sad?: number;
-  happy?: number;
-  angry?: number;
-  disgust?: number;
-  surprise?: number;
-  fear?: number;
+  like?: User[];
+  love?: User[];
+  support?: User[];
+  sad?: User[];
+  happy?: User[];
+  angry?: User[];
+  disgust?: User[];
+  surprise?: User[];
+  fear?: User[];
 };
 
 export default Expressions;

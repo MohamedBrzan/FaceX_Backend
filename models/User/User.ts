@@ -101,6 +101,12 @@ const UserSchema = new Schema<User>(
       accepted: [{ type: Types.ObjectId, ref: 'Job' }],
       rejected: [{ type: Types.ObjectId, ref: 'Job' }],
     },
+    shares: {
+      posts: [{ type: Types.ObjectId, ref: 'Post' }],
+      blogs: [{ type: Types.ObjectId, ref: 'Blog' }],
+      reels: [{ type: Types.ObjectId, ref: 'Reel' }],
+      videos: [{ type: Types.ObjectId, ref: 'Video' }],
+    },
     ads: [{ type: Types.ObjectId, ref: 'Ads' }],
     reels: {
       published: [{ type: Types.ObjectId, ref: 'Reel' }],

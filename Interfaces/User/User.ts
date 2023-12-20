@@ -108,6 +108,12 @@ interface User {
     accepted: Job[];
     rejected: Job[];
   };
+  shares?: {
+    posts: Post[];
+    blogs: Blog[];
+    reels: Reel[];
+    videos: Video[];
+  };
   ads?: Ad[];
   reels?: { reacted: Reel[]; published: Reel[] };
   notifications?: Notification[];
@@ -115,7 +121,7 @@ interface User {
   location?: string;
   hyperlinks?: Link[];
   preferences?: Preferences;
-  verified: {
+  verified?: {
     id: {
       number: number;
       photo: string;

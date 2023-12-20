@@ -3,8 +3,9 @@ import GetPosts from '../../controllers/Post/GetPosts';
 import GetPost from '../../controllers/Post/GetPost';
 import UpdatePost from '../../controllers/Post/UpdatePost';
 import DeletePost from '../../controllers/Post/DeletePublishedPost';
-import CreatePost from '../../controllers/Post/CreatePost';
 import IsAuthenticated from '../../middleware/IsAuthenticated';
+import PublishPost from '../../controllers/Post/PublishPost';
+import DeletePublishedPost from '../../controllers/Post/DeletePublishedPost';
 
 const router = Router();
 
@@ -15,10 +16,13 @@ router.get('/', GetPosts);
 router.get('/:id', GetPost);
 
 // Post Post
-router.post('/', IsAuthenticated, CreatePost);
+router.post('/', IsAuthenticated, PublishPost);
 
 // Put Post
 router.put('/:id', IsAuthenticated, UpdatePost);
+
+// Delete Published Post
+router.delete('/published', IsAuthenticated, DeletePublishedPost);
 
 // Delete Post
 router.delete('/:id', IsAuthenticated, DeletePost);
