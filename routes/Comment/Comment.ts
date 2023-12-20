@@ -10,16 +10,16 @@ const router = Router();
 // Get Comments
 router.get('/', GetComments);
 
-// Get Comment
-router.get('/:id', GetComment);
-
 // Post Comment
-router.post('/', IsAuthenticated, CreateComment);
+router.post('/create', IsAuthenticated, CreateComment);
 
 // Put Comment
-router.put('/:id', IsAuthenticated, UpdateComment);
+router.put('/update', IsAuthenticated, UpdateComment);
 
 // Delete Comment
-router.delete('/', IsAuthenticated, DeleteComment);
+router.delete('/del', IsAuthenticated, DeleteComment);
+
+// Get Comment
+router.get('/:id', GetComment);
 
 export default router;

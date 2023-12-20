@@ -142,10 +142,10 @@ app.use(passport.session());
 
 app.use('/user', User);
 app.use('/post', Post);
+app.use('/comment', Comment);
 // app.use('/ad', Ad);
 // app.use('/blog', Blog);
 // app.use('/job', Job);
-// app.use('/comment', Comment);
 // app.use('/reply', Reply);
 // app.use('/hashTag', HashTag);
 // app.use('/image', Image);
