@@ -1,19 +1,23 @@
 import { Request, Response, NextFunction } from 'express';
 import AsyncHandler from '../../middleware/AsyncHandler';
-import ErrorHandler from '../../middleware/ErrorHandler';
 import Post from '../../models/Post/Post';
+import ErrorHandler from '../../middleware/ErrorHandler';
 
 export default AsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { id } = req.params;
-    let post = await Post.findById(id);
-    if (!post)
-      return next(new ErrorHandler(404, `Couldn't Find Post With Id => ${id}`));
+    const { postId } = req.body;
 
-    post = await Post.findByIdAndUpdate(id, req.body, {
-      runValidators: true,
+    let post = await Post.findById(postId);
+
+    if (!post)
+      return next(new ErrorHandler(404, `cannot find post with id ${postId}`));
+
+    post = await Post.findByIdAndUpdate(postId, req.body, {
       new: true,
+      runValidators: true,
+      upsert: true,
     });
-    return res.json(post);
+
+    return res.status(200).json(post);
   }
 );

@@ -1,11 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
-import AsyncHandler from '../../../middleware/AsyncHandler';
-import ErrorHandler from '../../../middleware/ErrorHandler';
-import Post from '../../../models/Post/Post';
-import User from '../../../models/User/User';
-import Comment from '../../../models/Comment/Comment';
-import { getUserId } from '../../../constants/UserId';
-import Reply from '../../../models/Comment/Reply';
+import AsyncHandler from '../../middleware/AsyncHandler';
+import ErrorHandler from '../../middleware/ErrorHandler';
+import Post from '../../models/Post/Post';
+import User from '../../models/User/User';
+import Comment from '../../models/Comment/Comment';
+import { getUserId } from '../../constants/UserId';
+import Reply from '../../models/Comment/Reply';
 
 export default AsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {

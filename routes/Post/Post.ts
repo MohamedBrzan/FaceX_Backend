@@ -1,13 +1,12 @@
 import { Router } from 'express';
 import GetPosts from '../../controllers/Post/GetPosts';
 import GetPost from '../../controllers/Post/GetPost';
+import CreatePost from '../../controllers/Post/CreatePost';
+import AddExpression from '../../controllers/Post/AddExpression';
 import UpdatePost from '../../controllers/Post/UpdatePost';
-import DeletePost from '../../controllers/Post/Published/DeletePost';
+import DeleteExpression from '../../controllers/Post/DeleteExpression';
+import DeletePost from '../../controllers/Post/DeletePost';
 import IsAuthenticated from '../../middleware/IsAuthenticated';
-import PublishPost from '../../controllers/Post/Published/CreatePost';
-import DeletePublishedPost from '../../controllers/Post/Published/DeletePost';
-import AddExpression from '../../controllers/Post/Published/AddExpression';
-import DeleteExpression from '../../controllers/Post/Published/DeleteExpression';
 
 const router = Router();
 
@@ -17,22 +16,19 @@ router.get('/', GetPosts);
 // Get Post
 router.get('/:id', GetPost);
 
-// Post Post
-router.post('/published/create', IsAuthenticated, PublishPost);
+// Create Post
+router.post('/create', IsAuthenticated, CreatePost);
 
-// Add Expression for Published Posts
-router.patch('/published/expressions/add', IsAuthenticated, AddExpression);
+// Add Expression for Posts
+router.patch('/expressions/add', IsAuthenticated, AddExpression);
 
-// Delete Expression for Published Posts
-router.delete('/published/expressions/del', IsAuthenticated, DeleteExpression);
+// Delete Expression for  Posts
+router.delete('/expressions/del', IsAuthenticated, DeleteExpression);
 
-// Put Post
-router.put('/:id', IsAuthenticated, UpdatePost);
-
-// Delete Published Post
-router.delete('/delete/published', IsAuthenticated, DeletePublishedPost);
+// Update Post
+router.put('/update', IsAuthenticated, UpdatePost);
 
 // Delete Post
-router.delete('/:id', IsAuthenticated, DeletePost);
+router.delete('/del', IsAuthenticated, DeletePost);
 
 export default router;

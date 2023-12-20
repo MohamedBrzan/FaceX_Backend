@@ -1,13 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
-import AsyncHandler from '../../../middleware/AsyncHandler';
-import Post from '../../../models/Post/Post';
-import User from '../../../models/User/User';
-import { getUserId } from '../../../constants/UserId';
-import ErrorHandler from '../../../middleware/ErrorHandler';
+import AsyncHandler from '../../middleware/AsyncHandler';
+import Post from '../../models/Post/Post';
+import User from '../../models/User/User';
+import { getUserId } from '../../constants/UserId';
+import ErrorHandler from '../../middleware/ErrorHandler';
 
 export default AsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { postId } = req.body;
+    const { expression, postId } = req.body;
 
     const userId = await getUserId(req);
 
@@ -16,6 +16,9 @@ export default AsyncHandler(
     if (!post) return next(new ErrorHandler(404, 'this post not exists'));
 
     let found: boolean = false;
+
+    if (!post.expressions[expression])
+      return next(new ErrorHandler(404, 'expression string not found'));
 
     do {
       // TODO // Search for userId in the like expression
@@ -117,9 +120,11 @@ export default AsyncHandler(
       }
     } while (found);
 
-    return res.status(200).json({
-      msg: 'expression deleted successfully',
-      expressions: post.expressions,
-    });
+    if (!found) {
+      post.expressions[expression].push(userId);
+      await post.save();
+    }
+
+    return res.status(200).json(post.expressions);
   }
 );
