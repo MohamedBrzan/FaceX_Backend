@@ -20,6 +20,7 @@ import ActivateVerification from '../../controllers/User/ActivateVerification';
 import DeactivateVerification from '../../controllers/User/DeactivateVerification';
 import ActivelyRecruiting from '../../controllers/User/ActivelyRecruiting';
 import AddReactedPost from '../../controllers/User/AddReactedPost';
+import DeleteReactedPost from '../../controllers/User/DeleteReactedPost';
 const router = Router();
 
 // Get Users
@@ -39,6 +40,9 @@ router.get('/me', IsAuthenticated, GetMyProfile);
 
 // Add Reacted Post
 router.patch('/posts/reacted/add', IsAuthenticated, AddReactedPost);
+
+// Delete Reacted Post
+router.delete('/posts/reacted/del', IsAuthenticated, DeleteReactedPost);
 
 // Follower
 router.post('/follower', IsAuthenticated, ReceiveFollow);

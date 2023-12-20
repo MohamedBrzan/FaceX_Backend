@@ -9,11 +9,22 @@ export default AsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { expression, postId } = req.body;
 
-    const userId = await getUserId(req);
+    const userId = (await getUserId(req)).toString();
+
+    let user = await User.findById(userId);
 
     let post = await Post.findById(postId);
 
     if (!post) return next(new ErrorHandler(404, 'this post not exists'));
+
+    const findPostInUser = user.posts.reacted.findIndex(
+      (p) => p.toString() === postId
+    );
+
+    if (findPostInUser === -1 && post.user.toString() !== userId) {
+      user.posts.reacted.push(postId);
+      await user.save();
+    }
 
     let found: boolean = false;
 
