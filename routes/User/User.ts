@@ -19,6 +19,7 @@ import VerificationRequest from '../../controllers/User/VerificationRequest';
 import ActivateVerification from '../../controllers/User/ActivateVerification';
 import DeactivateVerification from '../../controllers/User/DeactivateVerification';
 import ActivelyRecruiting from '../../controllers/User/ActivelyRecruiting';
+import AddReactedPost from '../../controllers/User/AddReactedPost';
 const router = Router();
 
 // Get Users
@@ -35,6 +36,9 @@ router.get('/logout', IsAuthenticated, Logout);
 
 // User Profile
 router.get('/me', IsAuthenticated, GetMyProfile);
+
+// Add Reacted Post
+router.patch('/posts/reacted/add', IsAuthenticated, AddReactedPost);
 
 // Follower
 router.post('/follower', IsAuthenticated, ReceiveFollow);
