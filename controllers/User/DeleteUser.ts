@@ -50,20 +50,35 @@ export default AsyncHandler(async (req: Request, res: Response) => {
           followings,
         } = user;
         //! Delete All User Posts
-        if (posts?.length > 0) {
-          for (let i = 0; i < posts.length; i++) {
+        if (posts?.published.length > 0) {
+          for (let i = 0; i < posts.published.length; i++) {
+            await Post.findByIdAndRemove(posts[i].toString());
+          }
+        }
+        if (posts?.reacted.length > 0) {
+          for (let i = 0; i < posts.reacted.length; i++) {
             await Post.findByIdAndRemove(posts[i].toString());
           }
         }
         //! Delete All User Blogs
-        if (blogs?.length > 0) {
-          for (let i = 0; i < blogs.length; i++) {
+        if (blogs?.published.length > 0) {
+          for (let i = 0; i < blogs.published.length; i++) {
+            await Blog.findByIdAndRemove(blogs[i].toString());
+          }
+        }
+        if (blogs?.reacted.length > 0) {
+          for (let i = 0; i < blogs.reacted.length; i++) {
             await Blog.findByIdAndRemove(blogs[i].toString());
           }
         }
         //! Delete All User Reels
-        if (reels?.length > 0) {
-          for (let i = 0; i < reels.length; i++) {
+        if (reels?.published.length > 0) {
+          for (let i = 0; i < reels.published.length; i++) {
+            await Reel.findByIdAndRemove(reels[i].toString());
+          }
+        }
+        if (reels?.reacted.length > 0) {
+          for (let i = 0; i < reels.reacted.length; i++) {
             await Reel.findByIdAndRemove(reels[i].toString());
           }
         }
@@ -80,8 +95,13 @@ export default AsyncHandler(async (req: Request, res: Response) => {
           }
         }
         //! Delete All User Videos
-        if (videos?.length > 0) {
-          for (let i = 0; i < videos.length; i++) {
+        if (videos?.published.length > 0) {
+          for (let i = 0; i < videos.published.length; i++) {
+            await Video.findByIdAndRemove(videos[i].toString());
+          }
+        }
+        if (videos?.reacted.length > 0) {
+          for (let i = 0; i < videos.reacted.length; i++) {
             await Video.findByIdAndRemove(videos[i].toString());
           }
         }
@@ -92,20 +112,35 @@ export default AsyncHandler(async (req: Request, res: Response) => {
           }
         }
         //! Delete All User Videos
-        if (videos?.length > 0) {
-          for (let i = 0; i < videos.length; i++) {
+        if (videos?.published.length > 0) {
+          for (let i = 0; i < videos.published.length; i++) {
+            await Video.findByIdAndRemove(videos[i].toString());
+          }
+        }
+        if (videos?.reacted.length > 0) {
+          for (let i = 0; i < videos.reacted.length; i++) {
             await Video.findByIdAndRemove(videos[i].toString());
           }
         }
         //! Delete All User Comments
-        if (comments?.length > 0) {
-          for (let i = 0; i < comments.length; i++) {
+        if (comments?.published.length > 0) {
+          for (let i = 0; i < comments.published.length; i++) {
+            await Comment.findByIdAndRemove(comments[i].toString());
+          }
+        }
+        if (comments?.reacted.length > 0) {
+          for (let i = 0; i < comments.reacted.length; i++) {
             await Comment.findByIdAndRemove(comments[i].toString());
           }
         }
         //! Delete All User Replies
-        if (replies?.length > 0) {
-          for (let i = 0; i < replies.length; i++) {
+        if (replies?.published.length > 0) {
+          for (let i = 0; i < replies.published.length; i++) {
+            await Reply.findByIdAndRemove(replies[i].toString());
+          }
+        }
+        if (replies?.reacted.length > 0) {
+          for (let i = 0; i < replies.reacted.length; i++) {
             await Reply.findByIdAndRemove(replies[i].toString());
           }
         }
@@ -116,16 +151,21 @@ export default AsyncHandler(async (req: Request, res: Response) => {
           }
         }
         //! Delete All Hashtags That Created By User
-        if (hashTags?.create.length > 0) {
-          for (let i = 0; i < hashTags.create.length; i++) {
-            await HashTag.findByIdAndRemove(hashTags.create[i].toString());
+        if (hashTags?.published.length > 0) {
+          for (let i = 0; i < hashTags.published.length; i++) {
+            await HashTag.findByIdAndRemove(hashTags.published[i].toString());
+          }
+        }
+        if (hashTags?.reacted.length > 0) {
+          for (let i = 0; i < hashTags.reacted.length; i++) {
+            await HashTag.findByIdAndRemove(hashTags.reacted[i].toString());
           }
         }
         //! Delete All Hashtags That Followed By User
-        if (hashTags?.follow.length > 0) {
-          for (let i = 0; i < hashTags.follow.length; i++) {
+        if (hashTags?.reacted.length > 0) {
+          for (let i = 0; i < hashTags.reacted.length; i++) {
             await HashTag.findByIdAndUpdate(
-              hashTags.follow[i].toString(),
+              hashTags.reacted[i].toString(),
               { $pull: { followers: userId } },
               { runValidators: true, new: true }
             );
