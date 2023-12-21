@@ -16,8 +16,8 @@ export default async (
     );
 
     if (
-      inReacted === -1 &&
-      inPublished === -1 &&
+      inReacted < 0 &&
+      inPublished < 0 &&
       modelToFind.user.toString() !== userId
     ) {
       reactedTrack.push(modelId);

@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import AsyncHandler from '../../middleware/AsyncHandler';
 import Comment from '../../models/Comment/Comment';
-import User from '../../models/User/User';
 import { getUserId } from '../../constants/UserId';
 import ErrorHandler from '../../middleware/ErrorHandler';
 import ExpressionLoop from '../../constants/ExpressionLoop';

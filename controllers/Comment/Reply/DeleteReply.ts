@@ -8,6 +8,7 @@ import Reel from '../../../models/Reel/Reel';
 import Blog from '../../../models/Blog/Blog';
 import Comment from '../../../models/Comment/Comment';
 import Post from '../../../models/Post/Post';
+import ExtractUsersFromExpressions from '../../../constants/DeleteUsersFromExpressions';
 
 export default AsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -17,7 +18,7 @@ export default AsyncHandler(
 
     const user = await User.findById(userId).select('replies');
 
-    const reply = await Reply.findById(replyId).select('ref');
+    const reply = await Reply.findById(replyId);
 
     if (!reply)
       return next(
@@ -42,6 +43,18 @@ export default AsyncHandler(
         )
       );
 
+    const founded = user.replies.published.splice(
+      user.replies.published.indexOf(replyId),
+      1
+    );
+
+    !founded &&
+      user.replies.reacted.splice(user.replies.reacted.indexOf(replyId), 1);
+
+    await user.save();
+
+    await ExtractUsersFromExpressions(reply.expressions, 'replies', replyId);
+
     const { ref } = comment;
 
     let refName: string;
@@ -57,7 +70,6 @@ export default AsyncHandler(
         },
         { runValidators: true, new: true }
       );
-      await Reply.findByIdAndRemove(reply);
 
       refName = 'post';
 
@@ -73,8 +85,6 @@ export default AsyncHandler(
         { runValidators: true, new: true }
       );
 
-      await Reply.findByIdAndRemove(reply);
-
       refName = 'blog';
 
       //* Remove reply From Reel
@@ -89,17 +99,15 @@ export default AsyncHandler(
         { runValidators: true, new: true }
       );
 
-      await Reply.findByIdAndRemove(reply);
       refName = 'reel';
     }
 
-    if (user.replies.published[replyId]) {
-      user.replies.published.splice(user.replies.published.indexOf(replyId), 1);
-    } else if (user.replies.reacted[replyId]) {
-      user.replies.published.splice(user.replies.reacted.indexOf(replyId), 1);
-    }
-
-    await user.save();
+    await Reply.findByIdAndRemove(reply);
+    await Comment.findByIdAndUpdate(
+      reply.ref.toString(),
+      { $pull: { replies: replyId } },
+      { runValidators: true, new: true, upsert: true }
+    );
 
     return res
       .status(200)
