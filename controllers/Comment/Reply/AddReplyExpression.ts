@@ -6,10 +6,11 @@ import { getUserId } from '../../../constants/UserId';
 import ErrorHandler from '../../../middleware/ErrorHandler';
 import FindModelInUser from '../../../constants/FindModelInUser';
 import ExpressionLoop from '../../../constants/ExpressionLoop';
+import ToggleExpression from '../../../constants/ToggleExpression';
 
 export default AsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { expression, replyId } = req.body;
+    const { replyId, prevExpressionName, currentExpressionName } = req.body;
 
     const userId = (await getUserId(req)).toString();
 
@@ -19,23 +20,35 @@ export default AsyncHandler(
 
     if (!reply) return next(new ErrorHandler(404, 'this reply not exists'));
 
-    await FindModelInUser(
-      user.replies.published,
-      user.replies.reacted,
-      user,
+    await ToggleExpression(
+      res,
+      next,
       userId,
+      user,
       reply,
-      replyId
+      replyId,
+      'replies',
+      prevExpressionName,
+      currentExpressionName
     );
 
-    if (!reply.expressions[expression])
-      return next(new ErrorHandler(404, 'expression string not found'));
+    // await FindModelInUser(
+    //   user.replies.published,
+    //   user.replies.reacted,
+    //   user,
+    //   userId,
+    //   reply,
+    //   replyId
+    // );
 
-    await ExpressionLoop(userId, reply);
+    // if (!reply.expressions[expression])
+    //   return next(new ErrorHandler(404, 'expression string not found'));
 
-    reply.expressions[expression].push(userId);
-    await reply.save();
+    // await ExpressionLoop(userId, reply);
 
-    return res.status(200).json(reply.expressions);
+    // reply.expressions[expression].push(userId);
+    // await reply.save();
+
+    // return res.status(200).json(reply.expressions);
   }
 );

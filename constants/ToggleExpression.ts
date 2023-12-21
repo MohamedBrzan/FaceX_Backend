@@ -1,41 +1,62 @@
 import { Request, Response, NextFunction } from 'express';
-import AsyncHandler from '../../middleware/AsyncHandler';
-import Post from '../../models/Post/Post';
-import User from '../../models/User/User';
-import { getUserId } from '../../constants/UserId';
-import ErrorHandler from '../../middleware/ErrorHandler';
-import ExpressionLoop from '../../constants/ExpressionLoop';
-import FindModelInUser from '../../constants/FindModelInUser';
+import ErrorHandler from '../middleware/ErrorHandler';
+import FindModelInUser from './FindModelInUser';
 
-export default AsyncHandler(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const { expression, postId } = req.body;
+export default async (
+  res: Response,
+  next: NextFunction,
+  userId: string,
+  user: any,
+  model: any,
+  modelId: string,
+  property: string,
+  prevExpressionName?: string,
+  currentExpressionName?: string
+) => {
+  await FindModelInUser(
+    user.replies.published,
+    user.replies.reacted,
+    user,
+    userId,
+    model,
+    modelId
+  );
 
-    const userId = (await getUserId(req)).toString();
+  let foundedInPrev: boolean = false;
 
-    let user = await User.findById(userId);
+  if (prevExpressionName && !model.expressions[prevExpressionName])
+    return next(new ErrorHandler(404, 'prev expression string not found'));
 
-    let post = await Post.findById(postId);
+  if (currentExpressionName && !model.expressions[currentExpressionName])
+    return next(new ErrorHandler(404, 'current expression string not found'));
 
-    if (!post) return next(new ErrorHandler(404, 'this post not exists'));
+  if (prevExpressionName && currentExpressionName) {
+    for (let i = 0; i < model.expressions[prevExpressionName].length; i++) {
+      if (userId === model.expressions[prevExpressionName][i].toString()) {
+        model.expressions[prevExpressionName].splice(i, 1);
+        await model.save();
+        foundedInPrev = true;
+      }
+    }
+  }
 
-    await FindModelInUser(
-      user.replies.published,
-      user.replies.reacted,
-      user,
-      userId,
-      post,
-      postId
+  if (prevExpressionName !== currentExpressionName && foundedInPrev === false)
+    return next(
+      new ErrorHandler(
+        404,
+        `something goes wrong. user not found in prevExpressionName`
+      )
     );
 
-    if (!post.expressions[expression])
-      return next(new ErrorHandler(404, 'expression string not found'));
-
-    await ExpressionLoop(userId, post);
-
-    post.expressions[expression].push(userId);
-    await post.save();
-
-    return res.status(200).json(post.expressions);
+  if (prevExpressionName && currentExpressionName && foundedInPrev === false) {
+    model.expressions[currentExpressionName].push(userId);
+    await model.save();
   }
-);
+
+  if (prevExpressionName !== currentExpressionName && foundedInPrev === true) {
+    model.expressions[currentExpressionName].push(userId);
+    await model.save();
+  }
+
+  return res.status(200).json(model.expressions);
+};
