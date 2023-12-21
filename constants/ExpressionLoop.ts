@@ -1,6 +1,4 @@
-import { Document } from 'mongoose';
-
-export default async (userId: string, modelName: any) => {
+export default async (userId: string, modelName: any): Promise<void> => {
   try {
     do {
       // TODO // Search for userId in the like expression

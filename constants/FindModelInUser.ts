@@ -5,7 +5,7 @@ export default async (
   userId: string,
   modelToFind: { user: { toString: () => string } },
   modelId: any
-) => {
+): Promise<void> => {
   try {
     const inPublished = publishedTrack.findIndex(
       (p: { toString: () => any }) => p.toString() === modelId
