@@ -14,12 +14,12 @@ router.get('/', GetReplies);
 router.get('/:id', GetReply);
 
 // Post Reply
-router.post('/', IsAuthenticated, CreateReply);
+router.post('/create', IsAuthenticated, CreateReply);
 
 // Put Reply
-router.put('/:id', IsAuthenticated, UpdateReply);
+router.put('/update', IsAuthenticated, UpdateReply);
 
 // Delete Reply
-router.delete('/', IsAuthenticated, DeleteReply);
+router.delete('/del', IsAuthenticated, DeleteReply);
 
 export default router;

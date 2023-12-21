@@ -7,6 +7,7 @@ import Post from '../../models/Post/Post';
 import Blog from '../../models/Blog/Blog';
 import Reel from '../../models/Reel/Reel';
 import { getUserId } from '../../constants/UserId';
+import Reply from '../../models/Comment/Reply';
 
 export default AsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -27,6 +28,34 @@ export default AsyncHandler(
         return next(
           new ErrorHandler(404, `This Post Comment Id ${comment} Not Found`)
         );
+
+      if (userId !== comment.user.toString())
+        return next(
+          new ErrorHandler(
+            404,
+            "Sorry!!, It seems that you're not the owner of this comment"
+          )
+        );
+
+      //! Delete Reply From user.replies
+      for (let reply of comment.replies) {
+        const commentReply = await Reply.findById(reply.toString()).select(
+          'user'
+        );
+        const user = await User.findById(commentReply.user.toString()).select(
+          'replies'
+        );
+
+        if (user.replies.published[reply.toString()]) {
+          user.replies.published.splice(
+            user.replies.published.indexOf(reply),
+            1
+          );
+        } else if (user.replies.reacted[reply.toString()]) {
+          user.replies.reacted.splice(user.replies.reacted.indexOf(reply), 1);
+        }
+        await user.save();
+      }
 
       let post = await Post.findByIdAndUpdate(
         ref.post,
@@ -52,6 +81,35 @@ export default AsyncHandler(
           new ErrorHandler(404, `This Blog Comment Id ${comment} Not Found`)
         );
 
+      if (userId !== comment.user.toString())
+        return next(
+          new ErrorHandler(
+            404,
+            "Sorry!!, It seems that you're not the owner of this comment"
+          )
+        );
+
+      //! Delete Reply From user.replies
+      for (let reply of comment.replies) {
+        const commentReply = await Reply.findById(reply.toString()).select(
+          'user'
+        );
+        const user = await User.findById(commentReply.user.toString()).select(
+          'replies'
+        );
+
+        if (user.replies.published[reply.toString()]) {
+          user.replies.published.splice(
+            user.replies.published.indexOf(reply),
+            1
+          );
+        } else if (user.replies.reacted[reply.toString()]) {
+          user.replies.reacted.splice(user.replies.reacted.indexOf(reply), 1);
+        }
+
+        await user.save();
+      }
+
       let blog = await Blog.findByIdAndUpdate(
         ref.blog,
         {
@@ -76,6 +134,34 @@ export default AsyncHandler(
         return next(
           new ErrorHandler(404, `This Reel Comment Id ${comment} Not Found`)
         );
+
+      if (userId !== comment.user.toString())
+        return next(
+          new ErrorHandler(
+            404,
+            "Sorry!!, It seems that you're not the owner of this comment"
+          )
+        );
+
+      //! Delete Reply From user.replies
+      for (let reply of comment.replies) {
+        const commentReply = await Reply.findById(reply.toString()).select(
+          'user'
+        );
+        const user = await User.findById(commentReply.user.toString()).select(
+          'replies'
+        );
+
+        if (user.replies.published[reply.toString()]) {
+          user.replies.published.splice(
+            user.replies.published.indexOf(reply),
+            1
+          );
+        } else if (user.replies.reacted[reply.toString()]) {
+          user.replies.reacted.splice(user.replies.reacted.indexOf(reply), 1);
+        }
+        await user.save();
+      }
 
       let reel = await Reel.findByIdAndUpdate(
         ref.reel,
