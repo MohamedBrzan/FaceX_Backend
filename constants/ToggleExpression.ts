@@ -13,15 +13,6 @@ export default async (
   prevExpressionName?: string,
   currentExpressionName?: string
 ) => {
-  await FindModelInUser(
-    user.replies.published,
-    user.replies.reacted,
-    user,
-    userId,
-    model,
-    modelId
-  );
-
   let foundedInPrev: boolean = false;
 
   if (prevExpressionName && !model.expressions[prevExpressionName])
@@ -48,14 +39,31 @@ export default async (
       )
     );
 
-  if (prevExpressionName && currentExpressionName && foundedInPrev === false) {
+  if (
+    (prevExpressionName && currentExpressionName && foundedInPrev === false) ||
+    (prevExpressionName !== currentExpressionName && foundedInPrev === true)
+  ) {
     model.expressions[currentExpressionName].push(userId);
     await model.save();
-  }
-
-  if (prevExpressionName !== currentExpressionName && foundedInPrev === true) {
-    model.expressions[currentExpressionName].push(userId);
-    await model.save();
+    await FindModelInUser(
+      user[property].published,
+      user[property].reacted,
+      user,
+      userId,
+      model,
+      modelId,
+      true
+    );
+  } else {
+    await FindModelInUser(
+      user[property].published,
+      user[property].reacted,
+      user,
+      userId,
+      model,
+      modelId,
+      false
+    );
   }
 
   return res.status(200).json(model.expressions);

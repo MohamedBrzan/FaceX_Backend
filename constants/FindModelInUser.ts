@@ -4,7 +4,8 @@ export default async (
   user: { save: () => any },
   userId: string,
   modelToFind: { user: { toString: () => string } },
-  modelId: any
+  modelId: any,
+  activeAdding: boolean
 ): Promise<void> => {
   try {
     const inPublished = publishedTrack.findIndex(
@@ -16,13 +17,18 @@ export default async (
     );
 
     if (
+      activeAdding === true  &&
       inReacted < 0 &&
       inPublished < 0 &&
       modelToFind.user.toString() !== userId
     ) {
       reactedTrack.push(modelId);
-      await user.save();
+    }else if(activeAdding === false && inPublished >= 0){
+      publishedTrack.splice(publishedTrack.indexOf(modelId), 1);
+    }else if(activeAdding === false && inReacted >= 0){
+      reactedTrack.splice(reactedTrack.indexOf(modelId), 1);
     }
+    await user.save();
   } catch (error) {
     throw new Error(error);
   }

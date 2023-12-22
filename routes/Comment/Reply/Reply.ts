@@ -5,8 +5,7 @@ import CreateReply from '../../../controllers/Comment/Reply/CreateReply';
 import UpdateReply from '../../../controllers/Comment/Reply/UpdateReply';
 import DeleteReply from '../../../controllers/Comment/Reply/DeleteReply';
 import GetReply from '../../../controllers/Comment/Reply/GetReply';
-import AddReplyExpression from '../../../controllers/Comment/Reply/AddReplyExpression';
-import DeleteReplyExpression from '../../../controllers/Comment/Reply/DeleteReplyExpression';
+import AddAndRemoveExpression from '../../../controllers/Comment/Reply/AddAndRemoveExpression';
 const router = Router();
 
 // Get Replies
@@ -21,11 +20,9 @@ router.post('/create', IsAuthenticated, CreateReply);
 // Put Reply
 router.put('/update', IsAuthenticated, UpdateReply);
 
-// Add Reply Expression
-router.patch('/expressions/add', IsAuthenticated, AddReplyExpression);
+// Add and Delete Reply Expression
+router.patch('/expressions/toggle', IsAuthenticated, AddAndRemoveExpression);
 
-// Add Reply Expression
-router.delete('/expressions/del', IsAuthenticated, DeleteReplyExpression);
 
 // Delete Reply
 router.delete('/del', IsAuthenticated, DeleteReply);

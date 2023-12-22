@@ -1,25 +1,33 @@
 import { Request, Response, NextFunction } from 'express';
 import AsyncHandler from '../../middleware/AsyncHandler';
 import Post from '../../models/Post/Post';
+import User from '../../models/User/User';
 import { getUserId } from '../../constants/UserId';
 import ErrorHandler from '../../middleware/ErrorHandler';
-import ExpressionLoop from '../../constants/ExpressionLoop';
+import ToggleExpression from '../../constants/ToggleExpression';
 
 export default AsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { postId } = req.body;
+    const { prevExpressionName, currentExpressionName, postId } = req.body;
 
-    const userId = await getUserId(req);
+    const userId = (await getUserId(req)).toString();
+
+    let user = await User.findById(userId);
 
     let post = await Post.findById(postId);
 
     if (!post) return next(new ErrorHandler(404, 'this post not exists'));
 
-    await ExpressionLoop(userId, post);
-
-    return res.status(200).json({
-      msg: 'expression deleted successfully',
-      expressions: post.expressions,
-    });
+    await ToggleExpression(
+      res,
+      next,
+      userId,
+      user,
+      post,
+      postId,
+      'posts',
+      prevExpressionName,
+      currentExpressionName
+    );
   }
 );

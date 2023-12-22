@@ -2,9 +2,8 @@ import { Router } from 'express';
 import GetPosts from '../../controllers/Post/GetPosts';
 import GetPost from '../../controllers/Post/GetPost';
 import CreatePost from '../../controllers/Post/CreatePost';
-import AddExpression from '../../controllers/Post/AddPostExpression';
+import AddAndRemoveExpression from '../../controllers/Post/AddAndRemoveExpression';
 import UpdatePost from '../../controllers/Post/UpdatePost';
-import DeleteExpression from '../../controllers/Post/DeletePostExpression';
 import DeletePost from '../../controllers/Post/DeletePost';
 import IsAuthenticated from '../../middleware/IsAuthenticated';
 import AddView from '../../controllers/Post/AddView';
@@ -21,11 +20,9 @@ router.get('/:id', GetPost);
 // Create Post
 router.post('/create', IsAuthenticated, CreatePost);
 
-// Add Expression for Posts
-router.patch('/expressions/add', IsAuthenticated, AddExpression);
+// Add and Delete Expression for Posts
+router.patch('/expressions/toggle', IsAuthenticated, AddAndRemoveExpression);
 
-// Delete Expression for  Posts
-router.delete('/expressions/del', IsAuthenticated, DeleteExpression);
 
 // Update Post
 router.put('/update', IsAuthenticated, UpdatePost);
