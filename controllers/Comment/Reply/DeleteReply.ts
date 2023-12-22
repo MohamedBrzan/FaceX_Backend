@@ -8,6 +8,7 @@ import Reel from '../../../models/Reel/Reel';
 import Blog from '../../../models/Blog/Blog';
 import Comment from '../../../models/Comment/Comment';
 import Post from '../../../models/Post/Post';
+import ExpressionLoop from '../../../constants/ExpressionLoop';
 
 export default AsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -41,16 +42,6 @@ export default AsyncHandler(
           `This comment with id ${comment._id.toString()} not found`
         )
       );
-
-    const founded = user.replies.published.splice(
-      user.replies.published.indexOf(replyId),
-      1
-    );
-
-    !founded &&
-      user.replies.reacted.splice(user.replies.reacted.indexOf(replyId), 1);
-
-    await user.save();
 
     const { ref } = comment;
 
@@ -99,12 +90,28 @@ export default AsyncHandler(
       refName = 'reel';
     }
 
-    await Reply.findByIdAndRemove(reply);
+    const users = ExpressionLoop(reply);
+
+    for (const targetUser of users) {
+      const user = await User.findById(targetUser).select('replies');
+      //! Delete the comment from user.comments.reacted
+      user.replies.reacted.splice(user.replies.reacted.indexOf(replyId), 1);
+      await user.save();
+    }
+
+    //! Delete the reply's writer
+    user.replies.published.splice(user.replies.published.indexOf(replyId), 1);
+    await user.save();
+
+    //! Delete reply from the comment
     await Comment.findByIdAndUpdate(
       reply.ref.toString(),
       { $pull: { replies: replyId } },
       { runValidators: true, new: true, upsert: true }
     );
+
+    //! Delete reply from DB
+    await Reply.findByIdAndRemove(reply);
 
     return res
       .status(200)

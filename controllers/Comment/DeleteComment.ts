@@ -39,9 +39,6 @@ export default AsyncHandler(
 
     //* Remove Comment From Post
     if (ref.post) {
-      //! Delete Reply From user.replies
-      await DeleteUsersFromModel(Reply, comment, 'replies');
-
       let post = await Post.findByIdAndUpdate(
         ref.post,
         {
@@ -58,9 +55,6 @@ export default AsyncHandler(
 
       //* Remove Comment From Blog
     } else if (ref.blog) {
-      //! Delete Reply From user.replies
-      await DeleteUsersFromModel(Reply, comment, 'replies');
-
       let blog = await Blog.findByIdAndUpdate(
         ref.blog,
         {
@@ -77,9 +71,6 @@ export default AsyncHandler(
 
       //* Remove Comment From Reel
     } else if (ref.reel) {
-      //! Delete Reply From user.replies
-      await DeleteUsersFromModel(Reply, comment, 'replies');
-
       let reel = await Reel.findByIdAndUpdate(
         ref.reel,
         {
@@ -106,6 +97,9 @@ export default AsyncHandler(
       user.comments.reacted.splice(user.comments.reacted.indexOf(commentId), 1);
       await user.save();
     }
+
+    //! Delete Reply From user.replies.reacted & Delete the reply's writer
+    await DeleteUsersFromModel(Reply, comment, 'replies');
 
     //* Remove Comment Writer
     await User.findByIdAndUpdate(
