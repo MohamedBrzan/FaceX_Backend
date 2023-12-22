@@ -17,15 +17,13 @@ export default async (
     );
 
     if (
-      activeAdding === true  &&
+      activeAdding === true &&
       inReacted < 0 &&
       inPublished < 0 &&
       modelToFind.user.toString() !== userId
     ) {
       reactedTrack.push(modelId);
-    }else if(activeAdding === false && inPublished >= 0){
-      publishedTrack.splice(publishedTrack.indexOf(modelId), 1);
-    }else if(activeAdding === false && inReacted >= 0){
+    } else if (activeAdding === false && inReacted >= 0) {
       reactedTrack.splice(reactedTrack.indexOf(modelId), 1);
     }
     await user.save();

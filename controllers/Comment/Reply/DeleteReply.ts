@@ -8,7 +8,6 @@ import Reel from '../../../models/Reel/Reel';
 import Blog from '../../../models/Blog/Blog';
 import Comment from '../../../models/Comment/Comment';
 import Post from '../../../models/Post/Post';
-import ExtractUsersFromExpressions from '../../../constants/DeleteUsersFromExpressions';
 
 export default AsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -53,7 +52,7 @@ export default AsyncHandler(
 
     await user.save();
 
-    await ExtractUsersFromExpressions(reply.expressions, 'replies', replyId);
+    // await ExtractUsersFromExpressions(reply.expressions, 'replies', replyId);
 
     const { ref } = comment;
 
