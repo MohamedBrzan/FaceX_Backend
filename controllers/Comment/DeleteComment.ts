@@ -10,7 +10,6 @@ import { getUserId } from '../../constants/UserId';
 import Reply from '../../models/Comment/Reply';
 import DeleteUsersFromModel from '../../constants/DeleteUsersFromModel';
 import ExpressionLoop from '../../constants/ExpressionLoop';
-import CheckAndRemove from '../../constants/CheckAndRemove';
 
 export default AsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -99,20 +98,21 @@ export default AsyncHandler(
     if (!refName || !refComments)
       return res.status(404).json({ message: `cannot find this ref ${ref}` });
 
-    //* Remove Comment From User Comments
+    const users = ExpressionLoop(comment);
+
+    for (const targetUser of users) {
+      const user = await User.findById(targetUser).select('comments');
+      //! Delete the comment from user.comments.reacted
+      user.comments.reacted.splice(user.comments.reacted.indexOf(commentId), 1);
+      await user.save();
+    }
+
+    //* Remove Comment Writer
     await User.findByIdAndUpdate(
       userId,
       { $pull: { 'comments.published': commentId } },
       { runValidators: true, new: true, upsert: true }
     );
-
-    const users = ExpressionLoop(comment);
-
-    for (const targetUser of users) {
-      const user = await User.findById(targetUser).select('comments');
-      CheckAndRemove(user, 'comments', commentId);
-      await user.save();
-    }
 
     await Comment.findByIdAndRemove(comment);
 

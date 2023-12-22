@@ -19,7 +19,6 @@ export default async (
     for (const targetUser of users) {
       const user = await User.findById(targetUser).select(property);
 
-
       //! Delete the model from user[modelContainer].reacted
       user[property].reacted.splice(user[property].reacted.indexOf(target), 1);
       await user.save();

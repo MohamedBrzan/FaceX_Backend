@@ -52,8 +52,6 @@ export default AsyncHandler(
 
     await user.save();
 
-    // await ExtractUsersFromExpressions(reply.expressions, 'replies', replyId);
-
     const { ref } = comment;
 
     let refName: string;
