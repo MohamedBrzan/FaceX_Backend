@@ -1,4 +1,4 @@
-export default (modelName: any) => {
+export default (model: any) => {
   let keys = [
     'like',
     'love',
@@ -14,8 +14,8 @@ export default (modelName: any) => {
   let users = new Set();
 
   keys.forEach((key) => {
-    for (let i = 0; i < modelName.expressions[key].length; i++) {
-      users.add(modelName.expressions[key][i]);
+    for (let i = 0; i < model.expressions[key].length; i++) {
+      users.add(model.expressions[key][i]);
     }
   });
 
