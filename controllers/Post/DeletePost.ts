@@ -6,6 +6,7 @@ import User from '../../models/User/User';
 import Comment from '../../models/Comment/Comment';
 import { getUserId } from '../../constants/UserId';
 import Reply from '../../models/Comment/Reply';
+import ExpressionLoop from '../../constants/ExpressionLoop';
 
 export default AsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -26,162 +27,80 @@ export default AsyncHandler(
         message: "Sorry!!, It seems that you're not the owner of this post",
       });
 
-    let commentsId = new Set();
-    let repliesId = new Set();
-    let usersWhoReacted = new Set();
-    let usersWhoCommented = new Set();
-    let usersWhoReplied = new Set();
-    let usersWhoShared = new Set();
+    //! Delete the post from the owner
+    user.posts.published.splice(user.posts.published.indexOf(postId), 1);
+    await user.save();
 
     //* Get All User Who Reacted
-    // TODO: Like
-    for (let i = 0; i < post.expressions.like.length; i++) {
-      usersWhoReacted.add(post.expressions.like[i]);
-    }
-
-    // TODO: Love
-    for (let i = 0; i < post.expressions.love.length; i++) {
-      usersWhoReacted.add(post.expressions.love[i]);
-    }
-
-    // TODO: Support
-    for (let i = 0; i < post.expressions.support.length; i++) {
-      usersWhoReacted.add(post.expressions.support[i]);
-    }
-
-    // TODO: Sad
-    for (let i = 0; i < post.expressions.sad.length; i++) {
-      usersWhoReacted.add(post.expressions.sad[i]);
-    }
-
-    // TODO: Happy
-    for (let i = 0; i < post.expressions.happy.length; i++) {
-      usersWhoReacted.add(post.expressions.happy[i]);
-    }
-
-    // TODO: Angry
-    for (let i = 0; i < post.expressions.angry.length; i++) {
-      usersWhoReacted.add(post.expressions.angry[i]);
-    }
-
-    // TODO: Disgust
-    for (let i = 0; i < post.expressions.disgust.length; i++) {
-      usersWhoReacted.add(post.expressions.disgust[i]);
-    }
-
-    // TODO: Surprise
-    for (let i = 0; i < post.expressions.surprise.length; i++) {
-      usersWhoReacted.add(post.expressions.surprise[i]);
-    }
-
-    // TODO: Fear
-    for (let i = 0; i < post.expressions.fear.length; i++) {
-      usersWhoReacted.add(post.expressions.fear[i]);
-    }
+    const usersWhoReacted = ExpressionLoop(post);
 
     //* Get All Users Who Comments
     // TODO: Comments Loop
     for (let i = 0; i < post.comments.length; i++) {
-      const comment = await Comment.findById(
-        post.comments[i].toString()
-      ).select('user replies _id');
+      const comment = await Comment.findById(post.comments[i].toString());
+      const user = await User.findById(comment.user.toString());
+      const founded = user.comments.reacted.splice(
+        user.comments.reacted.indexOf(comment),
+        1
+      );
 
-      commentsId.add(comment._id);
-      usersWhoCommented.add(comment.user.toString());
+      founded.length < 1 &&
+        user.comments.published.splice(
+          user.comments.published.indexOf(comment),
+          1
+        );
+      await user.save();
+
+      const commentExpressions = ExpressionLoop(comment);
+
+      for (let expression of commentExpressions) {
+        const user = await User.findById(expression.toString());
+        user.comments.reacted.splice(user.comments.reacted.indexOf(comment), 1);
+        await user.save();
+      }
 
       // TODO: Comment Replies Loop
       for (let j = 0; j < comment.replies.length; j++) {
-        const reply = await Reply.findById(
-          comment.replies[j].toString()
-        ).select('user _id');
-        repliesId.add(reply._id);
-        usersWhoReplied.add(reply.user.toString());
+        const reply = await Reply.findById(comment.replies[j].toString());
+        const user = await User.findById(reply.user.toString());
+        const founded = user.replies.reacted.splice(
+          user.replies.reacted.indexOf(reply),
+          1
+        );
+
+        founded.length < 1 &&
+          user.replies.published.splice(
+            user.replies.published.indexOf(reply),
+            1
+          );
+        await user.save();
+
+        const repliesExpressions = ExpressionLoop(reply);
+        for (let expression of repliesExpressions) {
+          const user = await User.findById(expression.toString());
+          user.replies.reacted.splice(user.replies.reacted.indexOf(reply), 1);
+          await user.save();
+        }
+
+        await Reply.findByIdAndRemove(reply);
       }
+      await Comment.findByIdAndRemove(comment);
     }
 
     //* Get All Users Who Shared
     // TODO: Share Loop
     for (let i = 0; i < post.shares.length; i++) {
-      usersWhoShared.add(post.shares[i].toString());
+      const user = await User.findById(post.shares.toString()).select('shares');
+      user.shares.posts.splice(user.shares.posts.indexOf(postId), 1);
+      await user.save();
     }
 
     //! Delete Expression from usersWhoReacted
     for (let userId of usersWhoReacted) {
       const user = await User.findById(userId).select('posts');
-      user.posts.reacted.forEach(async (post) => {
-        if (post.toString() === postId) {
-          user.posts.reacted.splice(user.posts.reacted.indexOf(post), 1);
-          await user.save();
-        }
-      });
-    }
-
-    //! Delete the Comments from usersWhoCommented
-    for (let userId of usersWhoCommented) {
-      const user = await User.findById(userId).select('comments');
-      user.comments.reacted.forEach(async (comment) => {
-        if (comment.ref.post.toString() === postId) {
-          user.comments.reacted.splice(
-            user.comments.reacted.indexOf(comment),
-            1
-          );
-          await user.save();
-        }
-      });
-      user.comments.published.forEach(async (comment) => {
-        if (comment.ref.post.toString() === postId) {
-          user.comments.published.splice(
-            user.comments.published.indexOf(comment),
-            1
-          );
-          await user.save();
-        }
-      });
-    }
-
-    //! Delete the Replies from usersWhoReplied
-    for (let userId of usersWhoReplied) {
-      const user = await User.findById(userId).select('replies');
-      user.replies.reacted.forEach(async (reply) => {
-        if (reply.ref.toString() === postId) {
-          user.replies.reacted.splice(user.replies.reacted.indexOf(reply), 1);
-          await user.save();
-        }
-      });
-      user.replies.published.forEach(async (reply) => {
-        if (reply.ref.toString() === postId) {
-          user.replies.published.splice(
-            user.replies.published.indexOf(reply),
-            1
-          );
-          await user.save();
-        }
-      });
-    }
-
-    //! Delete Shares from usersWhoShared
-    for (let userId of usersWhoShared) {
-      const user = await User.findById(userId).select('shares');
-      user.shares.posts.forEach(async (post) => {
-        if (post.toString() === postId) {
-          user.shares.posts.splice(user.shares.posts.indexOf(post), 1);
-          await user.save();
-        }
-      });
-    }
-
-    //* Delete All Post Comments
-    for (let comment of commentsId) {
-      await Comment.findByIdAndRemove(comment.toString());
-    }
-
-    //* Delete All Post Replies
-    for (let reply of repliesId) {
-      await Reply.findByIdAndRemove(reply.toString());
-    }
-
-    user.posts.published.splice(user.posts.published.indexOf(postId), 1),
+      user.posts.reacted.splice(user.posts.reacted.indexOf(postId), 1);
       await user.save();
+    }
 
     //* Delete the Post
     await Post.findByIdAndRemove(postId);
