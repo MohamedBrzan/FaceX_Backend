@@ -10,6 +10,7 @@ import { getUserId } from '../../constants/UserId';
 import Reply from '../../models/Comment/Reply';
 import DeleteUsersFromModel from '../../constants/DeleteUsersFromModel';
 import ExpressionLoop from '../../constants/ExpressionLoop';
+import CommentDeletions from '../../functions/CommentDeletions';
 
 export default AsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -32,83 +33,89 @@ export default AsyncHandler(
         )
       );
 
-    let refName: string;
-    let refComments: any[];
-
-    // todo search if The Comment For Post | Blog | Reel
-
-    //* Remove Comment From Post
-    if (ref.post) {
-      let post = await Post.findByIdAndUpdate(
-        ref.post,
-        {
-          $pull: {
-            comments: commentId,
-          },
-        },
-        { runValidators: true, new: true }
-      );
-
-      const { comments } = post;
-      refComments = comments;
-      refName = 'post';
-
-      //* Remove Comment From Blog
-    } else if (ref.blog) {
-      let blog = await Blog.findByIdAndUpdate(
-        ref.blog,
-        {
-          $pull: {
-            comments: commentId,
-          },
-        },
-        { runValidators: true, new: true }
-      );
-
-      const { comments } = blog;
-      refComments = comments;
-      refName = 'blog';
-
-      //* Remove Comment From Reel
-    } else if (ref.reel) {
-      let reel = await Reel.findByIdAndUpdate(
-        ref.reel,
-        {
-          $pull: {
-            comments: commentId,
-          },
-        },
-        { runValidators: true, new: true }
-      );
-
-      const { comments } = reel;
-      refComments = comments;
-      refName = 'reel';
-    }
-
-    if (!refName || !refComments)
-      return res.status(404).json({ message: `cannot find this ref ${ref}` });
-
-    const users = ExpressionLoop(comment);
-
-    for (const targetUser of users) {
-      const user = await User.findById(targetUser).select('comments');
-      //! Delete the comment from user.comments.reacted
-      user.comments.reacted.splice(user.comments.reacted.indexOf(commentId), 1);
-      await user.save();
-    }
-
-    //! Delete Reply From user.replies.reacted & Delete the reply's writer
-    await DeleteUsersFromModel(Reply, comment, 'replies');
-
-    //* Remove Comment Writer
-    await User.findByIdAndUpdate(
-      userId,
-      { $pull: { 'comments.published': commentId } },
-      { runValidators: true, new: true, upsert: true }
+    const { refName, refComments } = await CommentDeletions(
+      ref,
+      comment,
+      userId
     );
+    
+    // let refName: string;
+    // let refComments: any[];
 
-    await Comment.findByIdAndRemove(comment);
+    // // todo search if The Comment For Post | Blog | Reel
+
+    // //* Remove Comment From Post
+    // if (ref.post) {
+    //   let post = await Post.findByIdAndUpdate(
+    //     ref.post,
+    //     {
+    //       $pull: {
+    //         comments: commentId,
+    //       },
+    //     },
+    //     { runValidators: true, new: true }
+    //   );
+
+    //   const { comments } = post;
+    //   refComments = comments;
+    //   refName = 'post';
+
+    //   //* Remove Comment From Blog
+    // } else if (ref.blog) {
+    //   let blog = await Blog.findByIdAndUpdate(
+    //     ref.blog,
+    //     {
+    //       $pull: {
+    //         comments: commentId,
+    //       },
+    //     },
+    //     { runValidators: true, new: true }
+    //   );
+
+    //   const { comments } = blog;
+    //   refComments = comments;
+    //   refName = 'blog';
+
+    //   //* Remove Comment From Reel
+    // } else if (ref.reel) {
+    //   let reel = await Reel.findByIdAndUpdate(
+    //     ref.reel,
+    //     {
+    //       $pull: {
+    //         comments: commentId,
+    //       },
+    //     },
+    //     { runValidators: true, new: true }
+    //   );
+
+    //   const { comments } = reel;
+    //   refComments = comments;
+    //   refName = 'reel';
+    // }
+
+    // if (!refName || !refComments)
+    //   return res.status(404).json({ message: `cannot find this ref ${ref}` });
+
+    // const users = ExpressionLoop(comment);
+
+    // for (const targetUser of users) {
+    //   const user = await User.findById(targetUser).select('comments');
+    //   //! Delete the comment from user.comments.reacted
+    //   user.comments.reacted.splice(user.comments.reacted.indexOf(commentId), 1);
+    //   await user.save();
+    // }
+
+    // //! Delete Reply From user.replies.reacted & Delete the reply's writer
+    // await DeleteUsersFromModel(Reply, comment, 'replies');
+
+    // //* Remove Comment Writer
+    // await User.findByIdAndUpdate(
+    //   userId,
+    //   { $pull: { 'comments.published': commentId } },
+    //   { runValidators: true, new: true, upsert: true }
+    // );
+
+    // await Comment.findByIdAndRemove(comment);
 
     return res.status(200).json({
       message: `deleted comment ${commentId} successfully from ${refName}`,

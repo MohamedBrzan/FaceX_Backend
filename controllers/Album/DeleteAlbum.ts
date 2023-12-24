@@ -4,34 +4,35 @@ import Album from '../../models/Album/Album';
 import ErrorHandler from '../../middleware/ErrorHandler';
 import User from '../../models/User/User';
 import Image from '../../models/Image/Image';
+import { getUserId } from '../../constants/UserId';
 
 export default AsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
+
+    const userId = (await getUserId(req)).toString();
+
     let album = await Album.findById(id);
     if (!album)
       return next(new ErrorHandler(404, `Album With Id ${id} Not Exist`));
 
-    let user = await User.findById(req['authorizedUser']._id);
+    let user = await User.findById(userId);
 
-    const albumIndex = user.albums.findIndex(
-      (album) => album['_id'].toString() === id
-    );
+    const albumIndex = user.albums.splice(user.albums.indexOf(album), 1);
 
-    if (albumIndex >= 0) {
-      //* Delete Album From User
-      user.albums.splice(albumIndex, 1);
-
-      //* Delete Album Images
-      for (let i = 0; i < album.images.length; i++) {
-        //* Delete Images From Image Model
-        await Image.findByIdAndRemove(album.images[i].toString());
-        //* Delete Images From User
-        user.images.filter(
-          (image) => image.toString() !== album.images[i].toString()
-        );
-      }
+    if (albumIndex.length > 0) {
       await user.save();
+
+      //! Delete All Images that inside the Album
+      for (let img of album.images) {
+        //* Delete every single image from user
+        user.images.splice(user.images.indexOf(img.toString()), 1);
+        await user.save();
+
+        //! Delete Images From DB
+        await Image.findByIdAndRemove(img.toString());
+      }
+      //! Delete Album From DB
       await Album.findByIdAndRemove(id);
 
       return res
