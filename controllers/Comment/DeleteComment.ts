@@ -3,7 +3,7 @@ import AsyncHandler from '../../middleware/AsyncHandler';
 import Comment from '../../models/Comment/Comment';
 import ErrorHandler from '../../middleware/ErrorHandler';
 import { getUserId } from '../../constants/UserId';
-import DeleteUsersFromModel from '../../constants/DeleteUsersFromModel';
+import DeleteCommentModel from '../../functions/DeleteCommentModel';
 import Post from '../../models/Post/Post';
 import Blog from '../../models/Blog/Blog';
 import Reel from '../../models/Reel/Reel';
@@ -52,7 +52,7 @@ export default AsyncHandler(
     }
 
     //! Delete Comment From user.comments.reacted & Delete the comment's writer
-    await DeleteUsersFromModel(Comment, refModel, 'comments');
+    await DeleteCommentModel(Comment, refModel, 'comments', 'replies');
 
     return res.status(200).json({
       message: `deleted comment ${commentId} successfully from ${refName}`,
