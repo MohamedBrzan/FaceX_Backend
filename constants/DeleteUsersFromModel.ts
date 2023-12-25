@@ -1,37 +1,52 @@
+import Reply from '../models/Comment/Reply';
 import User from '../models/User/User';
-// import CheckAndRemove from './CheckAndRemove';
-import ExpressionLoop from './ExpressionLoop';
 
-export default async (
-  targetModelSchema: any,
-  modelName: any,
+const DeleteUsersFromModelTest = async (
+  targetModel: any,
+  parentModel: any,
   property: string
-): Promise<void> => {
-  for (let target of modelName[property]) {
-    const model = await targetModelSchema
-      .findById(target.toString())
-      .select('user expressions');
+) => {
+  for (const targetId of parentModel[property]) {
+    console.log(targetId);
+    const target = await targetModel.findById(targetId);
 
-    const userOfModel = await User.findById(model.user.toString());
+    Object.keys(target.expressions).forEach((key) => {
+      target.expressions[key].forEach(async (id) => {
+        await User.findByIdAndUpdate(
+          id,
+          { $pull: { [`${property}.reacted`]: targetId } },
+          { runValidators: true, new: true, upsert: true }
+        );
+      });
+    });
 
-    const users = ExpressionLoop(model);
-
-    for (const targetUser of users) {
-      const user = await User.findById(targetUser).select(property);
-
-      //! Delete the model from user[modelContainer].reacted
-      user[property].reacted.splice(user[property].reacted.indexOf(target), 1);
-      await user.save();
+    for (const replyId of target['replies']) {
+      const reply = await Reply.findById(replyId);
+      Object.keys(reply.expressions).forEach((key) => {
+        reply.expressions[key].forEach(async (id) => {
+          await User.findByIdAndUpdate(
+            id,
+            { $pull: { [`replies.reacted`]: replyId } },
+            { runValidators: true, new: true, upsert: true }
+          );
+        });
+      });
+      await User.findByIdAndUpdate(
+        reply.user.toString(),
+        { $pull: { [`replies.published`]: replyId } },
+        { runValidators: true, new: true, upsert: true }
+      );
     }
 
-    //! Delete the owner of the model
-    userOfModel[property].published.splice(
-      userOfModel[property].published.indexOf(model),
-      1
-    );
-    await userOfModel.save();
+    parentModel[property].splice(parentModel[property].indexOf(targetId), 1);
+    await parentModel.save();
 
-    //! Delete the model from DB
-    await targetModelSchema.findByIdAndRemove(target.toString());
+    await User.findByIdAndUpdate(target.user.toString(), {
+      $pull: { [`${property}.published`]: targetId },
+    });
+
+    await targetModel.findByIdAndRemove(targetId);
   }
 };
+
+export default DeleteUsersFromModelTest;
