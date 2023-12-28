@@ -30,6 +30,7 @@ export default async (parentModel: any, userId: string) => {
       }
       await Comment.findByIdAndRemove(commentId);
     } else {
+      console.log('from else')
       Object.keys(comment.expressions).forEach((key) => {
         comment.expressions[key].forEach(async (id: string, index: any) => {
           if (userId === id.toString()) {

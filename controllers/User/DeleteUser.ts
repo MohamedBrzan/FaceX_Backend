@@ -41,26 +41,29 @@ export default AsyncHandler(
     //   if (todayDate == short) {
     const {
       posts,
+      comments,
+      replies,
       // blogs,
       // reels,
       // images,
       // albums,
       // payments,
       // videos,
-      // comments,
-      // replies,
       // hashTags,
       // ads,
       // notifications,
       // followers,
       // followings,
     } = user;
+
+    //TODO: Posts, comments and replies Part
     //! Delete All User Posts
     if (posts?.published.length > 0) {
       for (const postId of posts.published) {
         const post = await Post.findById(postId.toString());
-        const userWhoDoExpression = ExpressionLoop(post);
+
         //! Delete every user do expression
+        const userWhoDoExpression = ExpressionLoop(post);
         if (userWhoDoExpression.size > 0) {
           for (const userId of userWhoDoExpression) {
             const user = await User.findById(userId.toString());
@@ -72,7 +75,7 @@ export default AsyncHandler(
             await user.save();
           }
         }
-        //! Delete every user do comment and reply
+        //! Delete every user do comment and reply to the post
         if (post?.comments?.length > 0) {
           await FindInCommentModelAndDelete(post, userId);
         }
@@ -85,9 +88,41 @@ export default AsyncHandler(
         const post = await Post.findById(postId.toString());
         //* find the user in post.expressions and deleted and return true, or false if not exist
         await ExpressionLoopToDelete(post, userId);
-        if (post.comments?.length > 0) {
+        if (post?.comments?.length > 0) {
           await FindInCommentModelAndDelete(post, userId);
         }
+      }
+    }
+
+    //! Delete the ( comments.reacted )
+    if (comments.reacted.length > 0) {
+      for (const commentId of comments.reacted) {
+        const comment = await Comment.findById(commentId);
+        Object.keys(comment.expressions).forEach((key) => {
+          comment.expressions[key].forEach(async (id: any, index) => {
+            if (userId === id.toString()) {
+              comment.expressions[key].splice(index, 1);
+              await comment.save();
+              return;
+            }
+          });
+        });
+      }
+    }
+
+    //! Delete the ( replies.reacted )
+    if (replies.reacted.length > 0) {
+      for (const replyId of replies.reacted) {
+        const reply = await Reply.findById(replyId);
+        Object.keys(reply.expressions).forEach((key) => {
+          reply.expressions[key].forEach(async (id: any, index) => {
+            if (userId === id.toString()) {
+              reply.expressions[key].splice(index, 1);
+              await reply.save();
+              return;
+            }
+          });
+        });
       }
     }
 
