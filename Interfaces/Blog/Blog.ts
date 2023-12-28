@@ -11,6 +11,8 @@ interface Blog {
   content: string;
   status: PostStatus;
   user: User;
+  shares:User[];
+  saves:User[];
   views: User[];
   comments: Comment[];
   expressions: Expressions;

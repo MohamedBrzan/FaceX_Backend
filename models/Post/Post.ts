@@ -30,6 +30,7 @@ const PostSchema = new Schema<Post>(
       fear: [{ type: Types.ObjectId, ref: 'User' }],
     },
     shares: [{ type: Types.ObjectId, ref: 'User' }],
+    saves: [{ type: Types.ObjectId, ref: 'User' }],
     visiblePrivacy: {
       type: String,
       enum: VisiblePrivacy,

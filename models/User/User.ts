@@ -94,6 +94,11 @@ const UserSchema = new Schema<User>(
       published: [{ type: Types.ObjectId, ref: 'Blog' }],
       reacted: [{ type: Types.ObjectId, ref: 'Blog' }],
     },
+    reels: {
+      published: [{ type: Types.ObjectId, ref: 'Reel' }],
+      reacted: [{ type: Types.ObjectId, ref: 'Reel' }],
+    },
+    notifications: [{ type: Types.ObjectId, ref: 'Notification' }],
     jobs: {
       published: [{ type: Types.ObjectId, ref: 'Job' }],
       applied: [{ type: Types.ObjectId, ref: 'Job' }],
@@ -107,13 +112,14 @@ const UserSchema = new Schema<User>(
       reels: [{ type: Types.ObjectId, ref: 'Reel' }],
       videos: [{ type: Types.ObjectId, ref: 'Video' }],
     },
-    ads: [{ type: Types.ObjectId, ref: 'Ads' }],
-    reels: {
-      published: [{ type: Types.ObjectId, ref: 'Reel' }],
-      reacted: [{ type: Types.ObjectId, ref: 'Reel' }],
+    saved: {
+      posts: [{ type: Types.ObjectId, ref: 'Post' }],
+      blogs: [{ type: Types.ObjectId, ref: 'Blog' }],
+      reels: [{ type: Types.ObjectId, ref: 'Reel' }],
+      videos: [{ type: Types.ObjectId, ref: 'Video' }],
     },
-    notifications: [{ type: Types.ObjectId, ref: 'Notification' }],
-    saved: [{ type: Types.ObjectId }],
+    ads: [{ type: Types.ObjectId, ref: 'Ads' }],
+
     hyperlinks: [
       {
         for: { type: String, trim: true },

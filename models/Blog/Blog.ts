@@ -29,6 +29,8 @@ const blogSchema = new Schema<Blog>(
       surprise: { type: Number, required: true, default: 0 },
       fear: { type: Number, required: true, default: 0 },
     },
+    shares: [{ type: Types.ObjectId, ref: 'User' }],
+    saves: [{ type: Types.ObjectId, ref: 'User' }],
     visiblePrivacy: {
       type: String,
       enum: VisiblePrivacy,

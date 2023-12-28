@@ -114,6 +114,12 @@ interface User {
     reels: Reel[];
     videos: Video[];
   };
+  saves?: {
+    posts: Post[];
+    blogs: Blog[];
+    reels: Reel[];
+    videos: Video[];
+  };
   ads?: Ad[];
   reels?: { reacted: Reel[]; published: Reel[] };
   notifications?: Notification[];

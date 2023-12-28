@@ -52,7 +52,7 @@ export default AsyncHandler(
     }
 
     //! Delete Comment From user.comments.reacted & Delete the comment's writer
-    await DeleteCommentModel(Comment, refModel, 'comments', 'replies');
+    await DeleteCommentModel(refModel);
 
     return res.status(200).json({
       message: `deleted comment ${commentId} successfully from ${refName}`,
