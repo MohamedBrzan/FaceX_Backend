@@ -2,28 +2,28 @@ import { Request, Response, NextFunction } from 'express';
 import AsyncHandler from '../../middleware/AsyncHandler';
 import Blog from '../../models/Blog/Blog';
 import User from '../../models/User/User';
-import ErrorHandler from '../../middleware/ErrorHandler';
+import { getUserId } from '../../constants/UserId';
 
 export default AsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { title, content } = req.body;
+    const userId = (await getUserId(req)).toString();
 
-    let blog = await Blog.create({ user: req['authorizedUser']._id, title, content });
+    let user = await User.findById(userId);
 
-    let user = await User.findById(req['authorizedUser']._id);
-
-    if (!user) {
-      await Blog.findByIdAndRemove(blog['_id']);
-      return next(
-        new ErrorHandler(404, `User With Id ${req['authorizedUser']._id} Not Exist`)
-      );
-    }
-
-    await User.findByIdAndUpdate(req['authorizedUser']._id, {
-      $push: {
-        blogs: blog['_id'],
-      },
+    let blog = await Blog.create({
+      user: userId,
+      ...req.body,
     });
+
+    user = await User.findByIdAndUpdate(
+      userId,
+      {
+        $push: {
+          'blogs.published': blog._id,
+        },
+      },
+      { runValidators: true, new: true, upsert: true }
+    );
 
     return res.status(200).json(blog);
   }

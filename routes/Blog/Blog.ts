@@ -5,6 +5,9 @@ import UpdateBlog from '../../controllers/Blog/UpdateBlog';
 import DeleteBlog from '../../controllers/Blog/DeleteBlog';
 import CreateBlog from '../../controllers/Blog/CreateBlog';
 import IsAuthenticated from '../../middleware/IsAuthenticated';
+import AddAndRemoveExpression from '../../controllers/Blog/AddAndRemoveExpression';
+import AddView from '../../controllers/Blog/AddView';
+import DeleteView from '../../controllers/Blog/DeleteView';
 
 const router = Router();
 
@@ -14,13 +17,22 @@ router.get('/', GetBlogs);
 // Get Blog
 router.get('/:id', GetBlog);
 
-// Post Blog
-router.post('/', IsAuthenticated, CreateBlog);
+// Create Blog
+router.post('/create', IsAuthenticated, CreateBlog);
 
-// Put Blog
-router.put('/:id', IsAuthenticated, UpdateBlog);
+// Add and Delete Expression for Blogs
+router.patch('/expressions/toggle', IsAuthenticated, AddAndRemoveExpression);
+
+// Update Blog
+router.put('/update', IsAuthenticated, UpdateBlog);
+
+// Add Blog View
+router.patch('/views/add', IsAuthenticated, AddView);
+
+// Delete Blog View
+router.patch('/views/del', IsAuthenticated, DeleteView);
 
 // Delete Blog
-router.delete('/:id', IsAuthenticated, DeleteBlog);
+router.delete('/del', IsAuthenticated, DeleteBlog);
 
 export default router;
