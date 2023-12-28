@@ -112,7 +112,7 @@ const UserSchema = new Schema<User>(
       reels: [{ type: Types.ObjectId, ref: 'Reel' }],
       videos: [{ type: Types.ObjectId, ref: 'Video' }],
     },
-    saved: {
+    saves: {
       posts: [{ type: Types.ObjectId, ref: 'Post' }],
       blogs: [{ type: Types.ObjectId, ref: 'Blog' }],
       reels: [{ type: Types.ObjectId, ref: 'Reel' }],

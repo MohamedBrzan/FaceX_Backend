@@ -21,6 +21,8 @@ import DeactivateVerification from '../../controllers/User/DeactivateVerificatio
 import ActivelyRecruiting from '../../controllers/User/ActivelyRecruiting';
 import AddReactedPost from '../../controllers/User/AddReactedPost';
 import DeleteReactedPost from '../../controllers/User/DeleteReactedPost';
+import Share from '../../controllers/User/Share';
+import Save from '../../controllers/User/Save';
 const router = Router();
 
 // Get Users
@@ -37,6 +39,12 @@ router.get('/logout', IsAuthenticated, Logout);
 
 // User Profile
 router.get('/me', IsAuthenticated, GetMyProfile);
+
+// Share
+router.patch('/share', IsAuthenticated, Share);
+
+// Save
+router.patch('/save', IsAuthenticated, Save);
 
 // Add Reacted Post
 router.patch('/posts/reacted/add', IsAuthenticated, AddReactedPost);
