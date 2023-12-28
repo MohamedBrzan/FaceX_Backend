@@ -73,23 +73,21 @@ export default AsyncHandler(
           }
         }
         //! Delete every user do comment and reply
-        if (post.comments.length > 0) {
-          await DeleteCommentModel(post).then(async () => {
-            await Post.findByIdAndRemove(postId);
-          });
-        } else {
-          await Post.findByIdAndRemove(postId);
+        if (post?.comments?.length > 0) {
+          await FindInCommentModelAndDelete(post, userId);
         }
-        user.posts.published.splice(user.posts.published.indexOf(post), 1);
-        await user.save();
+
+        await Post.findByIdAndRemove(postId);
       }
     }
-    if (posts?.reacted.length > 0) {
+    if (posts?.reacted?.length > 0) {
       for (const postId of posts.reacted) {
         const post = await Post.findById(postId.toString());
         //* find the user in post.expressions and deleted and return true, or false if not exist
         await ExpressionLoopToDelete(post, userId);
-        await FindInCommentModelAndDelete(post, userId);
+        if (post.comments?.length > 0) {
+          await FindInCommentModelAndDelete(post, userId);
+        }
       }
     }
 

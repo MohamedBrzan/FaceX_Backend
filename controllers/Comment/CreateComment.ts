@@ -6,69 +6,62 @@ import Blog from '../../models/Blog/Blog';
 import Reel from '../../models/Reel/Reel';
 import User from '../../models/User/User';
 import { getUserId } from '../../constants/UserId';
+import { nextTick } from 'process';
+import ErrorHandler from '../../middleware/ErrorHandler';
+// import PostInterface from '../../Interfaces/Post/Post';
+// import BlogInterface from '../../Interfaces/Blog/Blog';
+// import ReelInterface from '../../Interfaces/Reel/Reel';
 
-export default AsyncHandler(async (req: Request, res: Response) => {
-  const { message, visiblePrivacy, ref } = req.body;
+export default AsyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { message, visiblePrivacy, ref } = req.body;
+    let refName: string;
+    let parentModel;
+    const userId = (await getUserId(req)).toString();
 
-  const userId = (await getUserId(req)).toString();
+    //* If The Comment For Post | Blog | Reel
 
-  let comment = await Comment.create({
-    user: userId,
-    message,
-    visiblePrivacy,
-    ref,
-  });
+    if (ref.post) {
+      parentModel = await Post.findById(ref.post);
+      if (!parentModel)
+        return next(
+          new ErrorHandler(404, `Could not find post with id ${ref.post}`)
+        );
+      refName = 'post';
+    } else if (ref.blog) {
+      parentModel = await Blog.findById(ref.blog);
+      if (!parentModel)
+        return next(
+          new ErrorHandler(404, `Could not find blog with id ${ref.blog}`)
+        );
+      refName = 'blog';
+    } else if (ref.reel) {
+      parentModel = await Reel.findById(ref.reel);
+      if (!parentModel)
+        return next(
+          new ErrorHandler(404, `Could not find reel with id ${ref.reel}`)
+        );
+      refName = 'reel';
+    }
 
-  //* Add Comment To The User Comments
+    let comment = await Comment.create({
+      user: userId,
+      message,
+      visiblePrivacy,
+      ref,
+    });
 
-  await User.findByIdAndUpdate(
-    userId,
-    { $push: { 'comments.published': comment._id } },
-    { runValidators: true, new: true, upsert: true }
-  );
+    parentModel.comments.push(comment._id);
+    await parentModel.save();
 
-  //* If The Comment For Post | Blog | Reel
+    //* Add Comment To The User Comments
 
-  if (ref.post) {
-    await Post.findByIdAndUpdate(
-      ref.post,
-      {
-        $push: {
-          comments: comment._id,
-        },
-      },
-      { runValidators: true, new: true, upsert: true }
-    );
-    return res
-      .status(200)
-      .json({ msg: 'added comment to post successfully', comment });
-  } else if (ref.blog) {
-    await Blog.findByIdAndUpdate(
-      ref.blog,
-      {
-        $push: {
-          comments: comment._id,
-        },
-      },
-      { runValidators: true, new: true, upsert: true }
-    );
-    return res
-      .status(200)
-      .json({ msg: 'added comment to blog successfully', comment });
-  } else if (ref.reel) {
-    await Reel.findByIdAndUpdate(
-      ref.reel,
-      {
-        $push: {
-          comments: comment._id,
-        },
-      },
+    await User.findByIdAndUpdate(
+      userId,
+      { $push: { 'comments.published': comment._id } },
       { runValidators: true, new: true, upsert: true }
     );
 
-    return res
-      .status(200)
-      .json({ msg: 'added comment to reel successfully', comment });
+    return res.status(404).json({ msg: `Added comment successfully to ${refName}`,comment });
   }
-  return res.status(404).json({ msg: `cannot find this ref ${ref}` });
-});
+);
