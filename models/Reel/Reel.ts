@@ -20,6 +20,7 @@ const reelSchema = new Schema<Reel>(
       surprise: { type: Number, required: true, default: 0 },
       fear: { type: Number, required: true, default: 0 },
     },
+    views: [{ type: Types.ObjectId, ref: 'User' }],
     shares: [{ type: Types.ObjectId, ref: 'User' }],
     saves: [{ type: Types.ObjectId, ref: 'User' }],
     visiblePrivacy: {

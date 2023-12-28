@@ -2,30 +2,29 @@ import { Request, Response, NextFunction } from 'express';
 import AsyncHandler from '../../middleware/AsyncHandler';
 import Reel from '../../models/Reel/Reel';
 import User from '../../models/User/User';
-import ErrorHandler from '../../middleware/ErrorHandler';
+import { getUserId } from '../../constants/UserId';
 
 export default AsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { title } = req.body;
-    let reel = await Reel.create({ user: req['authorizedUser']._id, title });
+    const userId = (await getUserId(req)).toString();
 
-    let user = await User.findById(req['authorizedUser']._id);
+    let user = await User.findById(userId);
 
-    if (!user) {
-      await Reel.findByIdAndRemove(reel['_id']);
-      return next(
-        new ErrorHandler(404, `User With Id ${req['authorizedUser']._id} Not Exist`)
-      );
-    }
-
-    await User.findByIdAndUpdate(req['authorizedUser']._id, {
-      $push: {
-        reels: reel['_id'],
-      },
+    let reel = await Reel.create({
+      user: userId,
+      ...req.body,
     });
 
-    return res.status(200).json(reel);
+    user = await User.findByIdAndUpdate(
+      userId,
+      {
+        $push: {
+          'reels.published': reel._id,
+        },
+      },
+      { runValidators: true, new: true, upsert: true }
+    );
 
-    //*** */
+    return res.status(200).json(reel);
   }
 );

@@ -23,7 +23,6 @@ router.post('/create', IsAuthenticated, CreatePost);
 // Add and Delete Expression for Posts
 router.patch('/expressions/toggle', IsAuthenticated, AddAndRemoveExpression);
 
-
 // Update Post
 router.put('/update', IsAuthenticated, UpdatePost);
 

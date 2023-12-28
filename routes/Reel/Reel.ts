@@ -5,6 +5,9 @@ import UpdateReel from '../../controllers/Reel/UpdateReel';
 import DeleteReel from '../../controllers/Reel/DeleteReel';
 import CreateReel from '../../controllers/Reel/CreateReel';
 import IsAuthenticated from '../../middleware/IsAuthenticated';
+import AddAndRemoveExpression from '../../controllers/Reel/AddAndRemoveExpression';
+import AddView from '../../controllers/Reel/AddView';
+import DeleteView from '../../controllers/Reel/DeleteView';
 
 const router = Router();
 
@@ -14,13 +17,22 @@ router.get('/', GetReels);
 // Get Reel
 router.get('/:id', GetReel);
 
-// Post Reel
-router.post('/', IsAuthenticated, CreateReel);
+// Create Reel
+router.post('/create', IsAuthenticated, CreateReel);
 
-// Put Reel
-router.put('/:id',IsAuthenticated, UpdateReel);
+// Add and Delete Expression for Reels
+router.patch('/expressions/toggle', IsAuthenticated, AddAndRemoveExpression);
+
+// Update Reel
+router.put('/update', IsAuthenticated, UpdateReel);
+
+// Add Reel View
+router.patch('/views/add', IsAuthenticated, AddView);
+
+// Delete Reel View
+router.patch('/views/del', IsAuthenticated, DeleteView);
 
 // Delete Reel
-router.delete('/:id',IsAuthenticated, DeleteReel);
+router.delete('/del', IsAuthenticated, DeleteReel);
 
 export default router;

@@ -10,6 +10,7 @@ interface Reel {
   title: string;
   image?: Image[];
   video?: Video[];
+  views: User[];
   shares: User[];
   saves: User[];
   expressions?: Expressions;
