@@ -5,14 +5,19 @@ import ErrorHandler from '../../middleware/ErrorHandler';
 
 export default AsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { id } = req.params;
-    let hashTag = await HashTag.findById(id);
-    if (!hashTag)
-      return next(new ErrorHandler(404, `HashTag With Id ${id} Not Exist`));
+    const { hashtagId } = req.body;
 
-    hashTag = await HashTag.findByIdAndUpdate(id, req.body, {
+    let hashTag = await HashTag.findById(hashtagId);
+
+    if (!hashTag)
+      return next(
+        new ErrorHandler(404, `HashTag With Id ${hashtagId} Not Exist`)
+      );
+
+    hashTag = await HashTag.findByIdAndUpdate(hashtagId, req.body, {
       runValidators: true,
       new: true,
+      upsert: true,
     });
 
     return res.status(200).json(hashTag);
