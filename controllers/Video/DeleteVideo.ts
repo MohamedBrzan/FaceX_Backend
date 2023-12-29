@@ -16,19 +16,11 @@ export default AsyncHandler(
     if (!video)
       return next(new ErrorHandler(404, `Video With Id ${videoId} Not Exist`));
 
-<<<<<<< HEAD
-<<<<<<< HEAD
     if (video.user.toString() !== userId)
       return res.status(404).json({
         success: false,
         message: "Sorry!!, You're Not The Owner Of This Video",
       });
-=======
-    const userId = (await getUserId(req)).toString();
->>>>>>> 1d8bc49 (fix all functions in controllers/Video)
-=======
-    const userId = (await getUserId(req)).toString();
->>>>>>> ef8514e0446c409b4c2b279c5e2721b249df4037
 
     let user = await User.findById(userId);
 
