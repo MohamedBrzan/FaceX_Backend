@@ -6,7 +6,7 @@ import { getUserId } from '../../constants/UserId';
 
 export default AsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { processName, jobId, targetUserId } = req.body;
+    const { jobId, targetUserId } = req.body;
 
     const userId = (await getUserId(req)).toString();
 
@@ -23,16 +23,16 @@ export default AsyncHandler(
         )
       );
 
-    job.process.reviewing.forEach(async ({ user, resume }, index) => {
+    job.process.approved.forEach(async ({ user, resume }, index) => {
       if (user.toString() === targetUserId) {
-        job.process.reviewing.splice(index, 1);
-        job.process.interviewing.push({ user, resume });
+        job.process.approved.splice(index, 1);
+        job.employees.push({ user, resume });
         await job.save();
       }
     });
 
     return res.status(200).json({
-      message: `moved job ${job.title} to interviewing process successfully`,
+      message: `moved job ${job.title} to approved process successfully`,
       job,
     });
   }

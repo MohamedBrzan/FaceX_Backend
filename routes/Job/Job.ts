@@ -11,6 +11,7 @@ import Reviewing from '../../controllers/Jobs/Reviewing';
 import Interviewing from '../../controllers/Jobs/Interviewing';
 import Rejected from '../../controllers/Jobs/Rejected';
 import Approved from '../../controllers/Jobs/Approved';
+import AddEmployees from '../../controllers/Jobs/AddEmployees';
 
 const router = Router();
 
@@ -37,6 +38,9 @@ router.patch('/rejected', IsAuthenticated, Rejected);
 
 // Approved
 router.patch('/approved', IsAuthenticated, Approved);
+
+// Add Employees
+router.patch('/employees', IsAuthenticated, AddEmployees);
 
 // Put Job
 router.put('/update', IsAuthenticated, UpdateJob);

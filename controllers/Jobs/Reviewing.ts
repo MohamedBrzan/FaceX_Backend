@@ -6,7 +6,7 @@ import { getUserId } from '../../constants/UserId';
 
 export default AsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { processName, jobId, targetUserId } = req.body;
+    const { jobId, targetUserId } = req.body;
 
     const userId = (await getUserId(req)).toString();
 
@@ -23,9 +23,9 @@ export default AsyncHandler(
         )
       );
 
-    job.process[processName].forEach(async ({ user, resume }, index) => {
+    job.process.applied.forEach(async ({ user, resume }, index) => {
       if (user.toString() === targetUserId) {
-        job.process[processName].splice(index, 1);
+        job.process.applied.splice(index, 1);
         job.process.reviewing.push({ user, resume });
         await job.save();
       }

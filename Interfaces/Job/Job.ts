@@ -48,7 +48,7 @@ interface Job {
     rejected: Process[];
     approved: Process[];
   };
-  employees?: User[];
+  employees?: Process[];
 }
 
 export default Job;
