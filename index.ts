@@ -146,7 +146,6 @@ app.use('/comment', Comment);
 app.use('/reply', Reply);
 app.use('/reel', Reel);
 app.use('/blog', Blog);
-app.use('/video', Video);
 app.use('/job', Job);
 app.use('/hashTag', HashTag);
 // app.use('/ad', Ad);
