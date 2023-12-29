@@ -3,28 +3,26 @@ import AsyncHandler from '../../middleware/AsyncHandler';
 import Video from '../../models/Video/Video';
 import User from '../../models/User/User';
 import ErrorHandler from '../../middleware/ErrorHandler';
+import { getUserId } from '../../constants/UserId';
 
 export default AsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { video, ref } = req.body;
 
-    let vdeo = await Video.create({ user: req['authorizedUser']._id, video, ref });
+    const userId = (await getUserId(req)).toString();
 
-    let user = await User.findById(req['authorizedUser']._id);
+    let newVideo = await Video.create({ user: userId, video, ref });
 
-    if (!user) {
-      await Video.findByIdAndRemove(vdeo['_id']);
-      return next(
-        new ErrorHandler(404, `User With Id ${req['authorizedUser']._id} Not Exist`)
-      );
-    }
-
-    await User.findByIdAndUpdate(req['authorizedUser']._id, {
-      $push: {
-        videos: vdeo['_id'],
+    await User.findByIdAndUpdate(
+      userId,
+      {
+        $push: {
+          'videos.published': newVideo,
+        },
       },
-    });
+      { new: true, runValidators: true, upsert: true }
+    );
 
-    return res.status(200).json(vdeo);
+    return res.status(200).json(newVideo);
   }
 );
