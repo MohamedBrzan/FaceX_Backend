@@ -3,26 +3,29 @@ import AsyncHandler from '../../middleware/AsyncHandler';
 import HashTag from '../../models/HashTag/HashTag';
 import ErrorHandler from '../../middleware/ErrorHandler';
 import User from '../../models/User/User';
+import { getUserId } from '../../constants/UserId';
 
 export default AsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { hashTagId } = req.body;
-    let hashTag = await HashTag.findById(hashTagId);
+    const { hashtagId } = req.body;
+    let hashTag = await HashTag.findById(hashtagId);
     if (!hashTag)
       return next(
-        new ErrorHandler(404, `HashTag With Id ${hashTagId} Not Exist`)
+        new ErrorHandler(404, `HashTag With Id ${hashtagId} Not Exist`)
       );
 
-    let user = await User.findById(req['authorizedUser']._id);
+    const userId = (await getUserId(req)).toString();
 
-    const hashTagIndex = user.hashTags.follow.findIndex(
-      (hashTag) => hashTag['_id'].toString() === hashTagId
+    let user = await User.findById(userId);
+
+    const hashTagIndex = user.hashTags.reacted.findIndex(
+      (hashTag) => hashTag.toString() === hashtagId
     );
 
     if (hashTagIndex >= 0) {
-      user.hashTags.follow.splice(hashTagIndex, 1);
+      user.hashTags.reacted.splice(hashTagIndex, 1);
       await user.save();
-      await HashTag.findByIdAndRemove(hashTagId);
+      await HashTag.findByIdAndRemove(hashtagId);
 
       return res
         .status(200)
