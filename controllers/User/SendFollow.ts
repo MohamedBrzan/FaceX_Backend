@@ -9,9 +9,7 @@ export default AsyncHandler(
     const userId = (await getUserId(req)).toString();
     const { following } = req.body;
 
-    let user = await User.findById(userId).select(
-      'followings name _id'
-    );
+    let user = await User.findById(userId).select('followings name _id');
 
     if (following === user._id.toString())
       return next(new ErrorHandler(500, 'You Cannot Follow Yourself'));
@@ -45,7 +43,7 @@ export default AsyncHandler(
     await user.save();
 
     return res.status(200).json({
-      message: `You (${user?.name}) Follow ${follower?.name} Successfully`,
+      message: `You Followed ${follower?.name.first} Successfully`,
     });
   }
 );

@@ -7,6 +7,10 @@ import DeleteJob from '../../controllers/Jobs/DeleteJob';
 import GetJobs from '../../controllers/Jobs/GetJobs';
 import GetJob from '../../controllers/Jobs/GetJob';
 import ApplyJob from '../../controllers/Jobs/ApplyJob';
+import Reviewing from '../../controllers/Jobs/Reviewing';
+import Interviewing from '../../controllers/Jobs/Interviewing';
+import Rejected from '../../controllers/Jobs/Rejected';
+import Approved from '../../controllers/Jobs/Approved';
 
 const router = Router();
 
@@ -19,13 +23,25 @@ router.get('/:id', GetJob);
 // Post Job
 router.post('/', IsAuthenticated, CreateJob);
 
-// Post Job
+// Apply Job
 router.patch('/apply', IsAuthenticated, ApplyJob);
 
+// Reviewing
+router.patch('/reviewing', IsAuthenticated, Reviewing);
+
+// Interviewing
+router.patch('/interviewing', IsAuthenticated, Interviewing);
+
+// Rejected
+router.patch('/rejected', IsAuthenticated, Rejected);
+
+// Approved
+router.patch('/approved', IsAuthenticated, Approved);
+
 // Put Job
-router.put('/:id', IsAuthenticated, UpdateJob);
+router.put('/update', IsAuthenticated, UpdateJob);
 
 // Delete Job
-router.delete('/:id', IsAuthenticated, DeleteJob);
+router.delete('/del', IsAuthenticated, DeleteJob);
 
 export default router;

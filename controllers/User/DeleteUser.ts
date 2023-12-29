@@ -51,14 +51,14 @@ export default AsyncHandler(
       saves,
       blogs,
       reels,
-      // images,
-      // albums,
-      // payments,
-      // hashTags,
-      // ads,
-      // notifications,
-      // followers,
-      // followings,
+      followers,
+      followings,
+      images,
+      albums,
+      payments,
+      hashTags,
+      ads,
+      notifications,
     } = user;
 
     //********************************/
@@ -157,6 +157,83 @@ export default AsyncHandler(
         await DeletingUsersFromJobProperty(userId, user, propertyName);
       }
     });
+
+    //TODO: Followers && Following
+    //! Delete Followers
+    if (followers.length > 0) {
+      for (const followerId of followers) {
+        await User.findByIdAndUpdate(followerId, {
+          $pull: { followings: userId },
+        });
+      }
+    }
+    //! Delete Followings
+    if (followings.length > 0) {
+      for (const followingId of followings) {
+        await User.findByIdAndUpdate(followingId, {
+          $pull: { followers: userId },
+        });
+      }
+    }
+
+    //TODO: Album && Images
+    //! Delete the Album and Images inside it
+    if (albums.length > 0) {
+      for (const albumId of albums) {
+        const album = await Album.findById(albumId);
+        for (let imageId of album.images) {
+          await Image.findByIdAndDelete(imageId);
+          album.images.splice(album.images.indexOf(imageId), 1);
+          await album.save();
+        }
+      }
+    }
+    //! Delete the image and Delete it from the Album if there's album
+    if (images.length > 0) {
+      for (const imageId of images) {
+        const image = await Image.findById(imageId);
+        for (let imageId of images) {
+          await Album.findByIdAndUpdate(image.ref.toString(), {
+            $pull: { images: imageId },
+          });
+          await Image.findByIdAndDelete(imageId);
+        }
+      }
+    }
+
+    //TODO: Payment
+    if (payments.length > 0) {
+      for (const paymentId of payments) {
+        await Payment.findByIdAndDelete(paymentId);
+      }
+    }
+
+    //TODO: HashTags
+    //! Delete Published Hashtags
+    if (hashTags.published.length > 0) {
+      for (const hashTagId of hashTags.published) {
+        const hashtag = await HashTag.findById(hashTagId);
+        if (hashtag.followers.length > 0) {
+          for (const followerId of hashtag.followers) {
+            await User.findByIdAndUpdate(followerId, {
+              $pull: { 'hashTags.reacted': hashTagId },
+            });
+          }
+        }
+        await HashTag.findByIdAndDelete(hashTagId);
+      }
+    }
+
+    //! Delete Reacted Hashtags
+    if (hashTags.reacted.length > 0) {
+      for (const hashTagId of hashTags.reacted) {
+        await HashTag.findByIdAndUpdate(hashTagId, {
+          $pull: { followers: userId },
+        });
+      }
+    }
+
+    //TODO: Notifications
 
     return res
       .status(200)

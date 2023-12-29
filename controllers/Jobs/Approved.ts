@@ -1,13 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
 import AsyncHandler from '../../middleware/AsyncHandler';
-import ErrorHandler from '../../middleware/ErrorHandler';
 import Job from '../../models/Job/Job';
-import User from '../../models/User/User';
+import ErrorHandler from '../../middleware/ErrorHandler';
 import { getUserId } from '../../constants/UserId';
 
 export default AsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { jobId } = req.body;
+    const { processName, jobId, targetUserId } = req.body;
+
     const userId = (await getUserId(req)).toString();
 
     const job = await Job.findById(jobId);
@@ -15,27 +15,25 @@ export default AsyncHandler(
     if (!job)
       return next(new ErrorHandler(404, `cannot find job with id ${jobId}`));
 
-    if (job.user.toString() === userId)
+    if (job.user.toString() !== userId)
       return next(
         new ErrorHandler(
           404,
-          `Sorry!!, You're Not The Owner Of This Job ${jobId}`
+          `Sorry!, you're not allowed to do this processing`
         )
       );
 
-    await User.findByIdAndUpdate(
-      userId,
-      {
-        $pull: { 'jobs.published': jobId },
-      },
-      { new: true, runValidators: true, upsert: true }
-    );
-
-    await Job.findByIdAndRemove(jobId);
+    job.process[processName].forEach(async ({ user, resume }, index) => {
+      if (user.toString() === targetUserId) {
+        job.process[processName].splice(index, 1);
+        job.process.approved.push({ user, resume });
+        await job.save();
+      }
+    });
 
     return res.status(200).json({
-      success: true,
-      message: 'Job Deleted successfully',
+      message: `moved job ${job.title} to approved process successfully`,
+      job,
     });
   }
 );
