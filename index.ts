@@ -148,20 +148,12 @@ app.use('/reel', Reel);
 app.use('/blog', Blog);
 app.use('/video', Video);
 app.use('/job', Job);
-<<<<<<< HEAD
 // app.use('/ad', Ad);
 app.use('/hashTag', HashTag);
 app.use('/image', Image);
 app.use('/album', Album);
 // app.use('/notification', Notification);
 app.use('/video', Video);
-=======
-// app.use('/hashTag', HashTag);
-app.use('/image', Image);
-app.use('/album', Album);
-// app.use('/ad', Ad);
-// app.use('/notification', Notification);
->>>>>>> 1d8bc49 (fix all functions in controllers/Video)
 // app.use('/payment', Payment);
 
 app.use(ErrorMessage);
