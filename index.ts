@@ -161,5 +161,3 @@ app.use(ErrorMessage);
 app.listen(3000, () => {
   debugServer(`listening on Port http://localhost:3000/`);
 });
-
-console.log('first');
