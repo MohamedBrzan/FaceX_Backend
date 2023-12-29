@@ -103,8 +103,9 @@ const UserSchema = new Schema<User>(
       published: [{ type: Types.ObjectId, ref: 'Job' }],
       applied: [{ type: Types.ObjectId, ref: 'Job' }],
       reviewing: [{ type: Types.ObjectId, ref: 'Job' }],
-      accepted: [{ type: Types.ObjectId, ref: 'Job' }],
+      interviewing: [{ type: Types.ObjectId, ref: 'Job' }],
       rejected: [{ type: Types.ObjectId, ref: 'Job' }],
+      approved: [{ type: Types.ObjectId, ref: 'Job' }],
     },
     shares: {
       posts: [{ type: Types.ObjectId, ref: 'Post' }],

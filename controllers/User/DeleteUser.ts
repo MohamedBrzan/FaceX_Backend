@@ -20,6 +20,8 @@ import DeleteCommentModel from '../../functions/DeleteCommentModel';
 import ExpressionLoopToDelete from '../../constants/ExpressionLoopToDelete';
 import FindInCommentModelAndDelete from '../../functions/FindInCommentModelAndDelete';
 import DeletingModel from '../../functions/DeletingModel';
+import Job from '../../models/Job/Job';
+import DeletingUsersFromJobProperty from '../../functions/DeletingUsersFromJobProperty';
 
 export default AsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -44,6 +46,7 @@ export default AsyncHandler(
       posts,
       comments,
       replies,
+      videos,
       shares,
       saves,
       blogs,
@@ -51,7 +54,6 @@ export default AsyncHandler(
       // images,
       // albums,
       // payments,
-      // videos,
       // hashTags,
       // ads,
       // notifications,
@@ -60,14 +62,57 @@ export default AsyncHandler(
     } = user;
 
     //********************************/
-    //********* Deleting Post ********
+    //********* Deleting Post && Blogs && Reels && Videos ********
     //********************************/
 
-    // //TODO: Posts, comments and replies Part
-    await DeletingModel(next, Post, posts, userId, shares.posts, saves.posts);
+    // //TODO: Posts && Blogs && Reels && Videos, comments and replies Part
+
+    const modelsInfo = [
+      {
+        id: 1,
+        modelName: Post,
+        modelContainer: posts,
+        sharesDir: 'posts',
+        savesDir: 'posts',
+      },
+      {
+        id: 2,
+        modelName: Blog,
+        modelContainer: blogs,
+        sharesDir: 'blogs',
+        savesDir: 'blogs',
+      },
+      {
+        id: 3,
+        modelName: Reel,
+        modelContainer: reels,
+        sharesDir: 'reels',
+        savesDir: 'reels',
+      },
+      {
+        id: 4,
+        modelName: Video,
+        modelContainer: videos,
+        sharesDir: 'videos',
+        savesDir: 'videos',
+      },
+    ];
+
+    modelsInfo.forEach(
+      async ({ modelName, modelContainer, sharesDir, savesDir }) => {
+        await DeletingModel(
+          next,
+          modelName,
+          modelContainer,
+          userId,
+          shares[sharesDir],
+          saves[savesDir]
+        );
+      }
+    );
 
     //! Delete the ( comments.reacted )
-    if (comments.reacted.length > 0) {
+    if (comments?.reacted?.length > 0) {
       for (const commentId of comments.reacted) {
         const comment = await Comment.findById(commentId);
         Object.keys(comment.expressions).forEach((key) => {
@@ -83,7 +128,7 @@ export default AsyncHandler(
     }
 
     //! Delete the ( replies.reacted )
-    if (replies.reacted.length > 0) {
+    if (replies?.reacted?.length > 0) {
       for (const replyId of replies.reacted) {
         const reply = await Reply.findById(replyId);
         Object.keys(reply.expressions).forEach((key) => {
@@ -98,11 +143,20 @@ export default AsyncHandler(
       }
     }
 
-    //TODO: Blog
-    await DeletingModel(next, Blog, blogs, userId, shares.blogs, saves.blogs);
-
-    //TODO: Reel
-    await DeletingModel(next, Reel, reels, userId, shares.reels, saves.reels);
+    //TODO: Job
+    const jobsProperties = [
+      'published',
+      'applied',
+      'reviewing',
+      'interviewing',
+      'rejected',
+      'approved',
+    ];
+    jobsProperties.forEach(async (propertyName) => {
+      if (user.jobs[propertyName].length > 0) {
+        await DeletingUsersFromJobProperty(userId, user, propertyName);
+      }
+    });
 
     return res
       .status(200)

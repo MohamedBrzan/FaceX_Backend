@@ -24,13 +24,13 @@ export default async (
 ) => {
   //TODO: Posts, comments and replies Part
   //! Delete All User Posts
-  if (modelContainer?.published.length > 0) {
+  if (modelContainer?.published?.length > 0) {
     for (const postId of modelContainer.published) {
       const post = await modelName.findById(postId.toString());
 
       //! Delete every user do expression
       const userWhoDoExpression = ExpressionLoop(post);
-      if (userWhoDoExpression.size > 0) {
+      if (userWhoDoExpression?.size > 0) {
         for (const userId of userWhoDoExpression) {
           const user = await User.findById(userId.toString());
           if (!user)
@@ -47,7 +47,7 @@ export default async (
       }
 
       //! Delete all users who saves the post
-      if (post.saves.length > 0) {
+      if (post?.saves?.length > 0) {
         for (const saveId of post.saves) {
           const saver = await User.findById(saveId);
           if (!saver)
@@ -60,7 +60,7 @@ export default async (
       }
 
       //! Delete all users who shares the post
-      if (post.shares.length > 0) {
+      if (post?.shares?.length > 0) {
         for (const saveId of post.shares) {
           const republishUser = await User.findById(saveId);
           if (!republishUser)

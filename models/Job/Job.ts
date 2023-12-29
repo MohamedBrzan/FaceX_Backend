@@ -7,8 +7,8 @@ const jobSchema = new Schema<Job>(
   {
     user: { type: Types.ObjectId, ref: 'User' },
     title: { type: String, required: true },
-    apply: { type: String, enum: ['easy', 'apply'] },
     type: {
+      apply: { type: String, enum: ['easy', 'apply'] },
       position: { type: String, required: true },
       timing: { type: String, enum: Timing, required: true },
     },
@@ -43,7 +43,44 @@ const jobSchema = new Schema<Job>(
         ],
       },
     },
-    employees: [{ type: Types.ObjectId, ref: 'User' }],
+    process: {
+      applied: [
+        {
+          user: { type: Types.ObjectId, ref: 'User' },
+          resume: { type: String, required: true },
+        },
+      ],
+      reviewing: [
+        {
+          user: { type: Types.ObjectId, ref: 'User' },
+          resume: { type: String, required: true },
+        },
+      ],
+      interviewing: [
+        {
+          user: { type: Types.ObjectId, ref: 'User' },
+          resume: { type: String, required: true },
+        },
+      ],
+      rejected: [
+        {
+          user: { type: Types.ObjectId, ref: 'User' },
+          resume: { type: String, required: true },
+        },
+      ],
+      approved: [
+        {
+          user: { type: Types.ObjectId, ref: 'User' },
+          resume: { type: String, required: true },
+        },
+      ],
+    },
+    employees: [
+      {
+        user: { type: Types.ObjectId, ref: 'User' },
+        resume: { type: String, required: true },
+      },
+    ],
   },
   { timestamps: true }
 );

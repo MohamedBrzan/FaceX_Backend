@@ -105,8 +105,9 @@ interface User {
     applied: Job[];
     published: Job[];
     reviewing: Job[];
-    accepted: Job[];
+    interviewing: Job[];
     rejected: Job[];
+    approved: Job[];
   };
   shares?: {
     posts: Post[];

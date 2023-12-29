@@ -7,11 +7,16 @@ enum apply {
   apply = 'apply',
 }
 
+type Process = {
+  user: User;
+  resume: string;
+};
+
 interface Job {
   user: User;
   title: string;
-  apply: apply;
   type: {
+    apply: apply;
     position: string;
     timing: Timing;
   };
@@ -35,6 +40,13 @@ interface Job {
       technical: Skill[];
       interpersonal: Skill[];
     };
+  };
+  process?: {
+    applied: Process[];
+    reviewing: Process[];
+    interviewing: Process[];
+    rejected: Process[];
+    approved: Process[];
   };
   employees?: User[];
 }
