@@ -10,15 +10,24 @@ export default AsyncHandler(
     const { text } = req.body;
 
     const userId = (await getUserId(req)).toString();
+<<<<<<< HEAD
 
     let user = await User.findById(userId);
+=======
+>>>>>>> 16242ca (fix all hashTag controllers functions)
 
-    if (!user)
-      return next(new ErrorHandler(404, `You Must Be Logged In First`));
+    let hashTag = await HashTag.create({ user: userId, text });
 
+<<<<<<< HEAD
     let hashTag = await HashTag.create({
       user: userId,
       text,
+=======
+    await User.findByIdAndUpdate(userId, {
+      $push: {
+        'hashTags.create': hashTag.toString(),
+      },
+>>>>>>> 16242ca (fix all hashTag controllers functions)
     });
 
     await User.findByIdAndUpdate(

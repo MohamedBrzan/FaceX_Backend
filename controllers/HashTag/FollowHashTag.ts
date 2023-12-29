@@ -20,14 +20,23 @@ export default AsyncHandler(
 
     let user = await User.findById(userId).select('hashTags');
 
+<<<<<<< HEAD
     const findHashTagOwner = user.hashTags.published.findIndex(
       (tag) => tag === hashTag
+=======
+    const findHashTagOwner = user.hashTags.reacted.findIndex(
+      (tag) => tag.toString() === hashTagId
+>>>>>>> 16242ca (fix all hashTag controllers functions)
     );
 
     if (findHashTagOwner > -1)
       return next(new ErrorHandler(500, `You Cannot Follow Your HashTag`));
 
+<<<<<<< HEAD
     const findUser = hashTag?.followers?.findIndex(
+=======
+    const findUser = hashTag.followers.findIndex(
+>>>>>>> 16242ca (fix all hashTag controllers functions)
       (user) => user.toString() === userId
     );
 

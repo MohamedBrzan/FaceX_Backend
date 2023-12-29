@@ -7,32 +7,45 @@ import { getUserId } from '../../constants/UserId';
 
 export default AsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
+<<<<<<< HEAD
     const { hashTagId } = req.body;
     const userId = (await getUserId(req)).toString();
 
     let hashTag = await HashTag.findById(hashTagId);
 
+=======
+    const { hashtagId } = req.body;
+    let hashTag = await HashTag.findById(hashtagId);
+>>>>>>> 16242ca (fix all hashTag controllers functions)
     if (!hashTag)
       return next(
-        new ErrorHandler(404, `HashTag With Id ${hashTagId} Not Exist`)
+        new ErrorHandler(404, `HashTag With Id ${hashtagId} Not Exist`)
       );
 
+<<<<<<< HEAD
     if (hashTag.user.toString() !== userId)
       return res.status(404).json({
         success: false,
         message: "Sorry!!, You're Not The Owner Of This HashTag",
       });
+=======
+    const userId = (await getUserId(req)).toString();
+>>>>>>> 16242ca (fix all hashTag controllers functions)
 
     let user = await User.findById(userId);
 
     const hashTagIndex = user.hashTags.reacted.findIndex(
+<<<<<<< HEAD
       (hashTag) => hashTag.toString() === hashTagId
+=======
+      (hashTag) => hashTag.toString() === hashtagId
+>>>>>>> 16242ca (fix all hashTag controllers functions)
     );
 
     if (hashTagIndex >= 0) {
       user.hashTags.reacted.splice(hashTagIndex, 1);
       await user.save();
-      await HashTag.findByIdAndRemove(hashTagId);
+      await HashTag.findByIdAndRemove(hashtagId);
 
       return res
         .status(200)

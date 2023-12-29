@@ -6,6 +6,7 @@ import ErrorHandler from '../../middleware/ErrorHandler';
 export default AsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { hashtagId } = req.body;
+<<<<<<< HEAD
 
     let hashTag = await HashTag.findById(hashtagId);
 
@@ -14,6 +15,14 @@ export default AsyncHandler(
         new ErrorHandler(404, `HashTag With Id ${hashtagId} Not Exist`)
       );
 
+=======
+    let hashTag = await HashTag.findById(hashtagId);
+    if (!hashTag)
+      return next(
+        new ErrorHandler(404, `HashTag With Id ${hashtagId} Not Exist`)
+      );
+
+>>>>>>> 16242ca (fix all hashTag controllers functions)
     hashTag = await HashTag.findByIdAndUpdate(hashtagId, req.body, {
       runValidators: true,
       new: true,
