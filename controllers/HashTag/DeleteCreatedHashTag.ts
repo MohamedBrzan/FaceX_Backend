@@ -3,33 +3,38 @@ import AsyncHandler from '../../middleware/AsyncHandler';
 import HashTag from '../../models/HashTag/HashTag';
 import ErrorHandler from '../../middleware/ErrorHandler';
 import User from '../../models/User/User';
+import { getUserId } from '../../constants/UserId';
 
 export default AsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { id } = req.params;
-    let hashTag = await HashTag.findById(id);
+    const { hashtagId } = req.body;
+    let hashTag = await HashTag.findById(hashtagId);
     if (!hashTag)
-      return next(new ErrorHandler(404, `HashTag With Id ${id} Not Exist`));
+      return next(
+        new ErrorHandler(404, `HashTag With Id ${hashtagId} Not Exist`)
+      );
 
-    let user = await User.findById(req['authorizedUser']._id);
+    const userId = (await getUserId(req)).toString();
 
-    const hashTagIndex = user.hashTags.create.findIndex(
-      (hashTag) => hashTag['_id'].toString() === id
+    if (hashTag.user.toString() !== userId)
+      return res.status(404).json({
+        success: false,
+        message: "Sorry!!, You're Not The Owner Of This HashTag",
+      });
+
+    let user = await User.findById(userId);
+
+    const hashTagIndex = user.hashTags.published.findIndex(
+      (hashTag) => hashTag.toString() === hashtagId
     );
 
     if (hashTagIndex >= 0) {
-      user.hashTags.create.splice(hashTagIndex, 1);
+      user.hashTags.published.splice(hashTagIndex, 1);
       await user.save();
-      await HashTag.findByIdAndRemove(id);
-
-      return res
-        .status(200)
-        .json({ success: true, msg: 'HashTag Deleted Successfully' });
+      await HashTag.findByIdAndRemove(hashtagId);
     }
-
-    return res.status(404).json({
-      success: false,
-      message: "Sorry!!, You're Not The Owner Of This HashTag",
-    });
+    return res
+      .status(200)
+      .json({ success: true, msg: 'HashTag Deleted Successfully' });
   }
 );

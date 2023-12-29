@@ -152,6 +152,7 @@ app.use('/job', Job);
 app.use('/image', Image);
 app.use('/album', Album);
 // app.use('/ad', Ad);
+
 // app.use('/notification', Notification);
 // app.use('/payment', Payment);
 
