@@ -6,22 +6,26 @@ import UpdateJob from '../../controllers/Jobs/UpdateJob';
 import DeleteJob from '../../controllers/Jobs/DeleteJob';
 import GetJobs from '../../controllers/Jobs/GetJobs';
 import GetJob from '../../controllers/Jobs/GetJob';
+import ApplyJob from '../../controllers/Jobs/ApplyJob';
 
 const router = Router();
 
-// Get Blogs
+// Get Jobs
 router.get('/', GetJobs);
 
-// Get Blog
+// Get Job
 router.get('/:id', GetJob);
 
-// Post Blog
+// Post Job
 router.post('/', IsAuthenticated, CreateJob);
 
-// Put Blog
+// Post Job
+router.patch('/apply', IsAuthenticated, ApplyJob);
+
+// Put Job
 router.put('/:id', IsAuthenticated, UpdateJob);
 
-// Delete Blog
+// Delete Job
 router.delete('/:id', IsAuthenticated, DeleteJob);
 
 export default router;

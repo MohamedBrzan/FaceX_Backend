@@ -14,6 +14,15 @@ export default AsyncHandler(
 
     const job = await Job.findById(jobId);
     if (!job) return next(new ErrorHandler(404, `cannot find job ${jobId}`));
+    if (job.user.toString() === userId)
+      return next(new ErrorHandler(404, `cannot apply to your job`));
+
+    const findUser = job.process.applied.findIndex(
+      (u) => u.user.toString() === userId
+    );
+
+    if (findUser >= 0)
+      return next(new ErrorHandler(404, `you already applied to this job`));
 
     user.jobs.applied.push(job);
     await user.save();
