@@ -13,6 +13,7 @@ export default AsyncHandler(
     video = await Video.findByIdAndUpdate(videoId, req.body, {
       runValidators: true,
       new: true,
+      upsert:true
     });
 
     return res.status(200).json(video);

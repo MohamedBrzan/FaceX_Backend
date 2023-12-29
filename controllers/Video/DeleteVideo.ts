@@ -3,6 +3,7 @@ import AsyncHandler from '../../middleware/AsyncHandler';
 import Video from '../../models/Video/Video';
 import ErrorHandler from '../../middleware/ErrorHandler';
 import User from '../../models/User/User';
+import { getUserId } from '../../constants/UserId';
 
 export default AsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -11,14 +12,16 @@ export default AsyncHandler(
     if (!video)
       return next(new ErrorHandler(404, `Video With Id ${videoId} Not Exist`));
 
-    let user = await User.findById(req['authorizedUser']._id);
+    const userId = (await getUserId(req)).toString();
 
-    const videoIndex = user.videos.findIndex(
-      (video) => video['_id'].toString() === videoId
+    let user = await User.findById(userId);
+
+    const videoIndex = user.videos.published.findIndex(
+      (video) => video.toString() === videoId
     );
 
     if (videoIndex >= 0) {
-      user.videos.splice(videoIndex, 1);
+      user.videos.published.splice(videoIndex, 1);
       await user.save();
       await Video.findByIdAndRemove(videoId);
 
