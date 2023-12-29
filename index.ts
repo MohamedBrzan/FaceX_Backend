@@ -152,6 +152,7 @@ app.use('/hashTag', HashTag);
 app.use('/hashTag', HashTag);
 app.use('/image', Image);
 app.use('/album', Album);
+
 // app.use('/notification', Notification);
 app.use('/video', Video);
 // app.use('/payment', Payment);

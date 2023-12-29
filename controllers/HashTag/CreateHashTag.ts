@@ -11,6 +11,7 @@ export default AsyncHandler(
 
     const userId = (await getUserId(req)).toString();
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     let user = await User.findById(userId);
 =======
@@ -23,6 +24,11 @@ export default AsyncHandler(
       user: userId,
       text,
 =======
+=======
+
+    let hashTag = await HashTag.create({ user: userId, text });
+
+>>>>>>> ef8514e0446c409b4c2b279c5e2721b249df4037
     await User.findByIdAndUpdate(userId, {
       $push: {
         'hashTags.create': hashTag.toString(),
