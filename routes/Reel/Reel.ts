@@ -8,6 +8,8 @@ import IsAuthenticated from '../../middleware/IsAuthenticated';
 import AddAndRemoveExpression from '../../controllers/Reel/AddAndRemoveExpression';
 import AddView from '../../controllers/Reel/AddView';
 import DeleteView from '../../controllers/Reel/DeleteView';
+import ToggleShareReel from '../../controllers/Reel/ToggleShareReel';
+import ToggleSaveReel from '../../controllers/Reel/ToggleSaveReel';
 
 const router = Router();
 
@@ -22,6 +24,12 @@ router.post('/create', IsAuthenticated, CreateReel);
 
 // Add and Delete Expression for Reels
 router.patch('/expressions/toggle', IsAuthenticated, AddAndRemoveExpression);
+
+// Toggle Share Reel
+router.patch('/share', IsAuthenticated, ToggleShareReel);
+
+// Toggle Save Reel
+router.patch('/save', IsAuthenticated, ToggleSaveReel);
 
 // Update Reel
 router.put('/update', IsAuthenticated, UpdateReel);
