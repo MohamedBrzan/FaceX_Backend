@@ -8,6 +8,8 @@ import DeletePost from '../../controllers/Post/DeletePost';
 import IsAuthenticated from '../../middleware/IsAuthenticated';
 import AddView from '../../controllers/Post/AddView';
 import DeleteView from '../../controllers/Post/DeleteView';
+import ToggleSharePost from '../../controllers/Post/ToggleSharePost';
+import ToggleSavePost from '../../controllers/Post/ToggleSavePost';
 
 const router = Router();
 
@@ -22,6 +24,12 @@ router.post('/create', IsAuthenticated, CreatePost);
 
 // Add and Delete Expression for Posts
 router.patch('/expressions/toggle', IsAuthenticated, AddAndRemoveExpression);
+
+// Toggle Share Post
+router.patch('/share', IsAuthenticated, ToggleSharePost);
+
+// Toggle Save Post
+router.patch('/save', IsAuthenticated, ToggleSavePost);
 
 // Update Post
 router.put('/update', IsAuthenticated, UpdatePost);
