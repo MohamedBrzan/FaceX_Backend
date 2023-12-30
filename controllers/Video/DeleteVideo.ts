@@ -19,23 +19,20 @@ export default AsyncHandler(
     if (video.user.toString() !== userId)
       return res.status(404).json({
         success: false,
-        message: "Sorry!!, You're Not The Owner Of This Video",
+        message: "Sorry!!, you're not allow to delete this video",
       });
 
-    let user = await User.findById(userId);
-
-    const videoIndex = user.videos.published.findIndex(
-      (video) => video.toString() === videoId
+    await User.findByIdAndUpdate(
+      userId,
+      { $pull: { 'videos.published': videoId } },
+      { new: true, runValidators: true, upsert: true }
     );
 
-    if (videoIndex >= 0) {
-      user.videos.published.splice(videoIndex, 1);
-      await user.save();
-      await Video.findByIdAndRemove(videoId);
+    await Video.findByIdAndRemove(videoId);
 
-      return res
-        .status(200)
-        .json({ success: true, msg: 'Video Deleted Successfully' });
-    }
+    return res.status(200).json({
+      success: true,
+      message: 'Video Deleted Successfully',
+    });
   }
 );
