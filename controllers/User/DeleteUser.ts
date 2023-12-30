@@ -233,6 +233,13 @@ export default AsyncHandler(
       }
     }
 
+    //TODO: Ad
+    if (ads.length > 0) {
+      for (const adId of ads) {
+        await Ad.findOneAndRemove(adId);
+      }
+    }
+
     //TODO: Notifications
 
     return res
