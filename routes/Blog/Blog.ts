@@ -8,6 +8,8 @@ import IsAuthenticated from '../../middleware/IsAuthenticated';
 import AddAndRemoveExpression from '../../controllers/Blog/AddAndRemoveExpression';
 import AddView from '../../controllers/Blog/AddView';
 import DeleteView from '../../controllers/Blog/DeleteView';
+import ToggleShareBlog from '../../controllers/Blog/ToggleShareBlog';
+import ToggleSaveBlog from '../../controllers/Blog/ToggleSaveBlog';
 
 const router = Router();
 
@@ -22,6 +24,12 @@ router.post('/create', IsAuthenticated, CreateBlog);
 
 // Add and Delete Expression for Blogs
 router.patch('/expressions/toggle', IsAuthenticated, AddAndRemoveExpression);
+
+// Toggle Share Blog
+router.patch('/share', IsAuthenticated, ToggleShareBlog);
+
+// Toggle Save Blog
+router.patch('/save', IsAuthenticated, ToggleSaveBlog);
 
 // Update Blog
 router.put('/update', IsAuthenticated, UpdateBlog);
