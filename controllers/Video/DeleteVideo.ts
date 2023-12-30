@@ -16,12 +16,6 @@ export default AsyncHandler(
     if (!video)
       return next(new ErrorHandler(404, `Video With Id ${videoId} Not Exist`));
 
-    if (video.user.toString() !== userId)
-      return res.status(404).json({
-        success: false,
-        message: "Sorry!!, you're not allow to delete this video",
-      });
-
     await User.findByIdAndUpdate(
       userId,
       { $pull: { 'videos.published': videoId } },
