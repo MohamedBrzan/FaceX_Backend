@@ -17,25 +17,27 @@ export default AsyncHandler(
     if (!post)
       return next(new ErrorHandler(404, `cannot find post with id ${postId}`));
 
-    const findUser = post.saves.findIndex((user) => user.toString() === userId);
+    const findUser = post.shares.findIndex(
+      (user) => user.toString() === userId
+    );
 
     if (findUser >= 0) {
       post = await Post.findByIdAndUpdate(
         postId,
         {
           $pull: {
-            saves: userId,
+            shares: userId,
           },
         },
         { runValidators: true, new: true, upsert: true }
       );
 
-      user.saves.posts.splice(user.saves.posts.indexOf(postId), 1);
+      user.shares.posts.splice(user.shares.posts.indexOf(postId), 1);
       await user.save();
 
       return res.status(200).json({
         msg: `unshared successfully for post ${post.title}`,
-        saves: user.saves.posts,
+        shares: user.shares.posts,
       });
     }
 
@@ -43,18 +45,18 @@ export default AsyncHandler(
       postId,
       {
         $push: {
-          saves: userId,
+          shares: userId,
         },
       },
       { runValidators: true, new: true, upsert: true }
     );
 
-    user.saves.posts.push(postId);
+    user.shares.posts.push(postId);
     await user.save();
 
     return res.status(200).json({
       msg: `shared post ${post.title} successfully`,
-      saves: user.saves.posts,
+      shares: user.shares.posts,
     });
   }
 );

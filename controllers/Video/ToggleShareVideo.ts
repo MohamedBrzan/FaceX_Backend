@@ -19,7 +19,7 @@ export default AsyncHandler(
         new ErrorHandler(404, `cannot find video with id ${videoId}`)
       );
 
-    const findUser = video.saves.findIndex(
+    const findUser = video.shares.findIndex(
       (user) => user.toString() === userId
     );
 
@@ -28,18 +28,18 @@ export default AsyncHandler(
         videoId,
         {
           $pull: {
-            saves: userId,
+            shares: userId,
           },
         },
         { runValidators: true, new: true, upsert: true }
       );
 
-      user.saves.videos.splice(user.saves.videos.indexOf(videoId), 1);
+      user.shares.videos.splice(user.shares.videos.indexOf(videoId), 1);
       await user.save();
 
       return res.status(200).json({
         msg: `unshared successfully for video`,
-        saves: user.saves.videos,
+        shares: user.shares.videos,
       });
     }
 
@@ -47,18 +47,18 @@ export default AsyncHandler(
       videoId,
       {
         $push: {
-          saves: userId,
+          shares: userId,
         },
       },
       { runValidators: true, new: true, upsert: true }
     );
 
-    user.saves.videos.push(videoId);
+    user.shares.videos.push(videoId);
     await user.save();
 
     return res.status(200).json({
       msg: `shared video successfully`,
-      saves: user.saves.videos,
+      shares: user.shares.videos,
     });
   }
 );
