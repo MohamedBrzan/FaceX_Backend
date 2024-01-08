@@ -4,5 +4,5 @@ import Post from '../../models/Post/Post';
 
 export default AsyncHandler(
   async (req: Request, res: Response, next: NextFunction) =>
-    res.status(200).json(await Post.find())
+    res.status(200).json(await Post.find().select('user'))
 );
