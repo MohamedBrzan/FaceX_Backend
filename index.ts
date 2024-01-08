@@ -148,14 +148,14 @@ app.use('/reel', Reel);
 app.use('/blog', Blog);
 app.use('/job', Job);
 app.use('/hashTag', HashTag);
-// app.use('/ad', Ad);
+app.use('/ad', Ad);
 app.use('/hashTag', HashTag);
 app.use('/image', Image);
 app.use('/album', Album);
 
-// app.use('/notification', Notification);
+app.use('/notification', Notification);
 app.use('/video', Video);
-// app.use('/payment', Payment);
+app.use('/payment', Payment);
 
 app.use(ErrorMessage);
 
