@@ -74,7 +74,7 @@ interface User {
   gender?: string;
   disability?: string;
   headline?: string;
-  professions?: string[];
+  profession?: string;
   industry?: string;
   role?: string;
   address?: string;

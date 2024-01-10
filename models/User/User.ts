@@ -22,7 +22,7 @@ const UserSchema = new Schema<User>(
     gender: { type: String, enum: Gender },
     disability: { type: String, trim: true },
     headline: { type: String, trim: true },
-    professions: [{ type: String, trim: true }],
+    profession: { type: String, trim: true },
     industry: { type: String, trim: true },
     role: {
       type: String,
