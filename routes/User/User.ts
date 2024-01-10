@@ -26,7 +26,7 @@ import Save from '../../controllers/User/Save';
 const router = Router();
 
 // Get Users
-router.get('/all', IsAuthenticated, GetAllUsers);
+router.get('/', GetAllUsers);
 
 // Register User
 router.post('/register', Register);
