@@ -13,8 +13,8 @@ interface Post {
   views: User[];
   comments: Comment[];
   expressions: Expressions;
-  shares:User[];
-  saves:User[];
+  shares: User[];
+  saves: User[];
   visiblePrivacy: VisiblePrivacy;
 }
 
