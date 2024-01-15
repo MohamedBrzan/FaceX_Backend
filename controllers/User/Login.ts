@@ -17,7 +17,16 @@ export default AsyncHandler(
       return req.logIn(user, (err) => {
         if (err) return res.status(401).json({ error: err });
 
-        return res.status(200).json(user);
+        const userToken = jwt.sign(user, process.env.SESSION_SECRET);
+
+        return res
+          .cookie('token', userToken, {
+            maxAge: 360000000000000,
+            secure: false,
+            httpOnly: true,
+          })
+          .status(200)
+          .json(user);
       });
     })(req, res, next);
   }
