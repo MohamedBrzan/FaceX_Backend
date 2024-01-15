@@ -22,17 +22,15 @@ import Notification from './routes/Notification/Notification';
 import Reel from './routes/Reel/Reel';
 import Payment from './routes/Payment/Payment';
 import Video from './routes/Video/Video';
+import bcrypt from 'bcrypt';
+import cookieParser from 'cookie-parser';
 import ErrorMessage from './middleware/ErrorMessage';
 
 const app = express();
 
-app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(
-  cors({
-    credentials: true,
-  })
-);
+app.use(bodyParser.json());
+app.use(cors());
 
 DB();
 
@@ -69,11 +67,18 @@ passport.use(
       'email password'
     );
     if (!findUser) return done(null, false);
-    return done(null, {
-      id: findUser._id,
-      email: findUser.email,
-      password: findUser.password,
-    });
+
+    const verifyPassword = await bcrypt.compare(password, findUser.password);
+
+    if (verifyPassword) {
+      return done(null, {
+        id: findUser._id,
+        email: findUser.email,
+        password: findUser.password,
+      });
+    }
+
+    return done(null, false);
   })
 );
 
@@ -84,7 +89,7 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
-    cookie: { maxAge: 1000 * 60 * 60 * 24 * 365.25 },
+    cookie: { maxAge: parseInt(process.env.EXPIRES), secure: false },
   })
 );
 
@@ -158,9 +163,6 @@ app.use('/video', Video);
 app.use('/payment', Payment);
 
 app.use(ErrorMessage);
-
-
-
 
 app.listen(3000, () => {
   debugServer(`listening on Port http://localhost:3000/`);

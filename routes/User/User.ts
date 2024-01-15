@@ -32,7 +32,7 @@ router.get('/', GetAllUsers);
 router.post('/register', Register);
 
 // Login User
-router.get('/login', Login);
+router.post('/login', Login);
 
 // Logout User
 router.get('/logout', IsAuthenticated, Logout);
