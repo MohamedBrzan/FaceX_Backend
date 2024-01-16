@@ -13,7 +13,6 @@ export default async (
   prevExpressionName?: string,
   currentExpressionName?: string
 ) => {
-  let expressionsLength = 0;
   let foundedInPrev: boolean = false;
 
   if (prevExpressionName && !model.expressions[prevExpressionName])

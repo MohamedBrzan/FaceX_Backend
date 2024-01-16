@@ -10,7 +10,6 @@ export default AsyncHandler(
     if (!token) return next(new ErrorHandler(404, 'Not Authorized'));
     const decoded = jwt.verify(token, process.env.SESSION_SECRET);
     req.user = await User.findById(decoded['id']);
-    console.log(req.user);
     next();
   }
 );

@@ -21,7 +21,7 @@ export default AsyncHandler(
 
         return res
           .cookie('token', userToken, {
-            maxAge: 360000000000000,
+            maxAge: 1000 * 60 * 60 * 24 * 365.25,
             secure: false,
             httpOnly: true,
           })
