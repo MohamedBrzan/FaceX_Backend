@@ -8,7 +8,7 @@ import ToggleExpression from '../../constants/ToggleExpression';
 
 export default AsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { prevExpressionName, currentExpressionName, commentId } = req.body;
+    const { expressionKey, commentId } = req.body;
 
     const userId = (await getUserId(req)).toString();
 
@@ -20,14 +20,12 @@ export default AsyncHandler(
 
     await ToggleExpression(
       res,
-      next,
       userId,
       user,
       comment,
       commentId,
       'comments',
-      prevExpressionName,
-      currentExpressionName
+      expressionKey
     );
   }
 );
