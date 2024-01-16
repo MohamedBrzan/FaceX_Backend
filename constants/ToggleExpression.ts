@@ -1,49 +1,71 @@
-import { Request, Response, NextFunction } from 'express';
-import ErrorHandler from '../middleware/ErrorHandler';
+import { Response } from 'express';
 import FindModelInUser from './FindModelInUser';
 
 export default async (
   res: Response,
-  next: NextFunction,
   userId: string,
   user: any,
   model: any,
   modelId: string,
   property: string,
-  prevExpressionName?: string,
-  currentExpressionName?: string
+  expressionKey?: string
 ) => {
-  let foundedInPrev: boolean = false;
+  let keys = [
+    'like',
+    'love',
+    'support',
+    'sad',
+    'happy',
+    'angry',
+    'disgust',
+    'surprise',
+    'fear',
+  ];
 
-  if (prevExpressionName && !model.expressions[prevExpressionName])
-    return next(new ErrorHandler(404, 'prev expression string not found'));
+  let foundedExpressionKey: string;
+  let index: number;
 
-  if (currentExpressionName && !model.expressions[currentExpressionName])
-    return next(new ErrorHandler(404, 'current expression string not found'));
-
-  if (prevExpressionName && currentExpressionName) {
-    for (let i = 0; i < model.expressions[prevExpressionName].length; i++) {
-      if (userId === model.expressions[prevExpressionName][i].toString()) {
-        model.expressions[prevExpressionName].splice(i, 1);
-        await model.save();
-        foundedInPrev = true;
+  keys.forEach((key) => {
+    for (let i = 0; i < model?.expressions[key]?.length; i++) {
+      if (model.expressions[key][i].toString() === userId) {
+        foundedExpressionKey = key;
+        index = i;
+        break;
       }
     }
-  }
+  });
 
-  if (prevExpressionName !== currentExpressionName && foundedInPrev === false)
-    return next(
-      new ErrorHandler(
-        404,
-        `something goes wrong. user not found in prevExpressionName`
-      )
-    );
-
-  if (
-    (prevExpressionName && currentExpressionName && foundedInPrev === false) ||
-    (prevExpressionName !== currentExpressionName && foundedInPrev === true)
-  ) {
-    model.expressions[currentExpressionName].push(userId);
+  if (index >= 0) {
+    if (expressionKey === foundedExpressionKey) {
+      model.expressions[expressionKey].splice(index, 1);
+      await model.save();
+      await FindModelInUser(
+        user[property].published,
+        user[property].reacted,
+        user,
+        userId,
+        model,
+        modelId,
+        false
+      );
+      return res.status(200).json(model.expressions);
+    } else {
+      model.expressions[foundedExpressionKey].splice(index, 1);
+      model.expressions[expressionKey].push(userId);
+      await model.save();
+      await FindModelInUser(
+        user[property].published,
+        user[property].reacted,
+        user,
+        userId,
+        model,
+        modelId,
+        true
+      );
+    }
+    return res.status(200).json(model.expressions);
+  } else {
+    model.expressions[expressionKey].push(userId);
     await model.save();
     await FindModelInUser(
       user[property].published,
@@ -54,17 +76,6 @@ export default async (
       modelId,
       true
     );
-  } else {
-    await FindModelInUser(
-      user[property].published,
-      user[property].reacted,
-      user,
-      userId,
-      model,
-      modelId,
-      false
-    );
+    return res.status(200).json(model.expressions);
   }
-
-  return res.status(200).json(model.expressions);
 };

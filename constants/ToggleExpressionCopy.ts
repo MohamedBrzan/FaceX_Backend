@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from 'express';
-import ErrorHandler from '../middleware/ErrorHandler';
 import FindModelInUser from './FindModelInUser';
 
 export default async (

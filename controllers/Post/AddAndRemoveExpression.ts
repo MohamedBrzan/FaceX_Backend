@@ -5,7 +5,6 @@ import User from '../../models/User/User';
 import { getUserId } from '../../constants/UserId';
 import ErrorHandler from '../../middleware/ErrorHandler';
 import ToggleExpression from '../../constants/ToggleExpression';
-import ToggleExpressionCopy from '../../constants/ToggleExpressionCopy';
 
 export default AsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -19,7 +18,7 @@ export default AsyncHandler(
 
     if (!post) return next(new ErrorHandler(404, 'this post not exists'));
 
-    await ToggleExpressionCopy(
+    await ToggleExpression(
       res,
       userId,
       user,

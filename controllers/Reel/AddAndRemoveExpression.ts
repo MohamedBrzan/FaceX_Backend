@@ -8,7 +8,7 @@ import ToggleExpression from '../../constants/ToggleExpression';
 
 export default AsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { prevExpressionName, currentExpressionName, reelId } = req.body;
+    const { expressionKey, reelId } = req.body;
 
     const userId = (await getUserId(req)).toString();
 
@@ -18,16 +18,15 @@ export default AsyncHandler(
 
     if (!reel) return next(new ErrorHandler(404, 'this reel not exists'));
 
+  
     await ToggleExpression(
       res,
-      next,
       userId,
       user,
       reel,
       reelId,
       'reels',
-      prevExpressionName,
-      currentExpressionName
+      expressionKey
     );
   }
 );
