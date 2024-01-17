@@ -14,8 +14,8 @@ interface Comment {
     reel?: Reel;
   };
   message: string;
-  replies: Reply[];
-  expressions: Expressions;
+  replies?: Reply[];
+  expressions?: Expressions;
   visiblePrivacy: VisiblePrivacy;
 }
 
