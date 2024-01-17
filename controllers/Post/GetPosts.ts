@@ -7,7 +7,11 @@ export default AsyncHandler(
     res.status(200).json(
       await Post.find().populate([
         { path: 'user', select: 'name avatar' },
-        { path: 'comments', populate: 'user replies' },
+        {
+          path: 'comments',
+          populate: [{ path: 'user' }, { path: 'replies', populate: 'user' }],
+        },
+
         {
           path: 'expressions',
           populate: [
