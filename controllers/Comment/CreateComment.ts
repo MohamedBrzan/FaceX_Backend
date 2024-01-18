@@ -62,6 +62,8 @@ export default AsyncHandler(
       { runValidators: true, new: true, upsert: true }
     );
 
-    return res.status(404).json({ msg: `Added comment successfully to ${refName}`,comment });
+    return res
+      .status(404)
+      .json({ msg: `Added comment successfully to ${refName}`, comment });
   }
 );
