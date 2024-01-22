@@ -7,8 +7,9 @@ export default AsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     const post = await Post.findById(id);
-    if (post)
+    if (!post)
       return next(new ErrorHandler(404, `Couldn't Find Post with Id ${id}`));
+
     return res.json(post);
   }
 );

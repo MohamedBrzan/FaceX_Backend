@@ -151,7 +151,12 @@ app.use(passport.session());
 //   req.logout((err) => (err ? next(err) : res.redirect('/')))
 // );
 
-//** */
+//** */rs
+
+app.get('/cors', (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*');
+  res.send({ msg: 'This has CORS enabled 🎈' });
+});
 
 app.use('/user', User);
 app.use('/post', Post);
