@@ -7,6 +7,7 @@ import DeleteCommentModel from '../../functions/DeleteCommentModel';
 import Post from '../../models/Post/Post';
 import Blog from '../../models/Blog/Blog';
 import Reel from '../../models/Reel/Reel';
+import DeleteCommentHandler from '../../functions/DeleteCommentHandler';
 
 export default AsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -51,18 +52,12 @@ export default AsyncHandler(
       refName = 'reel';
     }
 
-    if (refModel._id) {
-      //! Delete Comment From user.comments.reacted & Delete the comment's writer
-      await DeleteCommentModel(refModel);
+    //! Delete Comment From user.comments.reacted & Delete the comment's writer
+    await DeleteCommentHandler(refModel, commentId);
 
-      return res.status(200).json({
-        message: `deleted comment ${commentId} successfully from ${refName}`,
-        [`${refName} comments`]: refComments,
-      });
-    }
-
-    return res.status(404).json({
-      message: `Something went wrong while deleting comment ${commentId}`,
+    return res.status(200).json({
+      message: `deleted comment ${commentId} successfully from ${refName}`,
+      [`${refName} comments`]: refComments,
     });
   }
 );
