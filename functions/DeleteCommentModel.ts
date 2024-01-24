@@ -32,9 +32,11 @@ export default async (parentModel: any) => {
         { $pull: { 'replies.published': replyId } },
         { runValidators: true, new: true, upsert: true }
       );
+
+      await Reply.findByIdAndRemove(replyId);
     }
 
-    parentModel.comments.splice(parentModel.comments.indexOf(commentId), 1);
+    parentModel?.comments.splice(parentModel?.comments.indexOf(commentId), 1);
     await parentModel.save();
 
     await User.findByIdAndUpdate(comment.user.toString(), {

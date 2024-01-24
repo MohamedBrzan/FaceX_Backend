@@ -51,12 +51,18 @@ export default AsyncHandler(
       refName = 'reel';
     }
 
-    //! Delete Comment From user.comments.reacted & Delete the comment's writer
-    await DeleteCommentModel(refModel);
+    if (refModel._id) {
+      //! Delete Comment From user.comments.reacted & Delete the comment's writer
+      await DeleteCommentModel(refModel);
 
-    return res.status(200).json({
-      message: `deleted comment ${commentId} successfully from ${refName}`,
-      [`${refName} comments`]: refComments,
+      return res.status(200).json({
+        message: `deleted comment ${commentId} successfully from ${refName}`,
+        [`${refName} comments`]: refComments,
+      });
+    }
+
+    return res.status(404).json({
+      message: `Something went wrong while deleting comment ${commentId}`,
     });
   }
 );
