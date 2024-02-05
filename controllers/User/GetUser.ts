@@ -11,16 +11,16 @@ export default AsyncHandler(
     if (!finder)
       return next(new ErrorHandler(404, `Cannot find User with id ${id}`));
 
-    const userId = (await getUserId(req)).toString();
+    // const userId = (await getUserId(req)).toString();
 
-    let user = await User.findById(userId);
+    // let user = await User.findById(userId);
 
-    const findTheFinder = user.blocks.find(
-      (blocks) => blocks.toString() === id
-    );
+    // const findTheFinder = user.blocks.find(
+    //   (blocks) => blocks.toString() === id
+    // );
 
-    if (findTheFinder)
-      return res.status(404).json({ msg: 'You blocked this user' });
+    // if (findTheFinder)
+    //   return res.status(404).json({ msg: 'You blocked this user' });
 
     return res.status(200).json(finder);
   }

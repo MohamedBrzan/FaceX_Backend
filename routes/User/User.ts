@@ -7,8 +7,6 @@ import UpdateUser from '../../controllers/User/UpdateUser';
 import DeleteUser from '../../controllers/User/DeleteUser';
 import IsAuthenticated from '../../middleware/IsAuthenticated';
 import GetMyProfile from '../../controllers/User/GetMyProfile';
-import ReceiveFollow from '../../controllers/User/ReceiveFollow';
-import SendFollow from '../../controllers/User/SendFollow';
 import Logout from '../../controllers/User/Logout';
 import BlockUser from '../../controllers/User/BlockUser';
 import ActivateDeletion from '../../controllers/User/ActivateDeletion';
@@ -23,6 +21,7 @@ import AddReactedPost from '../../controllers/User/AddReactedPost';
 import DeleteReactedPost from '../../controllers/User/DeleteReactedPost';
 import Share from '../../controllers/User/Share';
 import Save from '../../controllers/User/Save';
+import ToggleFollow from '../../controllers/User/ToggleFollow';
 const router = Router();
 
 // Get Users
@@ -35,7 +34,7 @@ router.post('/register', Register);
 router.post('/login', Login);
 
 // Logout User
-router.get('/logout', IsAuthenticated, Logout);
+router.post('/logout', Logout);
 
 // User Profile
 router.get('/me', IsAuthenticated, GetMyProfile);
@@ -53,10 +52,10 @@ router.patch('/posts/reacted/add', IsAuthenticated, AddReactedPost);
 router.delete('/posts/reacted/del', IsAuthenticated, DeleteReactedPost);
 
 // Follower
-router.post('/follower', IsAuthenticated, ReceiveFollow);
+// router.post('/follower', IsAuthenticated, ReceiveFollow);
 
 // Following
-router.post('/following', IsAuthenticated, SendFollow);
+router.patch('/follow', IsAuthenticated, ToggleFollow);
 
 // Send Request For Verification
 router.patch('/verification/request', IsAuthenticated, VerificationRequest);
@@ -89,7 +88,7 @@ router.patch('/ban/activate', IsAuthenticated, ActivateBan);
 router.patch('/ban/deactivate', IsAuthenticated, DeactivateBan);
 
 // Get User
-router.get('/:id', IsAuthenticated, GetUser);
+router.get('/:id', GetUser);
 
 // Put User
 router.put('/:id', IsAuthenticated, UpdateUser);

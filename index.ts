@@ -70,7 +70,7 @@ passport.use(
     done
   ) {
     const findUser = await UserModel.findOne({ email: username }).select(
-      'email password avatar cover'
+      'email password avatar cover followers followings'
     );
     if (!findUser) return done(null, false);
 
@@ -83,6 +83,8 @@ passport.use(
         password: findUser.password,
         avatar: findUser.avatar,
         cover: findUser.cover,
+        followers: findUser.followers,
+        followings: findUser.followings,
       });
     }
 
@@ -97,7 +99,7 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
-    cookie: { maxAge: parseInt(process.env.EXPIRES), secure: false },
+    cookie: { maxAge: parseInt(process.env.EXPIRES), secure: true },
   })
 );
 

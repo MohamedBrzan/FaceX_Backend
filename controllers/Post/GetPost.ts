@@ -7,7 +7,7 @@ export default AsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     const post = await Post.findById(id).populate([
-      { path: 'user', select: 'name avatar profession' },
+      { path: 'user', select: 'name avatar profession followers followings' },
       {
         path: 'comments',
         populate: [{ path: 'user' }, { path: 'replies', populate: 'user' }],
