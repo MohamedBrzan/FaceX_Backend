@@ -12,7 +12,7 @@ const UserSchema = new Schema<User>(
     name: {
       first: { type: String, required: true, trim: true },
       last: { type: String, required: true, trim: true },
-      additional: { type: String, required: true, trim: true },
+      additional: { type: String, trim: true },
     },
     email: { type: String, required: true, trim: true },
     password: { type: String, required: true, trim: true, select: false },
@@ -44,10 +44,10 @@ const UserSchema = new Schema<User>(
     },
     analytics: [
       {
-        count: { type: Number, default: ''  },
-        name: { type: String, trim: true , default: '' },
-        percentage: { type: Number, default: ''  },
-        time: { type: String, trim: true , default: '' },
+        count: { type: Number, default: '' },
+        name: { type: String, trim: true, default: '' },
+        percentage: { type: Number, default: '' },
+        time: { type: String, trim: true, default: '' },
       },
     ],
     profile_topics: [{ type: String, trim: true }],
