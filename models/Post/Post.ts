@@ -7,7 +7,6 @@ const PostSchema = new Schema<Post>(
   {
     images: [{ type: String }],
     videos: [{ type: String }],
-    title: { type: String, required: true },
     content: { type: String, required: true },
     user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     status: {
@@ -16,7 +15,6 @@ const PostSchema = new Schema<Post>(
       default: PostStatus.Active,
       required: true,
     },
-    views: [{ type: Types.ObjectId, ref: 'User' }],
     comments: [{ type: Types.ObjectId, ref: 'Comment' }],
     expressions: {
       like: [{ type: Types.ObjectId, ref: 'User' }],

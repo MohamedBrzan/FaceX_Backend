@@ -6,11 +6,9 @@ import User from '../User/User';
 interface Post {
   images?: string[];
   videos?: string[];
-  title: string;
   content: string;
   status: PostStatus;
   user: User;
-  views: User[];
   comments: Comment[];
   expressions: Expressions;
   shares: User[];
