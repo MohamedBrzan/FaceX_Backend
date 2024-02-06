@@ -18,7 +18,6 @@ export default AsyncHandler(
         if (err) return res.status(401).json({ error: err });
 
         const userToken = jwt.sign(user, process.env.SESSION_SECRET);
-
         return res
           .cookie('token', userToken, {
             maxAge: 1000 * 60 * 60 * 24 * 365.25,

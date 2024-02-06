@@ -70,7 +70,7 @@ passport.use(
     done
   ) {
     const findUser = await UserModel.findOne({ email: username }).select(
-      'email password avatar cover followers followings'
+      'email password name avatar cover followers followings'
     );
     if (!findUser) return done(null, false);
 
