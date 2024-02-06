@@ -81,6 +81,7 @@ passport.use(
         id: findUser._id,
         email: findUser.email,
         password: findUser.password,
+        name: findUser.name,
         avatar: findUser.avatar,
         cover: findUser.cover,
         followers: findUser.followers,
