@@ -36,7 +36,7 @@ export default AsyncHandler(
       await user.save();
 
       return res.status(200).json({
-        msg: `unshared successfully for post ${post.title}`,
+        msg: `unshared successfully for post Id ${post._id}`,
         shares: user.shares.posts,
       });
     }
@@ -55,7 +55,7 @@ export default AsyncHandler(
     await user.save();
 
     return res.status(200).json({
-      msg: `shared post ${post.title} successfully`,
+      msg: `shared post Id ${post._id} successfully`,
       shares: user.shares.posts,
     });
   }

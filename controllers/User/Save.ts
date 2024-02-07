@@ -32,7 +32,7 @@ export default AsyncHandler(
       user.saves.posts.push(post);
       await user.save();
       return res.status(200).json({
-        message: `You save Post ${post?.title} Successfully`,
+        message: `You save Post Id ${post?._id} Successfully`,
       });
     } else if (save.blog) {
       const blog = await Blog.findById(save.blog);

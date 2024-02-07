@@ -32,7 +32,7 @@ export default AsyncHandler(
       user.shares.posts.push(post);
       await user.save();
       return res.status(200).json({
-        message: `You Share Post ${post?.title} Successfully`,
+        message: `You Share Post with Id ${post?._id} Successfully`,
       });
     } else if (share.blog) {
       const blog = await Blog.findById(share.blog);
