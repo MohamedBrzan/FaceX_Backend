@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
 import AsyncHandler from '../../middleware/AsyncHandler';
-import ErrorHandler from '../../middleware/ErrorHandler';
 import jwt from 'jsonwebtoken';
 import passport from 'passport';
 

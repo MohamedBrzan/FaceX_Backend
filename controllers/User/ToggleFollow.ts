@@ -11,7 +11,7 @@ export default AsyncHandler(
 
     let user = await User.findById(userId).select('followings name _id');
 
-    if (following === user._id.toString())
+    if (following === userId)
       return next(new ErrorHandler(500, 'You Cannot Follow Yourself'));
 
     let follower = await User.findById(following).select('followers name');

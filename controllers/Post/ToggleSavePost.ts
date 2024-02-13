@@ -35,7 +35,6 @@ export default AsyncHandler(
 
       return res.status(200).json({
         msg: `unSaved successfully for post Id ${post._id}`,
-        saves: user.saves.posts,
       });
     }
 
@@ -54,7 +53,6 @@ export default AsyncHandler(
 
     return res.status(200).json({
       msg: `saved post Id ${post._id} successfully`,
-      saves: user.saves.posts,
     });
   }
 );
