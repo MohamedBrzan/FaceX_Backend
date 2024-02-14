@@ -15,7 +15,7 @@ router.get('/', GetComments);
 router.post('/create', IsAuthenticated, CreateComment);
 
 // Put Comment
-router.put('/update', IsAuthenticated, UpdateComment);
+router.patch('/update', IsAuthenticated, UpdateComment);
 
 // Add and Delete Comment Expression
 router.patch('/expressions/toggle', IsAuthenticated, AddAndRemoveExpression);

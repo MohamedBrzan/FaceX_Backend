@@ -18,11 +18,10 @@ router.get('/:id', GetReply);
 router.post('/create', IsAuthenticated, CreateReply);
 
 // Put Reply
-router.put('/update', IsAuthenticated, UpdateReply);
+router.patch('/update', IsAuthenticated, UpdateReply);
 
 // Add and Delete Reply Expression
 router.patch('/expressions/toggle', IsAuthenticated, AddAndRemoveExpression);
-
 
 // Delete Reply
 router.delete('/del', IsAuthenticated, DeleteReply);
