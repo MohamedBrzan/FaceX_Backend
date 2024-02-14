@@ -9,7 +9,7 @@ export default AsyncHandler(
     const { token } = req.cookies;
     if (!token) return next(new ErrorHandler(404, 'Not Authorized From IsAuthenticated File'));
     const decoded = jwt.verify(token, process.env.SESSION_SECRET);
-    req.user = await User.findById(decoded['id']);
+    req.user = await User.findById(decoded['id'] ? decoded['id'] : decoded['_id']);
     next();
   }
 );

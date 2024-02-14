@@ -53,6 +53,8 @@ type Preferences = {
 };
 
 interface User {
+  id: any;
+  _id: string | object | Buffer;
   name?: {
     first: string;
     last: string;

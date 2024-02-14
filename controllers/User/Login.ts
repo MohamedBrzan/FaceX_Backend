@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import AsyncHandler from '../../middleware/AsyncHandler';
 import jwt from 'jsonwebtoken';
 import passport from 'passport';
+import SendToken from '../../middleware/SendToken';
 
 export default AsyncHandler(
   (req: Request, res: Response, next: NextFunction) => {
@@ -13,19 +14,9 @@ export default AsyncHandler(
         });
       if (!user)
         return res.status(401).json({ message: 'User Not Authorized' });
-      return req.logIn(user, (err) => {
-        if (err) return res.status(401).json({ error: err });
-
-        const userToken = jwt.sign(user, process.env.SESSION_SECRET);
-        return res
-          .cookie('token', userToken, {
-            maxAge: 1000 * 60 * 60 * 24 * 365.25,
-            secure: false,
-            httpOnly: true,
-          })
-          .status(200)
-          .json(user);
-      });
+      return req.logIn(user, (err) =>
+        err ? res.status(401).json({ error: err }) : SendToken(res, user)
+      );
     })(req, res, next);
   }
 );

@@ -78,9 +78,8 @@ passport.use(
 
     if (verifyPassword) {
       return done(null, {
-        id: findUser._id,
+        _id: findUser._id,
         email: findUser.email,
-        password: findUser.password,
         name: findUser.name,
         avatar: findUser.avatar,
         cover: findUser.cover,
@@ -106,10 +105,7 @@ app.use(
 
 //* Save User into session (cookie)
 passport.serializeUser((user, done) => {
-  if (user['_id']) {
-    return done(null, { id: user['_id'] });
-  }
-  return done(null, { id: user['id'] });
+  return done(null, { _id: user['_id'] });
 });
 
 //* Retrieve user from session (cookie)
