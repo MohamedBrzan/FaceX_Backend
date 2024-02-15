@@ -30,7 +30,7 @@ router.patch('/share', IsAuthenticated, ToggleSharePost);
 router.patch('/save', IsAuthenticated, ToggleSavePost);
 
 // Update Post
-router.put('/update', IsAuthenticated, UpdatePost);
+router.patch('/update', IsAuthenticated, UpdatePost);
 
 // Delete Post
 router.delete('/del', IsAuthenticated, DeletePost);
