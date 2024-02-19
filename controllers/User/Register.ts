@@ -3,7 +3,6 @@ import AsyncHandler from '../../middleware/AsyncHandler';
 import ErrorHandler from '../../middleware/ErrorHandler';
 import User from '../../models/User/User';
 import jwt from 'jsonwebtoken';
-import SendToken from '../../middleware/SendToken';
 
 export default AsyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {

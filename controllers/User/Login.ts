@@ -3,10 +3,11 @@ import AsyncHandler from '../../middleware/AsyncHandler';
 import jwt from 'jsonwebtoken';
 import passport from 'passport';
 import SendToken from '../../middleware/SendToken';
+import User from '../../Interfaces/User/User';
 
 export default AsyncHandler(
   (req: Request, res: Response, next: NextFunction) => {
-    passport.authenticate('local', (err, user) => {
+    passport.authenticate('local', (err: string, user: User) => {
       if (err)
         return res.status(401).json({
           message:
